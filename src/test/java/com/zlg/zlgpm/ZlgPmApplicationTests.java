@@ -4,27 +4,22 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.entity.User;
-import com.zlg.zlgpm.service.UserServiceImpl;
+import com.zlg.zlgpm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @SpringBootTest
 class ZlgPmApplicationTests {
 
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserService userServiceImpl;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -34,13 +29,13 @@ class ZlgPmApplicationTests {
 
     @Test
     void test() {
-        Page<User> users = userServiceImpl.queryList();
+//        Page<User> users = userServiceImpl.queryList();
         //分页total
-        Long total = users.getTotal();
-        System.out.println(total);
-        for (User u : users) {
-            System.out.println(u);
-        }
+//        Long total = users.getTotal();
+//        System.out.println(total);
+//        for (User u : users) {
+//            System.out.println(u);
+//        }
 
     }
 
@@ -60,6 +55,12 @@ class ZlgPmApplicationTests {
         for (User u :users){
             System.out.println(u);
         }
+    }
+
+    @Test
+    void test3(){
+        String s = DigestUtils.md5DigestAsHex("zlg2022".getBytes());
+        System.out.println(s);
     }
 
 
