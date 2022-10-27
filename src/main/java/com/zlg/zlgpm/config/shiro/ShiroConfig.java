@@ -25,7 +25,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后跳转的url
 //        shiroFilterFactoryBean.setSuccessUrl("/");
-        // 未授权url
+        // 访问未授权url,此设置仅对filterChain有效
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
         //设置登录拦截器
         Map<String,Filter> filters = shiroFilterFactoryBean.getFilters();
@@ -36,6 +36,16 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 允许匿名访问
         filterChainDefinitionMap.put("/login", "anon");
+
+        // 允许匿名访问swagger2页面
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/swagger/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/configuration/**", "anon");
+        filterChainDefinitionMap.put("/doc.html","anon");
+
         filterChainDefinitionMap.put("/**", "user");
         filterChainDefinitionMap.put("/**", "authc");
         // 配置退出过滤器
