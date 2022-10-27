@@ -4,6 +4,7 @@ import org.apache.shiro.web.filter.authc.UserFilter;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class LoginFilter extends UserFilter {
@@ -16,7 +17,9 @@ public class LoginFilter extends UserFilter {
      */
     @Override
     protected void redirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
-        response.setContentType("application/json; charset=utf-8");
-        response.getWriter().print("未登录");
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        httpServletResponse.setStatus(401);
+        httpServletResponse.setContentType("application/json; charset=utf-8");
+        httpServletResponse.getWriter().print("未登录");
     }
 }
