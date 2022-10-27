@@ -12,10 +12,12 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 public class ShiroRealm extends AuthorizingRealm {
 
@@ -70,14 +72,16 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String userName = (String) authenticationToken.getPrincipal();
         String password = new String((char[]) authenticationToken.getCredentials());
-
-        User user = userMapper.queryByUserName(userName);
+        String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
+        User userAuth = new User();
+        userAuth.setUserName(userName);
+        User user = userMapper.selectOne(userAuth).get();
         System.out.println("用户" + userName + "认证-----ShiroRealm.doGetAuthenticationInfo");
 
         if (!userName.equals(user.getUserName())) {
             throw new UnknownAccountException("用户不存在");
         }
-        if (!password.equals(user.getPassword())) {
+        if (!passwordMd5.equals(user.getPassword())) {
             throw new IncorrectCredentialsException("密码错误");
         }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
