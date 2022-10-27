@@ -1,0 +1,284 @@
+swagger: "2.0"
+info:
+  title: Demo APIs
+  version: "2.0"
+  description: Use VSCode plugin [OpenAPI (Swagger) Editor](https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi) to edit this document.
+host: localhost:8618
+schemes:
+  - http
+  - https
+
+paths:
+  /login:
+    post:
+      summary: 用户登录
+      tags:
+        - auth
+      operationId: login
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: rememberMe
+          in: query
+          type: boolean
+          required: true
+          description: 记住我
+          default: false
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/LoginRequest"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /logout:
+    get:
+      summary: 用户登出
+      tags:
+        - auth
+      operationId: logout
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+        401:
+          description: unauthorized
+  /user:
+    post:
+      summary: 添加用户
+      tags:
+        - user
+      description: 添加用户(仅root)
+      operationId: createUser
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateUserRequest"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+          description: server error
+    put:
+      summary: 修改用户
+      tags:
+        - user
+      description: 修改用户(仅root)
+      operationId: updateUser
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateUserRequest"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+          description: server error
+    delete:
+      tags:
+        - user
+      summary: 删除用户
+      description: 删除用户(仅root),删除用户前需要先删除用户下挂载的任务
+      operationId: deleteUser
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: query
+          required: true
+          type: integer
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /user/list:
+    get:
+      tags:
+        - user
+      summary: 获取用户列表
+      operationId: userList
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: userName
+          in: query
+          type: string
+        - name: currentPage
+          in: query
+          type: integer
+        - name: pageSize
+          in: query
+          type: integer
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/UserListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
+
+# common parameters
+parameters:
+  queryPageSize:
+    name: page_size
+    in: query
+    type: integer
+    required: false
+    default: 20
+    description: 每页条数
+  queryCurrentPage:
+    name: current_page
+    in: query
+    type: integer
+    required: false
+    default: 1
+    description: 当前页
+
+# common data structure
+definitions:
+  BaseResp:
+    type: object
+    properties:
+      message:
+        type: string
+  OnePageData:
+    type: object
+    properties:
+      pagination:
+        type: object
+        properties:
+          totalSize:
+            type: integer
+            example: 1000
+          currentPage:
+            type: integer
+            example: 1
+          pageSize:
+            type: integer
+            example: 20
+  LoginRequest:
+    type: object
+    required:
+      - userName
+      - password
+    properties:
+      userName:
+        type: string
+      password:
+        type: string
+  CreateUserRequest:
+    type: object
+    required:
+      - userName
+      - password
+      - nickName
+      - email
+    properties:
+      userName:
+        type: string
+        pattern: ^[a-zA-Z][_a-zA-Z0-9]+$
+        minLength: 2
+        maxLength: 32
+      password:
+        type: string
+        minLength: 8
+        maxLength: 16
+      nickName:
+        type: string
+        minLength: 2
+        maxLength: 32
+      email:
+        type: string
+        minLength: 2
+        maxLength: 32
+        pattern: ^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$
+      remark:
+        type: string
+        maxLength: 255
+  UpdateUserRequest:
+    type: object
+    properties:
+      password:
+        type: string
+        minLength: 8
+        maxLength: 16
+      nickName:
+        type: string
+        minLength: 2
+        maxLength: 32
+      email:
+        type: string
+        minLength: 2
+        maxLength: 32
+        pattern: ^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$
+      remark:
+        type: string
+        maxLength: 255
+  UserListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/UserResponse"
+  UserResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      userName:
+        type: string
+      nickName:
+        type: string
+      email:
+        type: string
+      updateTime:
+        type: string
+      createTime:
+        type: string
+      remark:
+        type: string
