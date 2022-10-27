@@ -103,6 +103,8 @@ public class ShiroConfig {
         SimpleCookie cookie = new SimpleCookie();
         //设置cookie的过期时间，单位为秒，这里为一天
         cookie.setMaxAge(86400);
+        //不设置name会导致shiro报错:Cookie name cannot be null/empty.
+        cookie.setName("pm_cookie");
         return cookie;
     }
 

@@ -1,5 +1,6 @@
 package com.zlg.zlgpm.entity;
 
+import com.zlg.zlgpm.exception.ErrResp;
 import io.mybatis.provider.Entity;
 
 import java.io.Serializable;
@@ -20,9 +21,7 @@ public class User implements Serializable {
     private String nickName;
     @Entity.Column
     private String email;
-    @Entity.Column
     private String updateTime;
-    @Entity.Column
     private String createTime;
     @Entity.Column
     private Integer status;
@@ -32,14 +31,11 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Long id, String userName, String password, String nickName, String email, String updateTime, String createTime, Integer status, String remark) {
-        this.id = id;
+    public User(String userName, String password, String nickName, String email, Integer status, String remark) {
         this.userName = userName;
         this.password = password;
         this.nickName = nickName;
         this.email = email;
-        this.updateTime = updateTime;
-        this.createTime = createTime;
         this.status = status;
         this.remark = remark;
     }
@@ -103,16 +99,8 @@ public class User implements Serializable {
         return updateTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
     public String getCreateTime() {
         return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
     }
 
     public Integer getStatus() {
@@ -129,5 +117,48 @@ public class User implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public static User.UserBuilder builder() {
+        return new User.UserBuilder();
+    }
+    
+    public static class UserBuilder{
+
+        private String userName;
+        private String password;
+        private String nickName;
+        private String email;
+        private Integer status;
+        private String remark;
+
+        public UserBuilder userName(final String userName){
+            this.userName = userName;
+            return this;
+        }
+        public UserBuilder password(final String password){
+            this.password = password;
+            return this;
+        }
+        public UserBuilder nickName(final String nickName){
+            this.nickName = nickName;
+            return this;
+        }
+        public UserBuilder email(final String email){
+            this.email = email;
+            return this;
+        }
+        public UserBuilder status(final Integer status){
+            this.status = status;
+            return this;
+        }
+        public UserBuilder remark(final String remark){
+            this.remark = remark;
+            return this;
+        }
+
+        public User build(){
+            return new User(this.userName,this.password,this.nickName,this.email,this.status,this.remark);
+        }
     }
 }

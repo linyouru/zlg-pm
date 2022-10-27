@@ -1,22 +1,28 @@
 package com.zlg.zlgpm.entity;
 
+import io.mybatis.provider.Entity;
+
 import java.io.Serializable;
 
+@Entity.Table("role")
 public class Role implements Serializable {
 
     private static final long serialVersionUID = -2L;
 
+    @Entity.Column(id = true)
     private int id;
+    @Entity.Column
     private String name;
-    private String describe;
+    @Entity.Column
+    private String remark;
 
     public Role() {
     }
 
-    public Role(int id, String name, String describe) {
+    public Role(int id, String name, String remark) {
         this.id = id;
         this.name = name;
-        this.describe = describe;
+        this.remark = remark;
     }
 
     @Override
@@ -24,7 +30,7 @@ public class Role implements Serializable {
         return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", describe='" + describe + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 
@@ -44,11 +50,11 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setRemark(String describe) {
+        this.remark = describe;
     }
 }

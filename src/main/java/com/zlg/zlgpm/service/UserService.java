@@ -1,6 +1,10 @@
 package com.zlg.zlgpm.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.zlg.zlgpm.dao.UserRoleMapper;
 import com.zlg.zlgpm.entity.User;
+import com.zlg.zlgpm.entity.UserRole;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.controller.model.ApiCreateUserRequest;
 import com.zlg.zlgpm.dao.UserMapper;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -22,6 +27,8 @@ public class UserService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private UserRoleMapper userRoleMapper;
     @Resource
     private DataConvertHelper dataConvertHelper;
 
@@ -42,20 +49,15 @@ public class UserService {
 //    }
 
     public void createUser(ApiCreateUserRequest apiCreateUserRequest) {
-        long timeMillis = System.currentTimeMillis();
-//        throw new BizException(HttpStatus.BAD_REQUEST,"tenant.10003");
         User user = dataConvertHelper.convert2User(apiCreateUserRequest);
-        user.setCreateTime(timeMillis + "");
-        user.setUpdateTime(timeMillis + "");
         user.setStatus(1);
-        User user1 = new User();
-        user1.setUserName(user.getUserName());
-        long count = userMapper.selectCount(user1);
+        long count = userMapper.selectCount(User.builder().userName(user.getUserName()).build());
         if (count > 0) {
-
+            throw new BizException(HttpStatus.BAD_REQUEST, "user.10001");
         }
-//        int insert = userMapper.insert(user);
-
+        userMapper.insert(user);
+        User insertUser = userMapper.selectOne(user).get();
+        userRoleMapper.insert(new UserRole(insertUser.getId(), 3L));
     }
 
 

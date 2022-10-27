@@ -8,6 +8,7 @@ import com.zlg.zlgpm.controller.model.ApiUserListResponse;
 import com.zlg.zlgpm.service.UserService;
 import io.swagger.annotations.Api;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class UserController implements UserApi {
     private UserService userService;
 
     @Override
+    @RequiresRoles(value="root")
     public ResponseEntity<ApiBaseResp> createUser(ApiCreateUserRequest body) {
         userService.createUser(body);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
@@ -41,7 +43,7 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<ApiUserListResponse> userList(String userName, Integer currentPage, Integer pageSize) {
-        return null;
+        return ResponseEntity.ok().body(null);
     }
 
 }

@@ -11,9 +11,9 @@ import java.util.List;
 
 @Repository
 @Mapper
-public interface UserPermissionMapper {
+public interface PermissionMapper {
 
-    @Select("select p.id,p.url,p.name,p.describe from role r\n" +
+    @Select("select p.id,p.url,p.name,p.remark from role r\n" +
             "        left join user_role ur on(r.id = ur.rid) \n" +
             "        left join user u on(u.id = ur.uid)\n" +
             "        left join role_permission rp on(rp.rid = r.id) \n" +
@@ -23,7 +23,7 @@ public interface UserPermissionMapper {
             @Result(property = "id", column = "id", javaType = int.class),
             @Result(property = "url", column = "url", javaType = String.class),
             @Result(property = "name", column = "name", javaType = String.class),
-            @Result(property = "describe", column = "describe", javaType = String.class)
+            @Result(property = "remark", column = "remark", javaType = String.class)
     })
     List<Permission> findByUserName(String userName);
 }

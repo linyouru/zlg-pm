@@ -1,21 +1,28 @@
 package com.zlg.zlgpm.entity;
 
+import io.mybatis.provider.Entity;
+
 import java.io.Serializable;
 
+@Entity.Table("permission")
 public class Permission implements Serializable {
 
     private static final long serialVersionUID = -3L;
 
+    @Entity.Column(id = true)
     private int id;
+    @Entity.Column
     private String url;
+    @Entity.Column
     private String name;
-    private String describe;
+    @Entity.Column
+    private String remark;
 
-    public Permission(int id, String url, String name, String describe) {
+    public Permission(int id, String url, String name, String remark) {
         this.id = id;
         this.url = url;
         this.name = name;
-        this.describe = describe;
+        this.remark = remark;
     }
 
     @Override
@@ -24,7 +31,7 @@ public class Permission implements Serializable {
                 "id=" + id +
                 ", url='" + url + '\'' +
                 ", name='" + name + '\'' +
-                ", describe='" + describe + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 
@@ -52,11 +59,11 @@ public class Permission implements Serializable {
         this.name = name;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
