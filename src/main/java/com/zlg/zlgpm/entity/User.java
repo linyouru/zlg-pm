@@ -21,6 +21,8 @@ public class User implements Serializable {
     @Entity.Column
     private String email;
     @Entity.Column
+    private String updateTime;
+    @Entity.Column
     private String createTime;
     @Entity.Column
     private Integer status;
@@ -30,15 +32,31 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Long id, String userName, String password, String nickName, String email, String createTime, Integer status, String remark) {
+    public User(Long id, String userName, String password, String nickName, String email, String updateTime, String createTime, Integer status, String remark) {
         this.id = id;
         this.userName = userName;
         this.password = password;
         this.nickName = nickName;
         this.email = email;
+        this.updateTime = updateTime;
         this.createTime = createTime;
         this.status = status;
         this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", email='" + email + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", status=" + status +
+                ", remark='" + remark + '\'' +
+                '}';
     }
 
     public Long getId() {
@@ -81,6 +99,14 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getCreateTime() {
         return createTime;
     }
@@ -103,19 +129,5 @@ public class User implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", email='" + email + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", status=" + status +
-                ", remark='" + remark + '\'' +
-                '}';
     }
 }

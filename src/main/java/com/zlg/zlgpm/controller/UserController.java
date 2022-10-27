@@ -1,0 +1,47 @@
+package com.zlg.zlgpm.controller;
+
+
+import com.zlg.zlgpm.controller.model.ApiBaseResp;
+import com.zlg.zlgpm.controller.model.ApiCreateUserRequest;
+import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
+import com.zlg.zlgpm.controller.model.ApiUserListResponse;
+import com.zlg.zlgpm.service.UserService;
+import io.swagger.annotations.Api;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+@RestController
+@Api(tags = "user", description = "用户相关接口")
+public class UserController implements UserApi {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Resource
+    private UserService userService;
+
+    @Override
+    public ResponseEntity<ApiBaseResp> createUser(ApiCreateUserRequest body) {
+        userService.createUser(body);
+        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> deleteUser(Integer id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> updateUser(ApiUpdateUserRequest body) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ApiUserListResponse> userList(String userName, Integer currentPage, Integer pageSize) {
+        return null;
+    }
+
+}
