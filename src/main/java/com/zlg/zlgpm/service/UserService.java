@@ -1,7 +1,7 @@
 package com.zlg.zlgpm.service;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zlg.zlgpm.dao.UserRoleMapper;
 import com.zlg.zlgpm.entity.User;
 import com.zlg.zlgpm.entity.UserRole;
@@ -9,16 +9,14 @@ import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.controller.model.ApiCreateUserRequest;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.helper.DataConvertHelper;
-import io.mybatis.mapper.example.Example;
-import io.mybatis.mapper.fn.Fn;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -48,15 +46,17 @@ public class UserService {
 //        return this.userMapper.queryByUserName(userName);
 //    }
 
+    @Transactional(rollbackFor = Exception.class)
     public void createUser(ApiCreateUserRequest apiCreateUserRequest) {
         User user = dataConvertHelper.convert2User(apiCreateUserRequest);
         user.setStatus(1);
-        long count = userMapper.selectCount(User.builder().userName(user.getUserName()).build());
+        Long count = userMapper.selectCount(new QueryWrapper<User>().eq("username", user.getUserName()));
         if (count > 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10001");
         }
-        userMapper.insert(user);
-        User insertUser = userMapper.selectOne(user).get();
+        int insert = userMapper.insert(user);
+        User insertUser = userMapper.selectOne(new QueryWrapper<User>().eq("username", user.getUserName()));
+        //添加默认角色
         userRoleMapper.insert(new UserRole(insertUser.getId(), 3L));
     }
 

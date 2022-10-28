@@ -1,7 +1,5 @@
 package com.zlg.zlgpm;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.entity.User;
 import com.zlg.zlgpm.service.UserService;
@@ -13,6 +11,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 class ZlgPmApplicationTests {
@@ -49,16 +48,14 @@ class ZlgPmApplicationTests {
 
     @Test
     void test2() {
-        User user = new User();
-        Page<User> users = PageHelper.startPage(1, 3).doSelectPage(() -> userMapper.selectList(user));
-//        List<User> users = userMapper.selectList(user);
-        for (User u :users){
+        List<User> users = userMapper.selectList(null);
+        for (User u : users) {
             System.out.println(u);
         }
     }
 
     @Test
-    void test3(){
+    void test3() {
         String s = DigestUtils.md5DigestAsHex("zlg2022".getBytes());
         System.out.println(s);
     }

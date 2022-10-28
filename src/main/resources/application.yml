@@ -14,10 +14,14 @@ spring:
 
 
 # mybatis分页插件pagehelper配置
-pagehelper:
-  propertyName: propertyValue
-  reasonable: false
-  defaultCount: true # 分页插件默认参数支持 default-count 形式，自定义扩展的参数，必须大小写一致
+#pagehelper:
+#  propertyName: propertyValue
+#  reasonable: false
+#  defaultCount: true # 分页插件默认参数支持 default-count 形式，自定义扩展的参数，必须大小写一致
 
 logging:
   config: classpath:log4j2.xml
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false #开启的驼峰效果: 实体类中的字段 userName 自动映射对应数据库中的 user_name

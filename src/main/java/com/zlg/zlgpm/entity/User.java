@@ -1,31 +1,36 @@
 package com.zlg.zlgpm.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.zlg.zlgpm.exception.ErrResp;
-import io.mybatis.provider.Entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity.Table("user")
+@TableName("user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
-    @Entity.Column(id = true)
+    @TableId(type = IdType.AUTO)
     private Long id;
-    @Entity.Column
+    @TableField
     private String userName;
-    @Entity.Column
+    @TableField
     private String password;
-    @Entity.Column
+    @TableField
     private String nickName;
-    @Entity.Column
+    @TableField
     private String email;
+    @TableField
     private String updateTime;
+    @TableField
     private String createTime;
-    @Entity.Column
+    @TableField
     private Integer status;
-    @Entity.Column
+    @TableField
     private String remark;
 
     public User() {

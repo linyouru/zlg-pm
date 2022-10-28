@@ -1,21 +1,25 @@
 package com.zlg.zlgpm.entity;
 
-import io.mybatis.provider.Entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 
-@Entity.Table("permission")
+@TableName("permission")
 public class Permission implements Serializable {
 
     private static final long serialVersionUID = -3L;
 
-    @Entity.Column(id = true)
+    @TableId(type = IdType.AUTO)
     private int id;
-    @Entity.Column
+    @TableField
     private String url;
-    @Entity.Column
+    @TableField
     private String name;
-    @Entity.Column
+    @TableField
     private String remark;
 
     public Permission(int id, String url, String name, String remark) {

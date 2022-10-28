@@ -1,15 +1,14 @@
 package com.zlg.zlgpm.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zlg.zlgpm.entity.User;
-import io.mybatis.mapper.Mapper;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-@org.apache.ibatis.annotations.Mapper
-public interface UserMapper extends Mapper<User,Long> {
+public interface UserMapper extends BaseMapper<User> {
 
 //    @Select("select * from user")
 //    List<User> queryList();

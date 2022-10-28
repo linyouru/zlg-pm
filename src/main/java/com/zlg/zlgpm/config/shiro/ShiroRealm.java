@@ -1,5 +1,6 @@
 package com.zlg.zlgpm.config.shiro;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zlg.zlgpm.dao.PermissionMapper;
 import com.zlg.zlgpm.dao.RoleMapper;
 import com.zlg.zlgpm.dao.UserMapper;
@@ -72,16 +73,14 @@ public class ShiroRealm extends AuthorizingRealm {
         String userName = (String) authenticationToken.getPrincipal();
         String password = new String((char[]) authenticationToken.getCredentials());
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
-        Optional<User> optionalUser = userMapper.selectOne(User.builder().userName(userName).build());
-        if(!optionalUser.isPresent()){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userName", userName);
+        User user = userMapper.selectOne(queryWrapper);
+        if(null == user){
             throw new UnknownAccountException("用户不存在");
         }
-        User user = optionalUser.get();
         System.out.println("用户" + userName + "认证-----ShiroRealm.doGetAuthenticationInfo");
 
-//        if (!userName.equals(user.getUserName())) {
-//            throw new UnknownAccountException("用户不存在");
-//        }
         if (!passwordMd5.equals(user.getPassword())) {
             throw new IncorrectCredentialsException("密码错误");
         }

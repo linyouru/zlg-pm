@@ -1,17 +1,19 @@
 package com.zlg.zlgpm.entity;
 
-import io.mybatis.provider.Entity;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 
-@Entity.Table("user_role")
+@TableName("user_role")
 public class UserRole implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
-    @Entity.Column("uid")
+    @TableField
     private Long uid;
-    @Entity.Column("rid")
+    @TableField
     private Long rid;
 
     public UserRole(Long uid, Long rid) {
