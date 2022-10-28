@@ -32,18 +32,29 @@ public class UserController implements UserApi {
     }
 
     @Override
+    @RequiresRoles(value="root")
     public ResponseEntity<ApiBaseResp> deleteUser(Integer id) {
-        return null;
+        userService.deleteUser(id);
+        return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
     @Override
-    public ResponseEntity<ApiBaseResp> updateUser(ApiUpdateUserRequest body) {
-        return null;
+    @RequiresRoles(value="root")
+    public ResponseEntity<ApiBaseResp> updateUser(Integer id, ApiUpdateUserRequest body) {
+        userService.updateUser(id, body);
+        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> updateUserPassword(Integer id, String newPassword, String oldPassword) {
+        userService.updatePassword(id, newPassword, oldPassword);
+        return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
     @Override
     public ResponseEntity<ApiUserListResponse> userList(String userName, Integer currentPage, Integer pageSize) {
-        return ResponseEntity.ok().body(null);
+        ApiUserListResponse apiUserListResponse = userService.userList(userName, currentPage, pageSize);
+        return ResponseEntity.ok().body(apiUserListResponse);
     }
 
 }

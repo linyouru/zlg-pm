@@ -3,6 +3,8 @@ package com.zlg.zlgpm.exception;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.exception.ErrResp;
 import org.apache.shiro.authz.AuthorizationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -29,8 +31,30 @@ import java.util.Map;
 @ControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler implements MessageSourceAware {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private MessageSource messageSource;
+
+    /**
+     * 意料之外的异常捕获,避免直接返回500
+     */
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ErrResp> serverError(WebRequest request,Exception exception){
+        final String path = getPath(request);
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        String code = getCode(httpStatus,"");
+        final ErrResp resp = ErrResp.builder()
+                .timestamp(new Date())
+                .status(httpStatus.value())
+                .code(code)
+                .error(httpStatus.getReasonPhrase())
+                .path(path)
+                .message("server error")
+                .build();
+        logger.error(exception.getMessage());
+        exception.printStackTrace();
+        return new ResponseEntity<>(resp, httpStatus);
+    }
 
     /**
      * 用户登录后访问自身无授权的资源时shiro会抛出AuthorizationException

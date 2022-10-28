@@ -91,6 +91,11 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - name: id
+          in: query
+          required: true
+          type: integer
+          description: 用户id
         - in: body
           name: body
           required: true
@@ -111,8 +116,6 @@ paths:
       summary: 删除用户
       description: 删除用户(仅root),删除用户前需要先删除用户下挂载的任务
       operationId: deleteUser
-      consumes:
-        - "application/json"
       produces:
         - "application/json"
       parameters:
@@ -135,8 +138,6 @@ paths:
         - user
       summary: 获取用户列表
       operationId: userList
-      consumes:
-        - "application/json"
       produces:
         - "application/json"
       parameters:
@@ -158,7 +159,44 @@ paths:
           description: parameter error
         500:
           description: server error
-
+  /user/password:
+    put:
+      summary: 修改用户密码
+      tags:
+        - user
+      description: 修改用户
+      operationId: updateUserPassword
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: query
+          required: true
+          type: integer
+          description: 用户id
+        - name: newPassword
+          in: query
+          required: true
+          type: string
+          minLength: 8
+          maxLength: 16
+          description:  新密码
+        - name: oldPassword
+          in: query
+          required: true
+          type: string
+          minLength: 8
+          maxLength: 16
+          description:  旧密码
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+          description: server error
 # common parameters
 parameters:
   queryPageSize:

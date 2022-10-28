@@ -36,6 +36,7 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 允许匿名访问
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/user/password", "anon");
 
         // 允许匿名访问swagger2页面
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");

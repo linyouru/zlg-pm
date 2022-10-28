@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableTransactionManagement
 @SpringBootApplication
 @MapperScan("com.zlg.zlgpm.dao")
 public class ZlgPmApplication {
