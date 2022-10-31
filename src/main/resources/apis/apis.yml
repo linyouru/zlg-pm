@@ -34,7 +34,7 @@ paths:
         200:
           description: success
           schema:
-            $ref: "#/definitions/BaseResp"
+            $ref: "#/definitions/LoginResponse"
         400:
           description: parameter error
         500:
@@ -246,6 +246,14 @@ definitions:
         type: string
       password:
         type: string
+  LoginResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      result:
+        type: object
+        $ref: "#/definitions/UserResponse"
   CreateUserRequest:
     type: object
     required:

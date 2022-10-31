@@ -52,6 +52,7 @@ public class UserController implements UserApi {
     }
 
     @Override
+    @RequiresRoles(value="root")
     public ResponseEntity<ApiUserListResponse> userList(String userName, Integer currentPage, Integer pageSize) {
         ApiUserListResponse apiUserListResponse = userService.userList(userName, currentPage, pageSize);
         return ResponseEntity.ok().body(apiUserListResponse);

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
 import com.zlg.zlgpm.controller.model.ApiUserListResponse;
+import com.zlg.zlgpm.controller.model.ApiUserResponse;
 import com.zlg.zlgpm.dao.UserRoleMapper;
 import com.zlg.zlgpm.entity.User;
 import com.zlg.zlgpm.entity.UserRole;
@@ -80,6 +81,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         }
         Page<User> userPage = userMapper.selectPage(new Page<User>().setCurrent(currentPage).setSize(pageSize), wrapper);
         return dataConvertHelper.convert2ApiUserListResponse(userPage);
+    }
+
+    public ApiUserResponse queryUserByName(String userName){
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("userName", userName));
+        return dataConvertHelper.convert2UserResponse(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
