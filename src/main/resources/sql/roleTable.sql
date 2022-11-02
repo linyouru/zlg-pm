@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `role`
 (
-    `id`         int(8)      NOT NULL,
+    `id`         int(8)      NOT NULL AUTO_INCREMENT,
     `name`       varchar(32) NOT NULL COMMENT '角色名',
     `remark`     varchar(255) DEFAULT NULL,
     `updateTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `project_task`
 (
-    `id`            int(8)      NOT NULL,
+    `id`            int(8)      NOT NULL AUTO_INCREMENT,
     `taskType`      int(8)      NOT NULL COMMENT '任务类型 1前端；2后端；3产品',
     `task`          varchar(255) DEFAULT NULL COMMENT '任务内容',
     `status`        int(8)      NOT NULL COMMENT '1开发中；2待验收；3已完成；4排队中',
