@@ -1,4 +1,4 @@
-package com.zlg.zlgpm.entity;
+package com.zlg.zlgpm.pojo;
 
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
 @TableName("user_role")
-public class UserRole implements Serializable {
+public class UserRolePo implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
@@ -16,7 +16,7 @@ public class UserRole implements Serializable {
     @TableField
     private Long rid;
 
-    public UserRole(Long uid, Long rid) {
+    public UserRolePo(Long uid, Long rid) {
         this.uid = uid;
         this.rid = rid;
     }

@@ -147,9 +147,11 @@ paths:
         - name: currentPage
           in: query
           type: integer
+          default: 1
         - name: pageSize
           in: query
           type: integer
+          default: 10
       responses:
         200:
           description: success
@@ -180,14 +182,14 @@ paths:
           type: string
           minLength: 8
           maxLength: 16
-          description:  新密码
+          description: 新密码
         - name: oldPassword
           in: query
           required: true
           type: string
           minLength: 8
           maxLength: 16
-          description:  旧密码
+          description: 旧密码
       responses:
         200:
           description: success
@@ -197,6 +199,113 @@ paths:
           description: parameter error
         500:
           description: server error
+  /project:
+    post:
+      tags:
+        - project
+      summary: 创建项目
+      description: 创建项目(仅root),name+version要唯一
+      operationId: createProject
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateProjectRequest"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error;
+        500:
+          description: server error;
+    put:
+      tags:
+        - project
+      summary: 修改项目信息
+      description: 修改项目信息(仅root),name+version要唯一
+      operationId: updateProject
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateProjectRequest"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error;
+        500:
+          description: server error;
+    delete:
+      tags:
+        - project
+      summary: 删除项目
+      description: 删除项目(仅root)
+      operationId: deleteProject
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+          description: 项目id
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /project/list:
+    get:
+      tags:
+        - project
+      summary: 获取项目列表
+      description: 获取项目列表
+      operationId: projectList
+      produces:
+        - "application/json"
+      parameters:
+        - name: name
+          in: query
+          type: string
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/ProjectListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
+
+
+
 # common parameters
 parameters:
   queryPageSize:
@@ -328,3 +437,89 @@ definitions:
         type: string
       remark:
         type: string
+  CreateProjectRequest:
+    type: object
+    required:
+      - name
+      - version
+      - uid
+      - status
+    properties:
+      name:
+        type: string
+        minLength: 2
+        maxLength: 32
+        description: 项目名
+      version:
+        type: string
+        minLength: 2
+        maxLength: 8
+        description: 项目版本号
+      uid:
+        type: integer
+        minLength: 1
+        maxLength: 8
+        description: 用户id
+      status:
+        type: string
+        enum:
+          - "1"
+          - "2"
+        description: "项目状态,1:开发中;2:已完成"
+      remark:
+        type: string
+        maxLength: 255
+  UpdateProjectRequest:
+    type: object
+    required:
+      - uid
+    properties:
+      version:
+        type: string
+        minLength: 2
+        maxLength: 8
+        description: 项目版本号
+      uid:
+        type: integer
+        minLength: 1
+        maxLength: 8
+        description: 用户id
+      status:
+        type: string
+        enum:
+          - "1"
+          - "2"
+        description: "项目状态,1:开发中;2:已完成"
+      remark:
+        type: string
+        maxLength: 255
+  ProjectResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      version:
+        type: string
+      nickName:
+        type: string
+        description: 项目负责人昵称
+      status:
+        type: string
+        description: "项目状态,1:开发中;2:已完成"
+      remark:
+        type: string
+      updateTime:
+        type: string
+      createTime:
+        type: string
+  ProjectListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/ProjectResponse"

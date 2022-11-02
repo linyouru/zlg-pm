@@ -2,17 +2,17 @@ package com.zlg.zlgpm;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.UserMapper;
-import com.zlg.zlgpm.entity.User;
+import com.zlg.zlgpm.pojo.ProjectPo;
+import com.zlg.zlgpm.pojo.ProjectBo;
+import com.zlg.zlgpm.pojo.UserPo;
 import com.zlg.zlgpm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -25,15 +25,17 @@ class ZlgPmApplicationTests {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private ProjectMapper projectMapper;
 
     @Test
     void updateUser() {
-        User user = new User();
-        user.setId(15L);
-        user.setUserName("zlg123");
-        user.setPassword("123456");
-        user.setEmail("zlg@qq.com");
-        userMapper.updateById(user);
+        UserPo userPo = new UserPo();
+        userPo.setId(15L);
+        userPo.setUserName("zlg123");
+        userPo.setPassword("123456");
+        userPo.setEmail("zlg@qq.com");
+        userMapper.updateById(userPo);
     }
 
     @Test
@@ -42,9 +44,17 @@ class ZlgPmApplicationTests {
         int pageSize = 2;
         String userName = "zlg123";
 //        Page<User> userPage = userMapper.selectPage(new Page<>(currentPage,pageSize), null);
-        Page<User> userPage = userMapper.selectPage(new Page<User>().setCurrent(currentPage).setSize(pageSize), new QueryWrapper<User>().eq("userName", userName));
+        Page<UserPo> userPage = userMapper.selectPage(new Page<UserPo>().setCurrent(currentPage).setSize(pageSize), new QueryWrapper<UserPo>().eq("userName", userName));
 
         System.out.println(1);
+    }
+
+    @Test
+    void selectProjectList(){
+        ProjectPo projectPo = new ProjectPo();
+        QueryWrapper<ProjectPo> queryWrapper = new QueryWrapper<ProjectPo>().eq("p.name", "awtk");
+//        List<Project> projects = projectMapper.selectByName(project,queryWrapper);
+        System.out.println();
     }
 
 

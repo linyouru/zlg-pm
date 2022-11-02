@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zlg.zlgpm.dao.PermissionMapper;
 import com.zlg.zlgpm.dao.RoleMapper;
 import com.zlg.zlgpm.dao.UserMapper;
-import com.zlg.zlgpm.entity.Permission;
-import com.zlg.zlgpm.entity.Role;
-import com.zlg.zlgpm.entity.User;
+import com.zlg.zlgpm.pojo.RolePo;
+import com.zlg.zlgpm.pojo.UserPo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -18,7 +17,6 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 public class ShiroRealm extends AuthorizingRealm {
 
@@ -38,17 +36,17 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String userName = user.getUserName();
+        UserPo userPo = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        String userName = userPo.getUserName();
 
         System.out.println("用户" + userName + "获取权限-----ShiroRealm.doGetAuthorizationInfo");
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
         //获取用户角色集
-        List<Role> roleList = roleMapper.findByUserName(userName);
+        List<RolePo> rolePoList = roleMapper.findByUserName(userName);
         HashSet<String> roleSet = new HashSet<>();
-        for (Role role : roleList) {
-            roleSet.add(role.getName());
+        for (RolePo rolePo : rolePoList) {
+            roleSet.add(rolePo.getName());
         }
         simpleAuthorizationInfo.setRoles(roleSet);
         //获取用户权限集(权限暂时不启用,现在有角色就够用了)
@@ -73,18 +71,18 @@ public class ShiroRealm extends AuthorizingRealm {
         String userName = (String) authenticationToken.getPrincipal();
         String password = new String((char[]) authenticationToken.getCredentials());
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<UserPo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userName", userName);
-        User user = userMapper.selectOne(queryWrapper);
-        if(null == user){
+        UserPo userPo = userMapper.selectOne(queryWrapper);
+        if(null == userPo){
             throw new UnknownAccountException("用户不存在");
         }
         System.out.println("用户" + userName + "认证-----ShiroRealm.doGetAuthenticationInfo");
 
-        if (!passwordMd5.equals(user.getPassword())) {
+        if (!passwordMd5.equals(userPo.getPassword())) {
             throw new IncorrectCredentialsException("密码错误");
         }
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userPo, password, getName());
         return info;
     }
 }

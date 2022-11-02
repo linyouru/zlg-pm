@@ -8,8 +8,8 @@ import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
 import com.zlg.zlgpm.controller.model.ApiUserListResponse;
 import com.zlg.zlgpm.controller.model.ApiUserResponse;
 import com.zlg.zlgpm.dao.UserRoleMapper;
-import com.zlg.zlgpm.entity.User;
-import com.zlg.zlgpm.entity.UserRole;
+import com.zlg.zlgpm.pojo.UserPo;
+import com.zlg.zlgpm.pojo.UserRolePo;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.controller.model.ApiCreateUserRequest;
 import com.zlg.zlgpm.dao.UserMapper;
@@ -25,7 +25,7 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 
 @Service
-public class UserService extends ServiceImpl<UserMapper, User> {
+public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -38,60 +38,63 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Transactional(rollbackFor = Exception.class)
     public void createUser(ApiCreateUserRequest apiCreateUserRequest) {
-        User user = dataConvertHelper.convert2User(apiCreateUserRequest);
-        user.setStatus(1);
-        Long count = userMapper.selectCount(new QueryWrapper<User>().eq("username", user.getUserName()));
+        UserPo userPo = dataConvertHelper.convert2User(apiCreateUserRequest);
+        userPo.setStatus(1);
+        Long count = userMapper.selectCount(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
         if (count > 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10001");
         }
-        int insert = userMapper.insert(user);
-        User insertUser = userMapper.selectOne(new QueryWrapper<User>().eq("username", user.getUserName()));
+        int insert = userMapper.insert(userPo);
+        UserPo insertUserPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
         //添加默认角色
-        userRoleMapper.insert(new UserRole(insertUser.getId(), 3L));
+        userRoleMapper.insert(new UserRolePo(insertUserPo.getId(), 3L));
     }
 
     public void updateUser(Integer id, ApiUpdateUserRequest body) {
-        Long count = userMapper.selectCount(new QueryWrapper<User>().eq("id", id));
+        Long count = userMapper.selectCount(new QueryWrapper<UserPo>().eq("id", id));
         if (count < 1) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
         }
-        User user = dataConvertHelper.convert2User(body);
-        user.setId(id.longValue());
-        int i = userMapper.updateById(user);
+        UserPo userPo = dataConvertHelper.convert2User(body);
+        userPo.setId(id.longValue());
+        int i = userMapper.updateById(userPo);
     }
 
     public void updatePassword(Integer id, String newPassword, String oldPassword) {
-        User select = userMapper.selectById(id);
+        UserPo select = userMapper.selectById(id);
         if (null == select) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
         } else if (!select.getPassword().equals(DigestUtils.md5DigestAsHex(oldPassword.getBytes()))) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10003");
         }
-        User user = new User();
-        user.setId(Long.valueOf(id));
-        user.setPassword(DigestUtils.md5DigestAsHex(newPassword.getBytes()));
-        userMapper.updateById(user);
+        UserPo userPo = new UserPo();
+        userPo.setId(Long.valueOf(id));
+        userPo.setPassword(DigestUtils.md5DigestAsHex(newPassword.getBytes()));
+        userMapper.updateById(userPo);
     }
 
     public ApiUserListResponse userList(String userName, Integer currentPage, Integer pageSize) {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
         wrapper.ne("id", 1);
         if (null != userName) {
             wrapper.eq("userName", userName);
         }
-        Page<User> userPage = userMapper.selectPage(new Page<User>().setCurrent(currentPage).setSize(pageSize), wrapper);
+        Page<UserPo> userPage = userMapper.selectPage(new Page<UserPo>().setCurrent(currentPage).setSize(pageSize), wrapper);
         return dataConvertHelper.convert2ApiUserListResponse(userPage);
     }
 
     public ApiUserResponse queryUserByName(String userName){
-        User user = userMapper.selectOne(new QueryWrapper<User>().eq("userName", userName));
-        return dataConvertHelper.convert2UserResponse(user);
+        UserPo userPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("userName", userName));
+        return dataConvertHelper.convert2UserResponse(userPo);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteUser(Integer id) {
-        userMapper.delete(new QueryWrapper<User>().eq("id", id));
-        userRoleMapper.delete(new QueryWrapper<UserRole>().eq("uid", id));
+        //##################待补充功能##################
+        //删除用户前须先删除用户下挂载的任务,若用户为项目负责人,还要先删除项目
+
+        userMapper.delete(new QueryWrapper<UserPo>().eq("id", id));
+        userRoleMapper.delete(new QueryWrapper<UserRolePo>().eq("uid", id));
     }
 
 

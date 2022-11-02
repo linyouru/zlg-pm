@@ -25,21 +25,21 @@ public class UserController implements UserApi {
     private UserService userService;
 
     @Override
-    @RequiresRoles(value="root")
+    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> createUser(ApiCreateUserRequest body) {
         userService.createUser(body);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
     @Override
-    @RequiresRoles(value="root")
+    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> deleteUser(Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
     @Override
-    @RequiresRoles(value="root")
+    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> updateUser(Integer id, ApiUpdateUserRequest body) {
         userService.updateUser(id, body);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
@@ -52,8 +52,9 @@ public class UserController implements UserApi {
     }
 
     @Override
-    @RequiresRoles(value="root")
     public ResponseEntity<ApiUserListResponse> userList(String userName, Integer currentPage, Integer pageSize) {
+        currentPage = currentPage == null ? 1 : currentPage;
+        pageSize = pageSize == null ? 10 : pageSize;
         ApiUserListResponse apiUserListResponse = userService.userList(userName, currentPage, pageSize);
         return ResponseEntity.ok().body(apiUserListResponse);
     }

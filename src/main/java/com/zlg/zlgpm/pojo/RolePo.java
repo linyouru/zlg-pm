@@ -1,4 +1,4 @@
-package com.zlg.zlgpm.entity;
+package com.zlg.zlgpm.pojo;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -8,32 +8,31 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 
-@TableName("permission")
-public class Permission implements Serializable {
+@TableName("role")
+public class RolePo implements Serializable {
 
-    private static final long serialVersionUID = -3L;
+    private static final long serialVersionUID = -2L;
 
     @TableId(type = IdType.AUTO)
     private int id;
-    @TableField
-    private String url;
     @TableField
     private String name;
     @TableField
     private String remark;
 
-    public Permission(int id, String url, String name, String remark) {
+    public RolePo() {
+    }
+
+    public RolePo(int id, String name, String remark) {
         this.id = id;
-        this.url = url;
         this.name = name;
         this.remark = remark;
     }
 
     @Override
     public String toString() {
-        return "Permission{" +
+        return "Role{" +
                 "id=" + id +
-                ", url='" + url + '\'' +
                 ", name='" + name + '\'' +
                 ", remark='" + remark + '\'' +
                 '}';
@@ -45,14 +44,6 @@ public class Permission implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getName() {
@@ -67,7 +58,7 @@ public class Permission implements Serializable {
         return remark;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setRemark(String describe) {
+        this.remark = describe;
     }
 }

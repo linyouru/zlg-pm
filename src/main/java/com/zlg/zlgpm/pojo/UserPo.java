@@ -1,16 +1,14 @@
-package com.zlg.zlgpm.entity;
+package com.zlg.zlgpm.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.zlg.zlgpm.exception.ErrResp;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @TableName("user")
-public class User implements Serializable {
+public class UserPo implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
@@ -33,10 +31,10 @@ public class User implements Serializable {
     @TableField
     private String remark;
 
-    public User() {
+    public UserPo() {
     }
 
-    public User(String userName, String password, String nickName, String email, Integer status, String remark) {
+    public UserPo(String userName, String password, String nickName, String email, Integer status, String remark) {
         this.userName = userName;
         this.password = password;
         this.nickName = nickName;
@@ -124,8 +122,8 @@ public class User implements Serializable {
         this.remark = remark;
     }
 
-    public static User.UserBuilder builder() {
-        return new User.UserBuilder();
+    public static UserPo.UserBuilder builder() {
+        return new UserPo.UserBuilder();
     }
     
     public static class UserBuilder{
@@ -162,8 +160,8 @@ public class User implements Serializable {
             return this;
         }
 
-        public User build(){
-            return new User(this.userName,this.password,this.nickName,this.email,this.status,this.remark);
+        public UserPo build(){
+            return new UserPo(this.userName,this.password,this.nickName,this.email,this.status,this.remark);
         }
     }
 }
