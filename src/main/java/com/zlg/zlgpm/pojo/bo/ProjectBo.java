@@ -1,54 +1,41 @@
-package com.zlg.zlgpm.pojo;
+package com.zlg.zlgpm.pojo.bo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
-
-@TableName("project")
-public class ProjectPo implements Serializable {
+public class ProjectBo {
 
     private static final long serialVersionUID =1L;
 
-    @TableId(type = IdType.AUTO)
     private int id;
-    @TableField
     private String name;
-    @TableField
     private String version;
-    @TableField
     private int uid;
-    @TableField
+    private String nickName;
     private String status;
-    @TableField
     private String remark;
-    @TableField
     private String updateTime;
-    @TableField
     private String createTime;
 
-    public ProjectPo() {
-    }
-
-    public ProjectPo(int id, String name, String version, int uid, String status, String remark) {
+    public ProjectBo() {}
+    public ProjectBo(int id, String name, String version, int uid, String nickName, String status, String remark, String updateTime, String createTime) {
         this.id = id;
         this.name = name;
         this.version = version;
         this.uid = uid;
+        this.nickName = nickName;
         this.status = status;
         this.remark = remark;
+        this.updateTime = updateTime;
+        this.createTime = createTime;
     }
 
     @Override
     public String toString() {
-        return "Project{" +
+        return "ProjectVo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", version='" + version + '\'' +
                 ", uid=" + uid +
-                ", status=" + status +
+                ", nickName='" + nickName + '\'' +
+                ", status='" + status + '\'' +
                 ", remark='" + remark + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
@@ -87,6 +74,14 @@ public class ProjectPo implements Serializable {
         this.uid = uid;
     }
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -107,8 +102,15 @@ public class ProjectPo implements Serializable {
         return updateTime;
     }
 
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getCreateTime() {
         return createTime;
     }
 
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 }

@@ -4,16 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.UserMapper;
-import com.zlg.zlgpm.pojo.ProjectPo;
-import com.zlg.zlgpm.pojo.ProjectBo;
-import com.zlg.zlgpm.pojo.UserPo;
+import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @SpringBootTest
 class ZlgPmApplicationTests {

@@ -1,4 +1,4 @@
-package com.zlg.zlgpm.pojo;
+package com.zlg.zlgpm.pojo.po;
 
 
 import com.baomidou.mybatisplus.annotation.TableField;

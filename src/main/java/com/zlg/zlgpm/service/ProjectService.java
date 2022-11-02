@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiCreateProjectRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.UserMapper;
-import com.zlg.zlgpm.pojo.ProjectBo;
-import com.zlg.zlgpm.pojo.ProjectPo;
-import com.zlg.zlgpm.pojo.UserPo;
+import com.zlg.zlgpm.pojo.bo.ProjectBo;
+import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import org.springframework.dao.DuplicateKeyException;
@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @Service
 public class ProjectService {

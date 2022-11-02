@@ -2,9 +2,9 @@ package com.zlg.zlgpm.helper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.*;
-import com.zlg.zlgpm.pojo.ProjectBo;
-import com.zlg.zlgpm.pojo.ProjectPo;
-import com.zlg.zlgpm.pojo.UserPo;
+import com.zlg.zlgpm.pojo.bo.ProjectBo;
+import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 

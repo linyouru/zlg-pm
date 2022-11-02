@@ -1,7 +1,7 @@
 package com.zlg.zlgpm.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zlg.zlgpm.pojo.UserPo;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.stereotype.Repository;
 
 @Repository
