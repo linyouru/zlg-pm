@@ -303,8 +303,137 @@ paths:
           description: parameter error
         500:
           description: server error
-
-
+  /task:
+    post:
+      tags:
+        - task
+      summary: 创建任务
+      description: 创建任务
+      operationId: createTask
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: pid
+          type: integer
+          required: true
+          description: 项目id
+        - in: query
+          name: uid
+          type: integer
+          required: true
+          description: 负责人用户id
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateTaskRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+    put:
+      tags:
+        - task
+      summary: 更新任务
+      description: 更新任务
+      operationId: updateTask
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+          description: 任务id
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTaskRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+    delete:
+      tags:
+        - task
+      summary: 删除任务
+      description: 删除任务
+      operationId: deleteTask
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /task/list:
+    get:
+      tags:
+        - task
+      summary: 获取任务列表
+      description: 获取任务列表
+      operationId: taskList
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: status
+          type: string
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+          description: 任务状态 1开发中；2待验收；3已完成；4排队中
+        - in: query
+          name: projectName
+          type: string
+        - in: query
+          name: projectVersion
+          type: string
+        - in: query
+          name: uid
+          type: integer
+          description: 负责人用户id
+        - in: query
+          name: startTime
+          type: string
+          description: 计划开始时间,起始,时间戳(ms)
+        - in: query
+          name: endTime
+          type: string
+          description: 计划开始时间,结束,时间戳(ms)
+        - in: query
+          name: abnormal
+          type: string
+          enum:
+            - 1
+            - 2
+          description: 1将过期,2已过期
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
 
 # common parameters
 parameters:
@@ -523,3 +652,169 @@ definitions:
             type: array
             items:
               $ref: "#/definitions/ProjectResponse"
+  CreateTaskRequest:
+    type: object
+    required:
+      - taskType
+      - status
+    properties:
+      taskType:
+        type: string
+        enum:
+          - 1
+          - 2
+          - 3
+        description: 任务类型 1前端；2后端；3产品
+      task:
+        type: string
+        description: 任务内容
+        maxLength: 255
+      status:
+        type: string
+        enum:
+          - 1
+          - 2
+          - 3
+          - 4
+        description: 任务状态 1开发中；2待验收；3已完成；4排队中
+      playStartTime:
+        type: string
+        description: 计划开始时间,时间戳(ms)
+      playEndTime:
+        type: string
+        description: 计划结束时间,时间戳(ms)
+      startTime:
+        type: string
+        description: 实际开始时间,时间戳(ms)
+      endTime:
+        type: string
+        description: 实际结束时间,时间戳(ms)
+      timely:
+        type: string
+        enum:
+          - 1
+          - 2
+        description: 及时性,1是;2否
+      quality:
+        type: string
+        description: 质量分
+      document:
+        type: string
+        description: 文档分
+      remark:
+        type: string
+        description: 备注
+      link:
+        type: string
+        description: 文档备注
+  UpdateTaskRequest:
+    type: object
+    properties:
+      taskType:
+        type: string
+        enum:
+          - 1
+          - 2
+          - 3
+        description: 任务类型 1前端；2后端；3产品
+      task:
+        type: string
+        description: 任务内容
+        maxLength: 255
+      status:
+        type: string
+        enum:
+          - 1
+          - 2
+          - 3
+          - 4
+        description: 任务状态 1开发中；2待验收；3已完成；4排队中
+      playStartTime:
+        type: string
+        description: 计划开始时间,时间戳(ms)
+      playEndTime:
+        type: string
+        description: 计划结束时间,时间戳(ms)
+      startTime:
+        type: string
+        description: 实际开始时间,时间戳(ms)
+      endTime:
+        type: string
+        description: 实际结束时间,时间戳(ms)
+      timely:
+        type: string
+        enum:
+          - 1
+          - 2
+        description: 及时性,1是;2否
+      quality:
+        type: string
+        description: 质量分
+      document:
+        type: string
+        description: 文档分
+      remark:
+        type: string
+        description: 备注
+      link:
+        type: string
+        description: 文档备注
+      uid:
+        type: integer
+        description: 负责人用户id
+  TaskListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/TaskResponse"
+  TaskResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      projectName:
+        type: string
+      projectVersion:
+        type: string
+      taskType:
+        type: string
+        description: 任务类型 1前端；2后端；3产品
+      task:
+        type: string
+      status:
+        type: string
+        description: 任务状态 1开发中；2待验收；3已完成；4排队中
+      nickName:
+        type: string
+        description: 开发负责人昵称
+      playStartTime:
+        type: string
+        description: 计划开始时间
+      playEndTime:
+        type: string
+        description: 计划结束时间
+      startTime:
+        type: string
+        description: 实际开始时间
+      endTime:
+        type: string
+        description: 实际结束时间
+      timely:
+        type: string
+        description: 及时性,1是;2否
+      quality:
+        type: string
+        description: 质量分
+      document:
+        type: string
+        description: 文档分
+      remark:
+        type: string
+        description: 备注
+      link:
+        type: string
+        description: 文档备注
