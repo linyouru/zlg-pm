@@ -17,5 +17,5 @@ CREATE TABLE IF NOT EXISTS `user`
   COLLATE = utf8mb4_unicode_ci;
 
 insert into `user` (id, userName, password, nickName, email, status, remark)
-values (1, "root", "f617b6f53bdea5bbbe3f73f13ba19cec", "超级管理员", "", 1, "")
+values (1, "root", "4f1e174007fc5daf5ca6ad8f9bf9c746", "超级管理员", "", 1, "")
 ON DUPLICATE KEY UPDATE id = 1;
