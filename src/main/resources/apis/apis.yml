@@ -313,16 +313,6 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - in: query
-          name: pid
-          type: integer
-          required: true
-          description: 项目id
-        - in: query
-          name: uid
-          type: integer
-          required: true
-          description: 负责人用户id
         - in: body
           name: body
           required: true
@@ -391,6 +381,14 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
         - in: query
           name: status
           type: string
@@ -655,9 +653,17 @@ definitions:
   CreateTaskRequest:
     type: object
     required:
+      - pid
+      - uid
       - taskType
       - status
     properties:
+      pid:
+        type: integer
+        description: 项目id
+      uid:
+        type: integer
+        description: 负责人用户id
       taskType:
         type: string
         enum:
@@ -818,3 +824,9 @@ definitions:
       link:
         type: string
         description: 文档备注
+      overtime:
+        type: string
+        description: 1已过期
+      warning:
+        type: string
+        description: 1将过期
