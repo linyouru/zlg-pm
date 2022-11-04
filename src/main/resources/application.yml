@@ -13,12 +13,6 @@ spring:
     url: jdbc:mysql://192.168.174.128:3306/pm?useUnicode=true&characterEncoding=utf8&useSSL=false
 
 
-# mybatis分页插件pagehelper配置
-#pagehelper:
-#  propertyName: propertyValue
-#  reasonable: false
-#  defaultCount: true # 分页插件默认参数支持 default-count 形式，自定义扩展的参数，必须大小写一致
-
 logging:
   config: classpath:log4j2.xml
 

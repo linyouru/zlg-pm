@@ -432,7 +432,41 @@ paths:
           description: parameter error
         500:
           description: server error
-
+  /operationLog/list:
+    get:
+      tags:
+        - operationLog
+      summary: 操作日志
+      description: 操作日志
+      operationId:  operationLogList
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: uid
+          type: integer
+        - in: query
+          name: record
+          type: string
+          maxLength: 255
+          description: 日志内容
+        - in: query
+          name: startTime
+          type: string
+          description: 开始时间,时间戳(ms)
+        - in: query
+          name: endTime
+          type: string
+          description: 结束时间.时间戳(ms)
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/OperationLogListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
 # common parameters
 parameters:
   queryPageSize:
@@ -830,3 +864,23 @@ definitions:
       warning:
         type: string
         description: 1将过期
+  OperationLogResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      nickName:
+        type: string
+      record:
+        type: string
+      createTime:
+        type: string
+  OperationLogListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/OperationLogResponse"
