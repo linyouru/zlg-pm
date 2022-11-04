@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiCreateProjectRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
+import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
@@ -24,6 +26,8 @@ public class ProjectService {
     @Resource
     private UserMapper userMapper;
     @Resource
+    private TaskMapper taskMapper;
+    @Resource
     private DataConvertHelper dataConvertHelper;
 
     public void createProject(ApiCreateProjectRequest request) {
@@ -40,8 +44,11 @@ public class ProjectService {
     }
 
     public void deleteProject(Integer id) {
-        //##################待补充功能##################
-        //删除项目前要先删除项目下挂载的任务
+        Long taskCount = taskMapper.selectCount(new QueryWrapper<TaskPo>().eq("pid", id));
+        if(taskCount>0){
+            //删除项目前要先删除项目下挂载的任务
+            throw new BizException(HttpStatus.BAD_REQUEST,"project.11003",id);
+        }
         int i = projectMapper.deleteById(id);
         if (i == 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", id);

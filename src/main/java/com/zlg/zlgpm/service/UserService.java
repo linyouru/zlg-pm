@@ -7,7 +7,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
 import com.zlg.zlgpm.controller.model.ApiUserListResponse;
 import com.zlg.zlgpm.controller.model.ApiUserResponse;
+import com.zlg.zlgpm.dao.ProjectMapper;
+import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserRoleMapper;
+import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.pojo.po.UserRolePo;
 import com.zlg.zlgpm.exception.BizException;
@@ -33,6 +37,10 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
     private UserMapper userMapper;
     @Resource
     private UserRoleMapper userRoleMapper;
+    @Resource
+    private ProjectMapper projectMapper;
+    @Resource
+    private TaskMapper taskMapper;
     @Resource
     private DataConvertHelper dataConvertHelper;
 
@@ -83,16 +91,22 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         return dataConvertHelper.convert2ApiUserListResponse(userPage);
     }
 
-    public ApiUserResponse queryUserByName(String userName){
+    public ApiUserResponse queryUserByName(String userName) {
         UserPo userPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("userName", userName));
         return dataConvertHelper.convert2ApiUserResponse(userPo);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteUser(Integer id) {
-        //##################待补充功能##################
         //删除用户前须先删除用户下挂载的任务,若用户为项目负责人,还要先删除项目
-
+        Long taskCount = taskMapper.selectCount(new QueryWrapper<TaskPo>().eq("uid", id));
+        if (taskCount > 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "user.10004", id);
+        }
+        Long projectCount = projectMapper.selectCount(new QueryWrapper<ProjectPo>().eq("uid", id));
+        if (projectCount > 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "user.10005", id);
+        }
         userMapper.delete(new QueryWrapper<UserPo>().eq("id", id));
         userRoleMapper.delete(new QueryWrapper<UserRolePo>().eq("uid", id));
     }
