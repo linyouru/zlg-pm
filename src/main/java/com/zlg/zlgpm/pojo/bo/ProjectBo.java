@@ -2,8 +2,6 @@ package com.zlg.zlgpm.pojo.bo;
 
 public class ProjectBo {
 
-    private static final long serialVersionUID =1L;
-
     private int id;
     private String name;
     private String version;

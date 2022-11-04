@@ -45,14 +45,14 @@ public class ProjectController implements ProjectApi {
     @Override
     public ResponseEntity<ApiProjectListResponse> projectList(String name, Integer currentPage, Integer pageSize) {
         Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize);
-        ApiProjectListResponse apiProjectListResponse = dataConvertHelper.convert2projectListResponse(projectBoPage);
+        ApiProjectListResponse apiProjectListResponse = dataConvertHelper.convert2ApiProjectListResponse(projectBoPage);
         return ResponseEntity.ok().body(apiProjectListResponse);
     }
 
     @Override
     @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> updateProject(Integer id, ApiUpdateProjectRequest body) {
-        ProjectPo projectPo = dataConvertHelper.convert2Project(body);
+        ProjectPo projectPo = dataConvertHelper.convert2ProjectPo(body);
         projectPo.setId(id);
         projectService.updateProject(projectPo);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));

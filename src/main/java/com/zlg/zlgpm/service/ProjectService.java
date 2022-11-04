@@ -31,7 +31,7 @@ public class ProjectService {
         if (null == userPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
         }
-        ProjectPo projectPo = dataConvertHelper.convert2Project(request);
+        ProjectPo projectPo = dataConvertHelper.convert2ProjectPo(request);
         try {
             int insert = projectMapper.insert(projectPo);
         } catch (DuplicateKeyException e) {

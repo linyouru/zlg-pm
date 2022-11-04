@@ -38,7 +38,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     @Transactional(rollbackFor = Exception.class)
     public void createUser(ApiCreateUserRequest apiCreateUserRequest) {
-        UserPo userPo = dataConvertHelper.convert2User(apiCreateUserRequest);
+        UserPo userPo = dataConvertHelper.convert2UserPo(apiCreateUserRequest);
         userPo.setStatus(1);
         Long count = userMapper.selectCount(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
         if (count > 0) {
@@ -55,7 +55,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         if (count < 1) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
         }
-        UserPo userPo = dataConvertHelper.convert2User(body);
+        UserPo userPo = dataConvertHelper.convert2UserPo(body);
         userPo.setId(id.longValue());
         int i = userMapper.updateById(userPo);
     }
@@ -85,7 +85,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     public ApiUserResponse queryUserByName(String userName){
         UserPo userPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("userName", userName));
-        return dataConvertHelper.convert2UserResponse(userPo);
+        return dataConvertHelper.convert2ApiUserResponse(userPo);
     }
 
     @Transactional(rollbackFor = Exception.class)
