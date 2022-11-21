@@ -33,6 +33,9 @@ public class OperationLogAspect {
     public void afterReturning(JoinPoint joinPoint, Object returnValue) {
         OperationLogPo operationLogPo = new OperationLogPo();
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        if(null==currentUser){
+            return;
+        }
         operationLogPo.setUserName(currentUser.getUserName());
         operationLogPo.setUid(Math.toIntExact(currentUser.getId()));
 
@@ -41,7 +44,6 @@ public class OperationLogAspect {
         String methodName = signature.getName();
         OperationLog annotation = method.getAnnotation(OperationLog.class);
         StringBuilder sb = new StringBuilder();
-        System.out.println(returnValue);
         if (annotation != null) {
             String value = annotation.value();
             String type = annotation.type();

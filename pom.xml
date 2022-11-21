@@ -115,7 +115,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-
+        <!--邮件服务-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>2.7.4</version>
+        </dependency>
     </dependencies>
 
     <build>

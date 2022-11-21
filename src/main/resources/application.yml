@@ -11,6 +11,20 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.174.128:3306/pm?useUnicode=true&characterEncoding=utf8&useSSL=false
+  # 邮件服务配置
+  mail:
+    host: smtp.zlgmcu.com
+    port: 465
+    username: noreply_developer@zlg.cn
+    password: eRXP528E
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          from: noreply_developer@zlg.cn
+          auth: true
+#        debug: true
+
 
 
 logging:

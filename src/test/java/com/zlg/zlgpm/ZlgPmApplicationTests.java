@@ -10,8 +10,11 @@ import com.zlg.zlgpm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 @SpringBootTest
 class ZlgPmApplicationTests {
@@ -25,6 +28,8 @@ class ZlgPmApplicationTests {
     private UserMapper userMapper;
     @Resource
     private ProjectMapper projectMapper;
+    @Resource
+    private JavaMailSender mailSender;
 
     @Test
     void updateUser() {
@@ -53,6 +58,19 @@ class ZlgPmApplicationTests {
         QueryWrapper<ProjectPo> queryWrapper = new QueryWrapper<ProjectPo>().eq("p.name", "awtk");
 //        List<Project> projects = projectMapper.selectByName(project,queryWrapper);
         System.out.println();
+    }
+
+    @Test
+    void sendMail(){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply_developer@zlg.cn");
+        message.setTo("270809304@qq.com");
+        message.setSubject("任务更新");
+        message.setText("项目xxx的任务xxx已更新,请查看");
+        message.setSentDate(new Date());
+
+        mailSender.send(message);
+        System.out.println("发送完成");
     }
 
 
