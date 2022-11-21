@@ -299,6 +299,23 @@ paths:
           description: parameter error
         500:
           description: server error
+  /project/group/name:
+    get:
+      tags:
+        - project
+      summary: 聚合项目名称
+      description: 聚合项目名称
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              type: string
+        500:
+          description: server error
   /task:
     post:
       tags:
@@ -688,6 +705,12 @@ definitions:
             type: array
             items:
               $ref: "#/definitions/ProjectResponse"
+  ProjectGroupNameResponse:
+    type: object
+    properties:
+      name:
+        type: string
+        description: 聚合后的项目名
   CreateTaskRequest:
     type: object
     required:

@@ -11,6 +11,9 @@ import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -200,5 +203,13 @@ public class DataConvertHelper {
         fillApiPage(response,operationLogPoPage);
         response.setList(operationLogPoPage.getRecords().stream().map(this::conver2ApiOperationLogResponse).collect(Collectors.toList()));
         return response;
+    }
+
+    public List<String> conver2ApiProjectGroupNameResponse(List<Map<String, String>> maps){
+        ArrayList<String> list = new ArrayList<>();
+        for(Map<String, String> map : maps){
+            list.add(map.get("name"));
+        }
+        return list;
     }
 }

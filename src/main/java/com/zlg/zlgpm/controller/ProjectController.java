@@ -1,10 +1,7 @@
 package com.zlg.zlgpm.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zlg.zlgpm.controller.model.ApiBaseResp;
-import com.zlg.zlgpm.controller.model.ApiCreateProjectRequest;
-import com.zlg.zlgpm.controller.model.ApiProjectListResponse;
-import com.zlg.zlgpm.controller.model.ApiUpdateProjectRequest;
+import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.helper.DataConvertHelper;
@@ -17,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Api(tags = "project")
@@ -40,6 +39,13 @@ public class ProjectController implements ProjectApi {
     public ResponseEntity<ApiBaseResp> deleteProject(Integer id) {
         projectService.deleteProject(id);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    }
+
+    @Override
+    public ResponseEntity<List<String>> projectGroupNameGet() {
+        List<Map<String, String>> maps = projectService.aggregatedProjectName();
+        List<String> responses = dataConvertHelper.conver2ApiProjectGroupNameResponse(maps);
+        return ResponseEntity.ok(responses);
     }
 
     @Override

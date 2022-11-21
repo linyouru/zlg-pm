@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectService {
@@ -83,5 +85,12 @@ public class ProjectService {
         projectBoPage.setCurrent(currentPage);
         projectBoPage.setSize(pageSize);
         return projectMapper.selectPageByName(projectBoPage, queryWrapper);
+    }
+
+    public List<Map<String, String>> aggregatedProjectName(){
+        QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("name");
+        List<Map<String, String>> mapList = projectMapper.aggregatedProjectName(queryWrapper);
+        return mapList;
     }
 }
