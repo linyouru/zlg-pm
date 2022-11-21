@@ -34,6 +34,7 @@ public class OperationLogService {
             wrapper.ge("createTime", Long.parseLong(startTime));
             wrapper.le("createTime", Long.parseLong(endTime));
         }
+        wrapper.orderByDesc("createTime");
         return operationLogMapper.selectPage(page, wrapper);
     }
 
