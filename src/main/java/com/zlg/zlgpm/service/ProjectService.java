@@ -2,6 +2,7 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiCreateProjectRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
@@ -30,7 +31,8 @@ public class ProjectService {
     @Resource
     private DataConvertHelper dataConvertHelper;
 
-    public void createProject(ApiCreateProjectRequest request) {
+    @OperationLog(value = "创建项目",type ="Project" )
+    public ProjectPo createProject(ApiCreateProjectRequest request) {
         UserPo userPo = userMapper.selectById(request.getUid());
         if (null == userPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
@@ -41,21 +43,26 @@ public class ProjectService {
         } catch (DuplicateKeyException e) {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11001");
         }
+        return projectPo;
     }
 
-    public void deleteProject(Integer id) {
+    @OperationLog(value = "删除项目",type ="Project" )
+    public ProjectPo deleteProject(Integer id) {
         Long taskCount = taskMapper.selectCount(new QueryWrapper<TaskPo>().eq("pid", id));
         if(taskCount>0){
             //删除项目前要先删除项目下挂载的任务
             throw new BizException(HttpStatus.BAD_REQUEST,"project.11003",id);
         }
-        int i = projectMapper.deleteById(id);
-        if (i == 0) {
+        ProjectPo projectPo = projectMapper.selectById(id);
+        if (null == projectPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", id);
         }
+        projectMapper.deleteById(id);
+        return projectPo;
     }
 
-    public void updateProject(ProjectPo projectPo) {
+    @OperationLog(value = "修改项目",type ="Project" )
+    public ProjectPo updateProject(ProjectPo projectPo) {
         try {
             int i = projectMapper.updateById(projectPo);
             if (i == 0) {
@@ -64,6 +71,7 @@ public class ProjectService {
         } catch (DuplicateKeyException e) {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11001");
         }
+        return projectMapper.selectById(projectPo.getId());
     }
 
     public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize) {

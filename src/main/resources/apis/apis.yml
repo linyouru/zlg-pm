@@ -45,10 +45,6 @@ paths:
       tags:
         - auth
       operationId: logout
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
       responses:
         200:
           description: success
@@ -458,6 +454,14 @@ paths:
           name: endTime
           type: string
           description: 结束时间.时间戳(ms)
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
       responses:
         200:
           description: success
@@ -869,7 +873,9 @@ definitions:
     properties:
       id:
         type: integer
-      nickName:
+      uid:
+        type: integer
+      userName:
         type: string
       record:
         type: string

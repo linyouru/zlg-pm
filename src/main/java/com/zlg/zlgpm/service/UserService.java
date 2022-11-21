@@ -4,6 +4,7 @@ package com.zlg.zlgpm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
 import com.zlg.zlgpm.controller.model.ApiUserListResponse;
 import com.zlg.zlgpm.controller.model.ApiUserResponse;
@@ -25,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -45,7 +47,8 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
     private DataConvertHelper dataConvertHelper;
 
     @Transactional(rollbackFor = Exception.class)
-    public void createUser(ApiCreateUserRequest apiCreateUserRequest) {
+    @OperationLog(value = "创建用户", type = "User")
+    public UserPo createUser(ApiCreateUserRequest apiCreateUserRequest) {
         UserPo userPo = dataConvertHelper.convert2UserPo(apiCreateUserRequest);
         userPo.setStatus(1);
         Long count = userMapper.selectCount(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
@@ -56,9 +59,11 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         UserPo insertUserPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
         //添加默认角色
         userRoleMapper.insert(new UserRolePo(insertUserPo.getId(), 3L));
+        return insertUserPo;
     }
 
-    public void updateUser(Integer id, ApiUpdateUserRequest body) {
+    @OperationLog(value = "修改用户", type = "User")
+    public UserPo updateUser(Integer id, ApiUpdateUserRequest body) {
         Long count = userMapper.selectCount(new QueryWrapper<UserPo>().eq("id", id));
         if (count < 1) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
@@ -66,6 +71,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         UserPo userPo = dataConvertHelper.convert2UserPo(body);
         userPo.setId(id.longValue());
         int i = userMapper.updateById(userPo);
+        return userMapper.selectById(id);
     }
 
     public void updatePassword(Integer id, String newPassword, String oldPassword) {
@@ -97,7 +103,12 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteUser(Integer id) {
+    @OperationLog(value = "删除用户", type = "User")
+    public UserPo deleteUser(Integer id) {
+        UserPo userPo = userMapper.selectById(id);
+        if (null == userPo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "user.10002", id);
+        }
         //删除用户前须先删除用户下挂载的任务,若用户为项目负责人,还要先删除项目
         Long taskCount = taskMapper.selectCount(new QueryWrapper<TaskPo>().eq("uid", id));
         if (taskCount > 0) {
@@ -109,6 +120,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         }
         userMapper.delete(new QueryWrapper<UserPo>().eq("id", id));
         userRoleMapper.delete(new QueryWrapper<UserRolePo>().eq("uid", id));
+        return userPo;
     }
 
 

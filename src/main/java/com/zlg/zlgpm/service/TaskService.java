@@ -2,6 +2,7 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
@@ -33,7 +34,8 @@ public class TaskService {
     @Resource
     private DataConvertHelper dataConvertHelper;
 
-    public void createTask(ApiCreateTaskRequest body) {
+    @OperationLog(value = "创建任务", type = "Task")
+    public TaskPo createTask(ApiCreateTaskRequest body) {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         UserPo userPo = userMapper.selectById(task.getUid());
         ProjectPo projectPo = projectMapper.selectById(task.getPid());
@@ -44,16 +46,21 @@ public class TaskService {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", task.getPid());
         }
         int insert = taskMapper.insert(task);
+        return task;
     }
 
-    public void deleteTask(Integer id) {
-        int i = taskMapper.deleteById(id);
-        if (i == 0) {
+    @OperationLog(value = "删除任务", type = "Task")
+    public TaskPo deleteTask(Integer id) {
+        TaskPo taskPo = taskMapper.selectById(id);
+        if (null == taskPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
+        taskMapper.deleteById(id);
+        return taskPo;
     }
 
-    public void updateTask(Integer id, ApiUpdateTaskRequest body) {
+    @OperationLog(value = "修改任务", type = "Task")
+    public TaskPo updateTask(Integer id, ApiUpdateTaskRequest body) {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         task.setId(id);
         Integer uid = task.getUid();
@@ -69,6 +76,7 @@ public class TaskService {
         if (i == 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
+        return task;
     }
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, String status, String projectName, String projectVersion,

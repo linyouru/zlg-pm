@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
+import com.zlg.zlgpm.pojo.po.OperationLogPo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
@@ -181,6 +182,23 @@ public class DataConvertHelper {
         response.setLink(task.getLink());
         response.setWarning(task.getWarning());
         response.setOvertime(task.getOvertime());
+        return response;
+    }
+
+    public ApiOperationLogResponse conver2ApiOperationLogResponse(OperationLogPo operationLogPo){
+        ApiOperationLogResponse response = new ApiOperationLogResponse();
+        response.setId(operationLogPo.getId());
+        response.setUid(operationLogPo.getUid());
+        response.setUserName(operationLogPo.getUserName());
+        response.setRecord(operationLogPo.getRecord());
+        response.setCreateTime(operationLogPo.getCreateTime());
+        return response;
+    }
+
+    public ApiOperationLogListResponse conver2ApiOperationLogListResponse(Page<OperationLogPo> operationLogPoPage){
+        ApiOperationLogListResponse response = new ApiOperationLogListResponse();
+        fillApiPage(response,operationLogPoPage);
+        response.setList(operationLogPoPage.getRecords().stream().map(this::conver2ApiOperationLogResponse).collect(Collectors.toList()));
         return response;
     }
 }

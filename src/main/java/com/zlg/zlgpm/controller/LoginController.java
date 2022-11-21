@@ -1,6 +1,7 @@
 package com.zlg.zlgpm.controller;
 
 
+import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiLoginRequest;
 import com.zlg.zlgpm.controller.model.ApiLoginResponse;
 import com.zlg.zlgpm.controller.model.ApiUserResponse;
@@ -29,6 +30,7 @@ public class LoginController implements AuthApi {
     }
 
     @Override
+    @OperationLog(value = "登录")
     public ResponseEntity<ApiLoginResponse> login(Boolean rememberMe, ApiLoginRequest body) {
         String userName = body.getUserName();
         String password = body.getPassword();

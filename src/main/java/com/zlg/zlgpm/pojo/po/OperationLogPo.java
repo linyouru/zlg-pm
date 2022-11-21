@@ -5,13 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-@TableName("Operation_log")
+@TableName("operation_log")
 public class OperationLogPo {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
     @TableField
-    private Integer uid;
+    private  Integer uid;
+    @TableField
+    private String userName;
     @TableField
     private String record;
     @TableField
@@ -28,12 +30,12 @@ public class OperationLogPo {
         this.id = id;
     }
 
-    public Integer getUid() {
-        return uid;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUid(Integer uid) {
-        this.uid = uid;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getRecord() {
@@ -48,11 +50,20 @@ public class OperationLogPo {
         return createTime;
     }
 
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
     @Override
     public String toString() {
-        return "OperationLog{" +
+        return "OperationLogPo{" +
                 "id=" + id +
                 ", uid=" + uid +
+                ", userName='" + userName + '\'' +
                 ", record='" + record + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
