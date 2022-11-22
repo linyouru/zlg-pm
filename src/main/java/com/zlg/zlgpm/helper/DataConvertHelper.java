@@ -11,6 +11,7 @@ import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,8 +126,8 @@ public class DataConvertHelper {
         task.setTaskType(taskRequest.getTaskType().toString());
         task.setTask(taskRequest.getTask());
         task.setStatus(taskRequest.getStatus().toString());
-        task.setPlayStartTime(taskRequest.getPlayStartTime());
-        task.setPlayEndTime(taskRequest.getPlayEndTime());
+        task.setPlayStartTime(StringUtils.hasText(taskRequest.getPlayStartTime()) ? taskRequest.getPlayStartTime() : null);
+        task.setPlayEndTime(StringUtils.hasText(taskRequest.getPlayEndTime()) ? taskRequest.getPlayEndTime() : null);
         task.setStartTime(taskRequest.getStartTime());
         task.setEndTime(taskRequest.getEndTime());
         ApiCreateTaskRequest.TimelyEnum timely = taskRequest.getTimely();
@@ -159,14 +160,14 @@ public class DataConvertHelper {
         return task;
     }
 
-    public ApiTaskListResponse convert2ApiTaskListResponse(Page<TaskListBo> taskListBoPage){
+    public ApiTaskListResponse convert2ApiTaskListResponse(Page<TaskListBo> taskListBoPage) {
         ApiTaskListResponse response = new ApiTaskListResponse();
-        fillApiPage(response,taskListBoPage);
+        fillApiPage(response, taskListBoPage);
         response.setList(taskListBoPage.getRecords().stream().map(this::convert2ApiTaskResponse).collect(Collectors.toList()));
         return response;
     }
 
-    public ApiTaskResponse convert2ApiTaskResponse(TaskListBo task){
+    public ApiTaskResponse convert2ApiTaskResponse(TaskListBo task) {
         ApiTaskResponse response = new ApiTaskResponse();
         response.setId(task.getId());
         response.setProjectName(task.getProjectName());
@@ -189,7 +190,7 @@ public class DataConvertHelper {
         return response;
     }
 
-    public ApiOperationLogResponse convert2ApiOperationLogResponse(OperationLogPo operationLogPo){
+    public ApiOperationLogResponse convert2ApiOperationLogResponse(OperationLogPo operationLogPo) {
         ApiOperationLogResponse response = new ApiOperationLogResponse();
         response.setId(operationLogPo.getId());
         response.setUid(operationLogPo.getUid());
@@ -199,35 +200,36 @@ public class DataConvertHelper {
         return response;
     }
 
-    public ApiOperationLogListResponse convert2ApiOperationLogListResponse(Page<OperationLogPo> operationLogPoPage){
+    public ApiOperationLogListResponse convert2ApiOperationLogListResponse(Page<OperationLogPo> operationLogPoPage) {
         ApiOperationLogListResponse response = new ApiOperationLogListResponse();
-        fillApiPage(response,operationLogPoPage);
+        fillApiPage(response, operationLogPoPage);
         response.setList(operationLogPoPage.getRecords().stream().map(this::convert2ApiOperationLogResponse).collect(Collectors.toList()));
         return response;
     }
 
-    public List<String> convert2ApiProjectGroupNameResponse(List<Map<String, String>> maps){
+    public List<String> convert2ApiProjectGroupNameResponse(List<Map<String, String>> maps) {
         ArrayList<String> list = new ArrayList<>();
-        for(Map<String, String> map : maps){
+        for (Map<String, String> map : maps) {
             list.add(map.get("name"));
         }
         return list;
     }
 
-    public ApiProjectStatisticsListResponse convert2ApiProjectStatisticsListResponse(Page<ProjectStatisticsBo> projectStatisticsBoPage){
+    public ApiProjectStatisticsListResponse convert2ApiProjectStatisticsListResponse(Page<ProjectStatisticsBo> projectStatisticsBoPage) {
         ApiProjectStatisticsListResponse response = new ApiProjectStatisticsListResponse();
-        fillApiPage(response,projectStatisticsBoPage);
+        fillApiPage(response, projectStatisticsBoPage);
         response.setList(projectStatisticsBoPage.getRecords().stream().map(this::convert2ApiProjectStatisticsResponse).collect(Collectors.toList()));
         return response;
     }
-    public ApiProjectStatisticsResponse convert2ApiProjectStatisticsResponse(ProjectStatisticsBo projectStatisticsBo){
+
+    public ApiProjectStatisticsResponse convert2ApiProjectStatisticsResponse(ProjectStatisticsBo projectStatisticsBo) {
         ApiProjectStatisticsResponse response = new ApiProjectStatisticsResponse();
         response.setId(projectStatisticsBo.getId());
         response.setName(projectStatisticsBo.getName());
         response.setVersion(projectStatisticsBo.getVersion());
         response.setTaskTotal(projectStatisticsBo.getTaskTotal());
-        double rateOfFinish = (double)projectStatisticsBo.getFinishTaskNum() / projectStatisticsBo.getTaskTotal();
-        response.setRateOfFinish(String.format("%.2f",rateOfFinish));
+        double rateOfFinish = (double) projectStatisticsBo.getFinishTaskNum() / projectStatisticsBo.getTaskTotal();
+        response.setRateOfFinish(String.format("%.2f", rateOfFinish));
         return response;
     }
 }
