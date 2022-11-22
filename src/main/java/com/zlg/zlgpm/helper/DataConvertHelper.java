@@ -3,6 +3,7 @@ package com.zlg.zlgpm.helper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
+import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.po.OperationLogPo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
@@ -161,11 +162,11 @@ public class DataConvertHelper {
     public ApiTaskListResponse convert2ApiTaskListResponse(Page<TaskListBo> taskListBoPage){
         ApiTaskListResponse response = new ApiTaskListResponse();
         fillApiPage(response,taskListBoPage);
-        response.setList(taskListBoPage.getRecords().stream().map(this::conver2ApiTaskResponse).collect(Collectors.toList()));
+        response.setList(taskListBoPage.getRecords().stream().map(this::convert2ApiTaskResponse).collect(Collectors.toList()));
         return response;
     }
 
-    public ApiTaskResponse conver2ApiTaskResponse(TaskListBo task){
+    public ApiTaskResponse convert2ApiTaskResponse(TaskListBo task){
         ApiTaskResponse response = new ApiTaskResponse();
         response.setId(task.getId());
         response.setProjectName(task.getProjectName());
@@ -188,7 +189,7 @@ public class DataConvertHelper {
         return response;
     }
 
-    public ApiOperationLogResponse conver2ApiOperationLogResponse(OperationLogPo operationLogPo){
+    public ApiOperationLogResponse convert2ApiOperationLogResponse(OperationLogPo operationLogPo){
         ApiOperationLogResponse response = new ApiOperationLogResponse();
         response.setId(operationLogPo.getId());
         response.setUid(operationLogPo.getUid());
@@ -198,18 +199,35 @@ public class DataConvertHelper {
         return response;
     }
 
-    public ApiOperationLogListResponse conver2ApiOperationLogListResponse(Page<OperationLogPo> operationLogPoPage){
+    public ApiOperationLogListResponse convert2ApiOperationLogListResponse(Page<OperationLogPo> operationLogPoPage){
         ApiOperationLogListResponse response = new ApiOperationLogListResponse();
         fillApiPage(response,operationLogPoPage);
-        response.setList(operationLogPoPage.getRecords().stream().map(this::conver2ApiOperationLogResponse).collect(Collectors.toList()));
+        response.setList(operationLogPoPage.getRecords().stream().map(this::convert2ApiOperationLogResponse).collect(Collectors.toList()));
         return response;
     }
 
-    public List<String> conver2ApiProjectGroupNameResponse(List<Map<String, String>> maps){
+    public List<String> convert2ApiProjectGroupNameResponse(List<Map<String, String>> maps){
         ArrayList<String> list = new ArrayList<>();
         for(Map<String, String> map : maps){
             list.add(map.get("name"));
         }
         return list;
+    }
+
+    public ApiProjectStatisticsListResponse convert2ApiProjectStatisticsListResponse(Page<ProjectStatisticsBo> projectStatisticsBoPage){
+        ApiProjectStatisticsListResponse response = new ApiProjectStatisticsListResponse();
+        fillApiPage(response,projectStatisticsBoPage);
+        response.setList(projectStatisticsBoPage.getRecords().stream().map(this::convert2ApiProjectStatisticsResponse).collect(Collectors.toList()));
+        return response;
+    }
+    public ApiProjectStatisticsResponse convert2ApiProjectStatisticsResponse(ProjectStatisticsBo projectStatisticsBo){
+        ApiProjectStatisticsResponse response = new ApiProjectStatisticsResponse();
+        response.setId(projectStatisticsBo.getId());
+        response.setName(projectStatisticsBo.getName());
+        response.setVersion(projectStatisticsBo.getVersion());
+        response.setTaskTotal(projectStatisticsBo.getTaskTotal());
+        double rateOfFinish = (double)projectStatisticsBo.getFinishTaskNum() / projectStatisticsBo.getTaskTotal();
+        response.setRateOfFinish(String.format("%.2f",rateOfFinish));
+        return response;
     }
 }

@@ -6,6 +6,7 @@ import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
+import com.zlg.zlgpm.service.ProjectService;
 import com.zlg.zlgpm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ class ZlgPmApplicationTests {
     private UserMapper userMapper;
     @Resource
     private ProjectMapper projectMapper;
+    @Resource
+    private ProjectService projectService;
     @Resource
     private JavaMailSender mailSender;
 
@@ -73,7 +76,15 @@ class ZlgPmApplicationTests {
         System.out.println("发送完成");
     }
 
+    @Test
+    void groupByProjectName(){
+        projectService.aggregatedProjectName();
+    }
 
+    @Test
+    void selectProjectStatistics(){
+        projectService.selectProjectStatistics(1,5);
+    }
 
 
 }

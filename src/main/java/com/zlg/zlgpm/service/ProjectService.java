@@ -8,6 +8,7 @@ import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
+import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
@@ -92,5 +93,12 @@ public class ProjectService {
         queryWrapper.groupBy("name");
         List<Map<String, String>> mapList = projectMapper.aggregatedProjectName(queryWrapper);
         return mapList;
+    }
+
+    public Page<ProjectStatisticsBo> selectProjectStatistics(Integer currentPage, Integer pageSize){
+        Page<ProjectStatisticsBo> projectStatisticsBo = new Page<>();
+        projectStatisticsBo.setCurrent(currentPage);
+        projectStatisticsBo.setSize(pageSize);
+        return projectMapper.selectProjectStatistics(projectStatisticsBo);
     }
 }

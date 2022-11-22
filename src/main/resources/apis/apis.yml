@@ -305,6 +305,7 @@ paths:
         - project
       summary: 聚合项目名称
       description: 聚合项目名称
+      operationId: projectGroupName
       produces:
         - "application/json"
       responses:
@@ -314,6 +315,31 @@ paths:
             type: array
             items:
               type: string
+        500:
+          description: server error
+  /project/statistics:
+    get:
+      tags:
+        - project
+      summary: 活动项目统计
+      description: 统计开发中项目任务完成信息
+      operationId: projectStatistics
+      produces:
+        - "application/json"
+      parameters:
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/ProjectStatisticsListResponse"
         500:
           description: server error
   /task:
@@ -705,6 +731,30 @@ definitions:
             type: array
             items:
               $ref: "#/definitions/ProjectResponse"
+  ProjectStatisticsListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/ProjectStatisticsResponse"
+  ProjectStatisticsResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      version:
+        type: string
+      taskTotal:
+        type: integer
+        description: 项目任务总数
+      rateOfFinish :
+        type: string
+        description: 项目任务完成率
   ProjectGroupNameResponse:
     type: object
     properties:

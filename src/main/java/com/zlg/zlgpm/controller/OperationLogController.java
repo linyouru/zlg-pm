@@ -27,7 +27,7 @@ public class OperationLogController implements OperationLogApi{
     @Override
     public ResponseEntity<ApiOperationLogListResponse> operationLogList(Integer uid, String record, String startTime, String endTime, Integer currentPage, Integer pageSize) {
         Page<OperationLogPo> operationLogPoPage = operationLogService.operationLogList(currentPage, pageSize, uid, record, startTime, endTime);
-        ApiOperationLogListResponse apiOperationLogListResponse = dataConvertHelper.conver2ApiOperationLogListResponse(operationLogPoPage);
+        ApiOperationLogListResponse apiOperationLogListResponse = dataConvertHelper.convert2ApiOperationLogListResponse(operationLogPoPage);
         return ResponseEntity.ok().body(apiOperationLogListResponse);
     }
 }

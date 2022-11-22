@@ -3,6 +3,7 @@ package com.zlg.zlgpm.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
+import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.service.ProjectService;
@@ -42,9 +43,9 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<List<String>> projectGroupNameGet() {
+    public ResponseEntity<List<String>> projectGroupName() {
         List<Map<String, String>> maps = projectService.aggregatedProjectName();
-        List<String> responses = dataConvertHelper.conver2ApiProjectGroupNameResponse(maps);
+        List<String> responses = dataConvertHelper.convert2ApiProjectGroupNameResponse(maps);
         return ResponseEntity.ok(responses);
     }
 
@@ -53,6 +54,13 @@ public class ProjectController implements ProjectApi {
         Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize);
         ApiProjectListResponse apiProjectListResponse = dataConvertHelper.convert2ApiProjectListResponse(projectBoPage);
         return ResponseEntity.ok().body(apiProjectListResponse);
+    }
+
+    @Override
+    public ResponseEntity<ApiProjectStatisticsListResponse> projectStatistics(Integer currentPage, Integer pageSize) {
+        Page<ProjectStatisticsBo> projectStatisticsBoPage = projectService.selectProjectStatistics(currentPage, pageSize);
+        ApiProjectStatisticsListResponse apiProjectStatisticsListResponse = dataConvertHelper.convert2ApiProjectStatisticsListResponse(projectStatisticsBoPage);
+        return ResponseEntity.ok().body(apiProjectStatisticsListResponse);
     }
 
     @Override
