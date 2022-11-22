@@ -7,6 +7,7 @@ import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.ProjectService;
+import com.zlg.zlgpm.service.TaskService;
 import com.zlg.zlgpm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ class ZlgPmApplicationTests {
     @Autowired
     private UserService userServiceImpl;
 
-
+    @Resource
+    private TaskService taskService;
     @Resource
     private UserMapper userMapper;
     @Resource
@@ -86,5 +88,9 @@ class ZlgPmApplicationTests {
         projectService.selectProjectStatistics(1,5);
     }
 
+    @Test
+    void selectTastStatistics(){
+        taskService.selectTaskStatistics();
+    }
 
 }

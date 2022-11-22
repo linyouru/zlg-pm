@@ -5,6 +5,7 @@ import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
+import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.OperationLogPo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
@@ -230,6 +231,17 @@ public class DataConvertHelper {
         response.setTaskTotal(projectStatisticsBo.getTaskTotal());
         double rateOfFinish = (double) projectStatisticsBo.getFinishTaskNum() / projectStatisticsBo.getTaskTotal();
         response.setRateOfFinish(String.format("%.2f", rateOfFinish));
+        return response;
+    }
+
+    public ApiTaskStatisticsResponse convert2ApiTaskStatisticsResponse(TaskStatisticsBo taskStatisticsBo) {
+        ApiTaskStatisticsResponse response = new ApiTaskStatisticsResponse();
+        response.setTaskTotal(taskStatisticsBo.getTaskTotal());
+        response.setFinishTaskNum(taskStatisticsBo.getFinishTaskNum());
+        response.setRateOfFinish(taskStatisticsBo.getRateOfFinish());
+        response.setOvertimeTaskNum(taskStatisticsBo.getOvertimeTaskNum());
+        response.setWarningTaskNum(taskStatisticsBo.getWarningTaskNum());
+        response.setProgressTaskNum(taskStatisticsBo.getProgressTaskNum());
         return response;
     }
 }

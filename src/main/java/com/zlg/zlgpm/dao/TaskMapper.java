@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
+import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -44,5 +44,6 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "ORDER BY  p.`name`,p.version,t.playStartTime")
     Page<TaskListBo> selectPage(Page<TaskListBo> taskListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
-
+    @Select("SELECT FORMAT(COUNT(if(`status` = 3,1,NULL))/COUNT(*),2) AS rateOfFinish, COUNT(if(`status` = 3,1,NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(if(`status` = 1,1,NULL)) AS progressTaskNum, COUNT(if((playEndTime - UNIX_TIMESTAMP() * 1000) BETWEEN 0 AND 86400000,1,null)) AS warningTaskNum, COUNT(if(UNIX_TIMESTAMP() * 1000 - playEndTime > 0,1,null)) AS overtimeTaskNum FROM `project_task`;")
+    TaskStatisticsBo selectTaskStatistics();
 }

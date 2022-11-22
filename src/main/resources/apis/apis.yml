@@ -471,6 +471,22 @@ paths:
           description: parameter error
         500:
           description: server error
+  /task/statistics:
+    get:
+      tags:
+        - task
+      summary: 任务统计信息
+      description: 任务统计信息
+      operationId: taskStatistics
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskStatisticsResponse"
+        500:
+          description: server error
   /operationLog/list:
     get:
       tags:
@@ -941,6 +957,27 @@ definitions:
       warning:
         type: string
         description: 1将过期
+  TaskStatisticsResponse:
+    type: object
+    properties:
+      rateOfFinish:
+        type: string
+        description: 总任务完成率
+      finishTaskNum:
+        type: string
+        description: 已完成任务数
+      taskTotal:
+        type: string
+        description: 任务总数
+      progressTaskNum:
+        type: string
+        description: 开发中任务数
+      warningTaskNum:
+        type: string
+        description: 即将过期任务数
+      overtimeTaskNum:
+        type: string
+        description: 已过期任务数
   OperationLogResponse:
     type: object
     properties:

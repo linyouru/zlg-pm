@@ -3,9 +3,11 @@ package com.zlg.zlgpm.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiTaskListResponse;
+import com.zlg.zlgpm.controller.model.ApiTaskStatisticsResponse;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
+import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.service.TaskService;
 import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +40,13 @@ public class TaskController implements TaskApi {
         Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, status, projectName, projectVersion, uid, startTime, endTime, abnormal);
         ApiTaskListResponse apiTaskListResponse = dataConvertHelper.convert2ApiTaskListResponse(taskListBoPage);
         return ResponseEntity.ok().body(apiTaskListResponse);
+    }
+
+    @Override
+    public ResponseEntity<ApiTaskStatisticsResponse> taskStatistics() {
+        TaskStatisticsBo taskStatisticsBo = taskService.selectTaskStatistics();
+        ApiTaskStatisticsResponse response = dataConvertHelper.convert2ApiTaskStatisticsResponse(taskStatisticsBo);
+        return ResponseEntity.ok(response);
     }
 
     @Override
