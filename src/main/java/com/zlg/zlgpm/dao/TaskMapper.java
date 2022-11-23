@@ -33,8 +33,8 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         t.link,\n" +
             "         t.updateTime,\n" +
             "         t.createTime,\n" +
-            "         UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 AS overtime,\n" +
-            "         t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 86400000 AS warning\n"+
+            "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`!= \"3\")),1,0 ) AS overtime,\n" +
+            "         IF(((t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 86400000) AND( t.`status`!= \"3\")),1,0 ) AS warning\n"+
             "FROM `project_task` AS t\n" +
             "LEFT JOIN `project` AS p\n" +
             "    ON t.pid = p.id\n" +
@@ -44,6 +44,6 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "ORDER BY  p.`name`,p.version,t.playStartTime")
     Page<TaskListBo> selectPage(Page<TaskListBo> taskListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
-    @Select("SELECT FORMAT(COUNT(if(`status` = 3,1,NULL))/COUNT(*),2) AS rateOfFinish, COUNT(if(`status` = 3,1,NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(if(`status` = 1,1,NULL)) AS progressTaskNum, COUNT(if((playEndTime - UNIX_TIMESTAMP() * 1000) BETWEEN 0 AND 86400000,1,null)) AS warningTaskNum, COUNT(if(UNIX_TIMESTAMP() * 1000 - playEndTime > 0,1,null)) AS overtimeTaskNum FROM `project_task`;")
+    @Select("SELECT FORMAT( COUNT(IF(`status` = 3, 1, NULL)) / COUNT(*), 2) AS rateOfFinish, COUNT(IF(`status` = 3, 1, NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(IF(`status` = 1, 1, NULL)) AS progressTaskNum, COUNT( IF( ( playEndTime - UNIX_TIMESTAMP() * 1000 ) BETWEEN 0 AND 86400000 AND `status`!=3, 1, NULL ) ) AS warningTaskNum, COUNT( IF ( UNIX_TIMESTAMP() * 1000 - playEndTime > 0 AND `status`!=3, 1, NULL ) ) AS overtimeTaskNum FROM `project_task`;")
     TaskStatisticsBo selectTaskStatistics();
 }

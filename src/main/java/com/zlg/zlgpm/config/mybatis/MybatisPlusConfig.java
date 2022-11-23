@@ -10,10 +10,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Configuration
 public class MybatisPlusConfig {
+
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        // 添加分页插件
+        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
+        //设置数据库类型
+        paginationInnerInterceptor.setDbType(DbType.MYSQL);
+        interceptor.addInnerInterceptor(paginationInnerInterceptor);
         return interceptor;
     }
 

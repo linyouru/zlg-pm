@@ -101,10 +101,10 @@ public class TaskService {
             queryWrapper.eq("t.status", status);
         }
         if (StringUtils.hasText(projectName)) {
-            queryWrapper.likeRight("p.name", projectName);
+            queryWrapper.eq("p.name", projectName);
         }
         if (StringUtils.hasText(projectVersion)) {
-            queryWrapper.likeRight("p.version", projectVersion);
+            queryWrapper.eq("p.version", projectVersion);
         }
         if (null != uid) {
             queryWrapper.eq("t.uid", uid);
