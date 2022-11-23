@@ -78,11 +78,11 @@ public class ProjectService {
     }
 
     public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize) {
-        QueryWrapper<ProjectBo> queryWrapper = new QueryWrapper<ProjectBo>();
+        QueryWrapper<ProjectBo> queryWrapper = new QueryWrapper<>();
         if (null != name) {
             queryWrapper.eq("name", name);
         }
-        Page<ProjectBo> projectBoPage = new Page<ProjectBo>();
+        Page<ProjectBo> projectBoPage = new Page<>();
         projectBoPage.setCurrent(currentPage);
         projectBoPage.setSize(pageSize);
         return projectMapper.selectPageByName(projectBoPage, queryWrapper);
@@ -91,8 +91,7 @@ public class ProjectService {
     public List<Map<String, String>> aggregatedProjectName(){
         QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
         queryWrapper.groupBy("name");
-        List<Map<String, String>> mapList = projectMapper.aggregatedProjectName(queryWrapper);
-        return mapList;
+        return projectMapper.aggregatedProjectName(queryWrapper);
     }
 
     public Page<ProjectStatisticsBo> selectProjectStatistics(Integer currentPage, Integer pageSize){

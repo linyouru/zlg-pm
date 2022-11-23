@@ -1,9 +1,5 @@
 package com.zlg.zlgpm.pojo.bo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-
 /**
  * 任务列表实体
  * @author linyouru

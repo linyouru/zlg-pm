@@ -68,8 +68,7 @@ public class ShiroConfig {
     @Bean
     public ShiroRealm shiroRealm() {
         // 配置Realm，需自己实现
-        ShiroRealm shiroRealm = new ShiroRealm();
-        return shiroRealm;
+        return new ShiroRealm();
     }
 
     /**

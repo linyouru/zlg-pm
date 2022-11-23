@@ -10,7 +10,6 @@ import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
-import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
@@ -24,7 +23,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class TaskService {
@@ -51,7 +49,7 @@ public class TaskService {
         if (null == projectPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", task.getPid());
         }
-        int insert = taskMapper.insert(task);
+        taskMapper.insert(task);
         return task;
     }
 

@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiOperationLogListResponse;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.po.OperationLogPo;
-import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.OperationLogService;
 import io.swagger.annotations.Api;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

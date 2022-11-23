@@ -7,8 +7,6 @@ import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.OperationLogService;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;

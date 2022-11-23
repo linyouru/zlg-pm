@@ -1,7 +1,5 @@
 package com.zlg.zlgpm.exception;
 
-import com.zlg.zlgpm.exception.BizException;
-import com.zlg.zlgpm.exception.ErrResp;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

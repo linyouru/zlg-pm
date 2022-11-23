@@ -26,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -55,7 +54,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         if (count > 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10001");
         }
-        int insert = userMapper.insert(userPo);
+        userMapper.insert(userPo);
         UserPo insertUserPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
         //添加默认角色
         userRoleMapper.insert(new UserRolePo(insertUserPo.getId(), 3L));
@@ -70,7 +69,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         }
         UserPo userPo = dataConvertHelper.convert2UserPo(body);
         userPo.setId(id.longValue());
-        int i = userMapper.updateById(userPo);
+        userMapper.updateById(userPo);
         return userMapper.selectById(id);
     }
 

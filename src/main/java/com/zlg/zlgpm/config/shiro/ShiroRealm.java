@@ -82,7 +82,6 @@ public class ShiroRealm extends AuthorizingRealm {
         if (!passwordMd5.equals(userPo.getPassword())) {
             throw new IncorrectCredentialsException("密码错误");
         }
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userPo, password, getName());
-        return info;
+        return new SimpleAuthenticationInfo(userPo, password, getName());
     }
 }
