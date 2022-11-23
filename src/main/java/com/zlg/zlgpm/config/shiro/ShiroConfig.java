@@ -35,8 +35,8 @@ public class ShiroConfig {
         // 接口过滤,有先后顺序
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 允许匿名访问
-        filterChainDefinitionMap.put("/login", "anon");
-        filterChainDefinitionMap.put("/user/password", "anon");
+        filterChainDefinitionMap.put("/v1/login", "anon");
+        filterChainDefinitionMap.put("/v1/user/password", "anon");
 
         // 允许匿名访问swagger2页面
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
