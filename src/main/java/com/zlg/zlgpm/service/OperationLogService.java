@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 @Service
 public class OperationLogService {
@@ -24,18 +28,25 @@ public class OperationLogService {
         page.setCurrent(currentPage);
         page.setSize(pageSize);
         QueryWrapper<OperationLogPo> wrapper = new QueryWrapper<>();
-        if(null != uid){
-            wrapper.eq("uid",uid);
+        if (null != uid) {
+            wrapper.eq("uid", uid);
         }
-        if(StringUtils.hasText(record)){
-            wrapper.like("record",record);
+        if (StringUtils.hasText(record)) {
+            wrapper.like("record", record);
         }
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
-            wrapper.ge("createTime", Long.parseLong(startTime));
-            wrapper.le("createTime", Long.parseLong(endTime));
+            wrapper.between("createTime", convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
         }
         wrapper.orderByDesc("createTime");
         return operationLogMapper.selectPage(page, wrapper);
     }
+
+    private String convertTimestamp2Date(Long timestamp, String pattern) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        //设定时区
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        return simpleDateFormat.format(new Date(timestamp));
+    }
+
 
 }
