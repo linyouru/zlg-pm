@@ -229,7 +229,7 @@ public class DataConvertHelper {
         response.setName(projectStatisticsBo.getName());
         response.setVersion(projectStatisticsBo.getVersion());
         response.setTaskTotal(projectStatisticsBo.getTaskTotal());
-        double rateOfFinish = (double) projectStatisticsBo.getFinishTaskNum() / projectStatisticsBo.getTaskTotal();
+        double rateOfFinish = projectStatisticsBo.getTaskTotal() > 0 ? (double) projectStatisticsBo.getFinishTaskNum() / projectStatisticsBo.getTaskTotal() : 0;
         response.setRateOfFinish(String.format("%.2f", rateOfFinish));
         return response;
     }
