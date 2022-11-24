@@ -116,10 +116,10 @@ public class TaskService {
         if (StringUtils.hasText(abnormal)) {
             if ("2".equals(abnormal)) {
                 //已过期
-                queryWrapper.apply("UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0");
+                queryWrapper.apply("(UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`!= \"3\")");
             } else {
                 //将过期(48小时内)
-                queryWrapper.apply("t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 86400000");
+                queryWrapper.apply("(t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`!= \"3\")");
             }
         }
 
