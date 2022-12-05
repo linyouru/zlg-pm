@@ -80,8 +80,8 @@ public class TaskService {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
         TaskPo retTask = taskMapper.selectById(id);
-        if("3".equals(task.getStatus()) ){
-            //任务状态改为[已完成]需要给项目负责人发邮件
+        if("2".equals(task.getStatus()) ){
+            //任务状态改为[待验收]需要给项目负责人发邮件
             ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
             UserPo userPo = userMapper.selectById(projectPo.getUid());
             SimpleMailMessage message = new SimpleMailMessage();
