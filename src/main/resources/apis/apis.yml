@@ -781,7 +781,6 @@ definitions:
     type: object
     required:
       - pid
-      - uid
       - taskType
       - status
     properties:
@@ -801,7 +800,7 @@ definitions:
       task:
         type: string
         description: 任务内容
-        maxLength: 255
+        maxLength: 1023
       status:
         type: string
         enum:
