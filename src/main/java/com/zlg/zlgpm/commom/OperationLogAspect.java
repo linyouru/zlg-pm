@@ -57,7 +57,7 @@ public class OperationLogAspect {
                     break;
                 case "Task":
                     TaskPo taskPo = (TaskPo) returnValue;
-                    sb.append(": ").append(taskPo.getId());
+                    sb.append(": ").append(taskPo.getTask());
                     break;
                 default:
                     break;
