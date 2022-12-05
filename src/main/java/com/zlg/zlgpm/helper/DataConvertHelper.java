@@ -137,6 +137,7 @@ public class DataConvertHelper {
         task.setDocument(taskRequest.getDocument());
         task.setRemark(taskRequest.getRemark());
         task.setLink(taskRequest.getLink());
+        task.setModule(taskRequest.getModule());
         return task;
     }
 
@@ -158,6 +159,7 @@ public class DataConvertHelper {
         task.setDocument(taskRequest.getDocument());
         task.setRemark(taskRequest.getRemark());
         task.setLink(taskRequest.getLink());
+        task.setModule(taskRequest.getModule());
         return task;
     }
 
@@ -186,6 +188,7 @@ public class DataConvertHelper {
         response.setDocument(task.getDocument());
         response.setRemark(task.getRemark());
         response.setLink(task.getLink());
+        response.setModule(task.getModule());
         response.setWarning(task.getWarning());
         response.setOvertime(task.getOvertime());
         return response;

@@ -43,6 +43,8 @@ public class TaskPo implements Serializable {
     @TableField
     private String link;
     @TableField
+    private String module;
+    @TableField
     private String updateTime;
     @TableField
     private String createTime;
@@ -50,7 +52,7 @@ public class TaskPo implements Serializable {
     public TaskPo() {
     }
 
-    public TaskPo(Integer id, String taskType, String task, String status, Integer uid, Integer pid, String playStartTime, String playEndTime, String startTime, String endTime, String timely, String quality, String document, String remark, String link, String updateTime, String createTime) {
+    public TaskPo(Integer id, String taskType, String task, String status, Integer uid, Integer pid, String playStartTime, String playEndTime, String startTime, String endTime, String timely, String quality, String document, String remark, String link, String module, String updateTime, String createTime) {
         this.id = id;
         this.taskType = taskType;
         this.task = task;
@@ -66,6 +68,7 @@ public class TaskPo implements Serializable {
         this.document = document;
         this.remark = remark;
         this.link = link;
+        this.module = module;
         this.updateTime = updateTime;
         this.createTime = createTime;
     }
@@ -190,6 +193,14 @@ public class TaskPo implements Serializable {
         this.link = link;
     }
 
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
     public String getUpdateTime() {
         return updateTime;
     }
@@ -216,6 +227,7 @@ public class TaskPo implements Serializable {
                 ", document='" + document + '\'' +
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
+                ", module='" + module + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';

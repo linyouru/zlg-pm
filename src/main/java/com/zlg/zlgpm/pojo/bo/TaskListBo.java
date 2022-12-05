@@ -22,6 +22,7 @@ public class TaskListBo {
     private String document;
     private String remark;
     private String link;
+    private String module;
     private String updateTime;
     private String createTime;
     private String overtime;
@@ -190,6 +191,14 @@ public class TaskListBo {
         this.warning = warning;
     }
 
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
     @Override
     public String toString() {
         return "TaskListBo{" +
@@ -213,6 +222,7 @@ public class TaskListBo {
                 ", createTime='" + createTime + '\'' +
                 ", overtime='" + overtime + '\'' +
                 ", warning='" + warning + '\'' +
+                ", module='" + module + '\'' +
                 '}';
     }
 }

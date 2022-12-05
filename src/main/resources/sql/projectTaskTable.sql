@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `project_task`
     `document`      varchar(8)   DEFAULT NULL COMMENT '文档分',
     `remark`        varchar(255) DEFAULT NULL COMMENT '备注',
     `link`          varchar(255) DEFAULT NULL COMMENT '文档链接',
+    `module`        varchar(64)  DEFAULT NULL COMMENT '功能模块',
     `updateTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     `createTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     PRIMARY KEY (`id`)

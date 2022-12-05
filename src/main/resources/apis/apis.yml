@@ -783,6 +783,7 @@ definitions:
       - pid
       - taskType
       - status
+      - module
     properties:
       pid:
         type: integer
@@ -836,9 +837,15 @@ definitions:
       remark:
         type: string
         description: 备注
+        maxLength: 255
       link:
         type: string
         description: 文档备注
+        maxLength: 255
+      module:
+        type: string
+        description: 功能模块
+        maxLength: 64
   UpdateTaskRequest:
     type: object
     properties:
@@ -894,6 +901,10 @@ definitions:
       uid:
         type: integer
         description: 负责人用户id
+      module:
+        type: string
+        description: 功能模块
+        maxLength: 64
   TaskListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -956,6 +967,9 @@ definitions:
       warning:
         type: string
         description: 1将过期
+      module:
+        type: string
+        description: 功能模块
   TaskStatisticsResponse:
     type: object
     properties:
