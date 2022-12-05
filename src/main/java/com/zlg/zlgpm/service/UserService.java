@@ -90,7 +90,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
         wrapper.ne("id", 1);
         if (null != userName) {
-            wrapper.eq("userName", userName);
+            wrapper.likeRight("userName", userName);
         }
         Page<UserPo> userPage = userMapper.selectPage(new Page<UserPo>().setCurrent(currentPage).setSize(pageSize), wrapper);
         return dataConvertHelper.convert2ApiUserListResponse(userPage);

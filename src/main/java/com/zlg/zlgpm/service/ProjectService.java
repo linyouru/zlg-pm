@@ -80,7 +80,7 @@ public class ProjectService {
     public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize) {
         QueryWrapper<ProjectBo> queryWrapper = new QueryWrapper<>();
         if (null != name) {
-            queryWrapper.eq("name", name);
+            queryWrapper.likeRight("name", name);
         }
         Page<ProjectBo> projectBoPage = new Page<>();
         projectBoPage.setCurrent(currentPage);
