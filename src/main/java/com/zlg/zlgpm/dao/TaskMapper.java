@@ -11,6 +11,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface TaskMapper extends BaseMapper<TaskPo> {
 
@@ -46,4 +49,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
 
     @Select("SELECT FORMAT( COUNT(IF(`status` = 3, 1, NULL)) / COUNT(*), 2) AS rateOfFinish, COUNT(IF(`status` = 3, 1, NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(IF(`status` = 1, 1, NULL)) AS progressTaskNum, COUNT( IF( ( playEndTime - UNIX_TIMESTAMP() * 1000 ) BETWEEN 0 AND 172800000 AND `status`!=3, 1, NULL ) ) AS warningTaskNum, COUNT( IF ( UNIX_TIMESTAMP() * 1000 - playEndTime > 0 AND `status`!=3, 1, NULL ) ) AS overtimeTaskNum FROM `project_task`;")
     TaskStatisticsBo selectTaskStatistics();
+
+    @Select("SELECT t.module FROM `project_task` AS t LEFT JOIN project AS p ON t.pid = p.id ${ew.customSqlSegment}")
+    List<Map<String, String>> aggregatedTaskModule(@Param(Constants.WRAPPER) Wrapper ew);
 }

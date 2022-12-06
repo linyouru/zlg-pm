@@ -219,6 +219,14 @@ public class DataConvertHelper {
         return list;
     }
 
+    public List<String> convert2ApiTaskGroupModuleResponse(List<Map<String, String>> maps) {
+        ArrayList<String> list = new ArrayList<>();
+        for (Map<String, String> map : maps) {
+            list.add(map.get("module"));
+        }
+        return list;
+    }
+
     public ApiProjectStatisticsListResponse convert2ApiProjectStatisticsListResponse(Page<ProjectStatisticsBo> projectStatisticsBoPage) {
         ApiProjectStatisticsListResponse response = new ApiProjectStatisticsListResponse();
         fillApiPage(response, projectStatisticsBoPage);

@@ -23,6 +23,8 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TaskService {
@@ -96,7 +98,7 @@ public class TaskService {
     }
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, String status, String projectName, String projectVersion,
-                                     Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc) {
+                                     Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String module) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             queryWrapper.eq("t.status", status);
@@ -123,6 +125,9 @@ public class TaskService {
                 queryWrapper.apply("(t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`!= \"3\")");
             }
         }
+        if (StringUtils.hasText(module)) {
+            queryWrapper.eq("module", module);
+        }
         if (StringUtils.hasText(sortField)) {
             queryWrapper.orderBy(true, isAsc, sortField);
         }
@@ -135,6 +140,18 @@ public class TaskService {
 
     public TaskStatisticsBo selectTaskStatistics() {
         return taskMapper.selectTaskStatistics();
+    }
+
+    public List<Map<String, String>> aggregatedTaskModule(String projectName, String projectVersion) {
+        QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("p.`name`", "p.version", "t.module");
+        if (StringUtils.hasText(projectName)) {
+            queryWrapper.having("p.`name` = {0}", projectName);
+        }
+        if (StringUtils.hasText(projectVersion)) {
+            queryWrapper.having("p.`version` = {0}", projectVersion);
+        }
+        return taskMapper.aggregatedTaskModule(queryWrapper);
     }
 
 }
