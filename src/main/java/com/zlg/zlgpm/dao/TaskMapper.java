@@ -41,8 +41,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "    ON t.pid = p.id\n" +
             "LEFT JOIN `user` AS u\n" +
             "    ON t.uid = u.id\n" +
-            "${ew.customSqlSegment}\n" +
-            "ORDER BY  p.`name`,p.version,t.playStartTime")
+            "${ew.customSqlSegment}\n")
     Page<TaskListBo> selectPage(Page<TaskListBo> taskListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
     @Select("SELECT FORMAT( COUNT(IF(`status` = 3, 1, NULL)) / COUNT(*), 2) AS rateOfFinish, COUNT(IF(`status` = 3, 1, NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(IF(`status` = 1, 1, NULL)) AS progressTaskNum, COUNT( IF( ( playEndTime - UNIX_TIMESTAMP() * 1000 ) BETWEEN 0 AND 172800000 AND `status`!=3, 1, NULL ) ) AS warningTaskNum, COUNT( IF ( UNIX_TIMESTAMP() * 1000 - playEndTime > 0 AND `status`!=3, 1, NULL ) ) AS overtimeTaskNum FROM `project_task`;")

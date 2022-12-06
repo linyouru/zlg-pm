@@ -5,12 +5,15 @@ import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiTaskListResponse;
 import com.zlg.zlgpm.controller.model.ApiTaskStatisticsResponse;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
+import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.service.TaskService;
 import io.swagger.annotations.Api;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -36,8 +39,11 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal) {
-        Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, status, projectName, projectVersion, uid, startTime, endTime, abnormal);
+    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc) {
+        if (StringUtils.hasText(sortField) && null == isAsc) {
+            throw new BizException(HttpStatus.BAD_REQUEST,"task.12002");
+        }
+        Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, status, projectName, projectVersion, uid, startTime, endTime, abnormal, sortField, isAsc);
         ApiTaskListResponse apiTaskListResponse = dataConvertHelper.convert2ApiTaskListResponse(taskListBoPage);
         return ResponseEntity.ok().body(apiTaskListResponse);
     }

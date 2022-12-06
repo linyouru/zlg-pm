@@ -80,7 +80,7 @@ public class TaskService {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
         TaskPo retTask = taskMapper.selectById(id);
-        if("2".equals(task.getStatus()) ){
+        if ("2".equals(task.getStatus())) {
             //任务状态改为[待验收]需要给项目负责人发邮件
             ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
             UserPo userPo = userMapper.selectById(projectPo.getUid());
@@ -96,7 +96,7 @@ public class TaskService {
     }
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, String status, String projectName, String projectVersion,
-                                     Integer uid, String startTime, String endTime, String abnormal) {
+                                     Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             queryWrapper.eq("t.status", status);
@@ -123,6 +123,9 @@ public class TaskService {
                 queryWrapper.apply("(t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`!= \"3\")");
             }
         }
+        if (StringUtils.hasText(sortField)) {
+            queryWrapper.orderBy(true, isAsc, sortField);
+        }
 
         Page<TaskListBo> taskListBoPage = new Page<>();
         taskListBoPage.setCurrent(currentPage);
@@ -130,7 +133,7 @@ public class TaskService {
         return taskMapper.selectPage(taskListBoPage, queryWrapper);
     }
 
-    public TaskStatisticsBo selectTaskStatistics(){
+    public TaskStatisticsBo selectTaskStatistics() {
         return taskMapper.selectTaskStatistics();
     }
 
