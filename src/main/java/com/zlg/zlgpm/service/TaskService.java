@@ -44,10 +44,12 @@ public class TaskService {
     public TaskPo createTask(ApiCreateTaskRequest body) {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         //任务负责人暂时改为非必填
-//        UserPo userPo = userMapper.selectById(task.getUid());
-//        if (null == userPo) {
-//            throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
-//        }
+        if (task.getUid() != null) {
+            UserPo userPo = userMapper.selectById(task.getUid());
+            if (null == userPo) {
+                throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
+            }
+        }
         ProjectPo projectPo = projectMapper.selectById(task.getPid());
         if (null == projectPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", task.getPid());
