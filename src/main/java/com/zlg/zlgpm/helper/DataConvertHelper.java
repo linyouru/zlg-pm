@@ -48,6 +48,7 @@ public class DataConvertHelper {
         userPo.setNickName(apiUpdateUserRequest.getNickName());
         userPo.setEmail(apiUpdateUserRequest.getEmail());
         userPo.setRemark(apiUpdateUserRequest.getRemark());
+        userPo.setTaskTitle(apiUpdateUserRequest.getTaskTitle());
         return userPo;
     }
 
@@ -60,6 +61,7 @@ public class DataConvertHelper {
         apiUserResponse.setRemark(userPo.getRemark());
         apiUserResponse.setCreateTime(userPo.getCreateTime());
         apiUserResponse.setUpdateTime(userPo.getUpdateTime());
+        apiUserResponse.setTaskTitle(userPo.getTaskTitle());
         return apiUserResponse;
     }
 

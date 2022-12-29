@@ -674,6 +674,10 @@ definitions:
       remark:
         type: string
         maxLength: 255
+      taskTitle:
+        type: string
+        maxLength: 255
+        description: 任务表表头,字段用英文逗号分隔
   UserListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -699,6 +703,8 @@ definitions:
       createTime:
         type: string
       remark:
+        type: string
+      taskTitle:
         type: string
   CreateProjectRequest:
     type: object

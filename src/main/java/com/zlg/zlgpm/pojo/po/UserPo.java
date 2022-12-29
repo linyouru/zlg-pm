@@ -30,22 +30,25 @@ public class UserPo implements Serializable {
     private Integer status;
     @TableField
     private String remark;
+    @TableField
+    private String taskTitle;
 
     public UserPo() {
     }
 
-    public UserPo(String userName, String password, String nickName, String email, Integer status, String remark) {
+    public UserPo(String userName, String password, String nickName, String email, Integer status, String remark, String taskTitle) {
         this.userName = userName;
         this.password = password;
         this.nickName = nickName;
         this.email = email;
         this.status = status;
         this.remark = remark;
+        this.taskTitle = taskTitle;
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserPo{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
@@ -55,6 +58,7 @@ public class UserPo implements Serializable {
                 ", createTime='" + createTime + '\'' +
                 ", status=" + status +
                 ", remark='" + remark + '\'' +
+                ", taskTitle='" + taskTitle + '\'' +
                 '}';
     }
 
@@ -122,11 +126,19 @@ public class UserPo implements Serializable {
         this.remark = remark;
     }
 
+    public String getTaskTitle() {
+        return taskTitle;
+    }
+
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle = taskTitle;
+    }
+
     public static UserPo.UserBuilder builder() {
         return new UserPo.UserBuilder();
     }
-    
-    public static class UserBuilder{
+
+    public static class UserBuilder {
 
         private String userName;
         private String password;
@@ -134,34 +146,45 @@ public class UserPo implements Serializable {
         private String email;
         private Integer status;
         private String remark;
+        private String taskTitle;
 
-        public UserBuilder userName(final String userName){
+        public UserBuilder userName(final String userName) {
             this.userName = userName;
             return this;
         }
-        public UserBuilder password(final String password){
+
+        public UserBuilder password(final String password) {
             this.password = password;
             return this;
         }
-        public UserBuilder nickName(final String nickName){
+
+        public UserBuilder nickName(final String nickName) {
             this.nickName = nickName;
             return this;
         }
-        public UserBuilder email(final String email){
+
+        public UserBuilder email(final String email) {
             this.email = email;
             return this;
         }
-        public UserBuilder status(final Integer status){
+
+        public UserBuilder status(final Integer status) {
             this.status = status;
             return this;
         }
-        public UserBuilder remark(final String remark){
+
+        public UserBuilder remark(final String remark) {
             this.remark = remark;
             return this;
         }
 
-        public UserPo build(){
-            return new UserPo(this.userName,this.password,this.nickName,this.email,this.status,this.remark);
+        public UserBuilder taskTitle(final String taskTitle) {
+            this.taskTitle = taskTitle;
+            return this;
+        }
+
+        public UserPo build() {
+            return new UserPo(this.userName, this.password, this.nickName, this.email, this.status, this.remark, this.taskTitle);
         }
     }
 }
