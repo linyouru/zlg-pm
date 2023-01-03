@@ -2,14 +2,8 @@ package com.zlg.zlgpm.helper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.*;
-import com.zlg.zlgpm.pojo.bo.ProjectBo;
-import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
-import com.zlg.zlgpm.pojo.bo.TaskListBo;
-import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
-import com.zlg.zlgpm.pojo.po.OperationLogPo;
-import com.zlg.zlgpm.pojo.po.ProjectPo;
-import com.zlg.zlgpm.pojo.po.TaskPo;
-import com.zlg.zlgpm.pojo.po.UserPo;
+import com.zlg.zlgpm.pojo.bo.*;
+import com.zlg.zlgpm.pojo.po.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
@@ -254,5 +248,36 @@ public class DataConvertHelper {
         response.setWarningTaskNum(taskStatisticsBo.getWarningTaskNum());
         response.setProgressTaskNum(taskStatisticsBo.getProgressTaskNum());
         return response;
+    }
+
+    public TaskChangePo convert2TaskChangePo(ApiCreateTaskChangeRequest taskChangeRequest){
+        TaskChangePo taskChangePo = new TaskChangePo();
+        taskChangePo.setTaskId(taskChangeRequest.getTaskId());
+        taskChangePo.setUid(taskChangeRequest.getUid());
+        taskChangePo.setBeforeTime(taskChangeRequest.getBeforeTime());
+        taskChangePo.setTime(taskChangeRequest.getTime());
+        taskChangePo.setReason(taskChangeRequest.getReason());
+        return taskChangePo;
+    }
+
+    public ApiTaskChangeListResponse convert2ApiTaskChangeListResponse(Page<TaskChangeListBo>  taskChangeListBoPage){
+        ApiTaskChangeListResponse response = new ApiTaskChangeListResponse();
+        fillApiPage(response,taskChangeListBoPage);
+        response.setList(taskChangeListBoPage.getRecords().stream().map(this::convert2ApiTaskChangeResponse).collect(Collectors.toList()));
+        return response;
+    }
+
+    public ApiTaskChangeResponse convert2ApiTaskChangeResponse(TaskChangeListBo taskChangeListBo){
+        ApiTaskChangeResponse apiTaskChangeResponse = new ApiTaskChangeResponse();
+        apiTaskChangeResponse.setId(taskChangeListBo.getId());
+        apiTaskChangeResponse.setTaskId(taskChangeListBo.getTaskId());
+        apiTaskChangeResponse.setUid(taskChangeListBo.getUid());
+        apiTaskChangeResponse.setUserName(taskChangeListBo.getUserName());
+        apiTaskChangeResponse.setNickName(taskChangeListBo.getNickName());
+        apiTaskChangeResponse.setBeforeTime(taskChangeListBo.getBeforeTime());
+        apiTaskChangeResponse.setTime(taskChangeListBo.getTime());
+        apiTaskChangeResponse.setReason(taskChangeListBo.getReason());
+        apiTaskChangeResponse.setCreateTime(taskChangeListBo.getCreateTime());
+        return apiTaskChangeResponse;
     }
 }

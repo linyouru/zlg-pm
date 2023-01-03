@@ -526,6 +526,56 @@ paths:
               type: string
         500:
           description: server error
+  /v1/task/change:
+    post:
+      tags:
+        - taskChange
+      summary: 创建任务变更
+      description: 创建任务变更
+      operationId: createTaskChange
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateTaskChangeRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+    get:
+      tags:
+        - taskChange
+      summary: 获取任务变更原因
+      description: 获取任务变更原因
+      operationId: getTaskChange
+      produces:
+        - "application/json"
+      parameters:
+        - name: taskId
+          in: query
+          type: integer
+          description: 任务id
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskChangeListResponse"
+        500:
+          description: server error
   /v1/operationLog/list:
     get:
       tags:
@@ -1059,3 +1109,58 @@ definitions:
             type: array
             items:
               $ref: "#/definitions/OperationLogResponse"
+  CreateTaskChangeRequest:
+    type: object
+    required:
+      - taskId
+      - uid
+      - beforeTime
+      - time
+      - reason
+    properties:
+      taskId:
+        type: integer
+        description: 任务id
+      uid:
+        type: integer
+        description: 申请变更用户id
+      beforeTime:
+        type: string
+        description: 变更前时间(时间戳,毫秒)
+      time:
+        type: string
+        description: 变更后时间(时间戳,毫秒)
+      reason:
+        type: string
+        maxLength: 255
+        description: 变更原因
+  TaskChangeListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/TaskChangeResponse"
+  TaskChangeResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      taskId:
+        type: integer
+      uid:
+        type: integer
+      userName:
+        type: string
+      nickName:
+        type: string
+      beforeTime:
+        type: string
+      time:
+        type: string
+      reason:
+        type: string
+      createTime:
+        type: string
