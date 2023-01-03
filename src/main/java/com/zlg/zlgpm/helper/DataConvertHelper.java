@@ -131,8 +131,6 @@ public class DataConvertHelper {
         task.setStatus(taskRequest.getStatus().toString());
         task.setPlayStartTime(StringUtils.hasText(taskRequest.getPlayStartTime()) ? taskRequest.getPlayStartTime() : null);
         task.setPlayEndTime(StringUtils.hasText(taskRequest.getPlayEndTime()) ? taskRequest.getPlayEndTime() : null);
-        task.setStartTime(taskRequest.getStartTime());
-        task.setEndTime(taskRequest.getEndTime());
         ApiCreateTaskRequest.TimelyEnum timely = taskRequest.getTimely();
         task.setTimely(timely != null ? timely.toString() : null);
         task.setQuality(taskRequest.getQuality());
@@ -140,6 +138,7 @@ public class DataConvertHelper {
         task.setRemark(taskRequest.getRemark());
         task.setLink(taskRequest.getLink());
         task.setModule(taskRequest.getModule());
+        task.setHaveDocument(taskRequest.getHaveDocument());
         return task;
     }
 
@@ -153,8 +152,6 @@ public class DataConvertHelper {
         task.setStatus(status != null ? status.toString() : null);
         task.setPlayStartTime(taskRequest.getPlayStartTime());
         task.setPlayEndTime(taskRequest.getPlayEndTime());
-        task.setStartTime(taskRequest.getStartTime());
-        task.setEndTime(taskRequest.getEndTime());
         ApiUpdateTaskRequest.TimelyEnum timely = taskRequest.getTimely();
         task.setTimely(timely != null ? timely.toString() : null);
         task.setQuality(taskRequest.getQuality());
@@ -162,6 +159,7 @@ public class DataConvertHelper {
         task.setRemark(taskRequest.getRemark());
         task.setLink(taskRequest.getLink());
         task.setModule(taskRequest.getModule());
+        task.setHaveDocument(taskRequest.getHaveDocument());
         return task;
     }
 

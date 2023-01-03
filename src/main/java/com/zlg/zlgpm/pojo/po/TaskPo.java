@@ -29,10 +29,6 @@ public class TaskPo implements Serializable {
     @TableField
     private String playEndTime;
     @TableField
-    private String startTime;
-    @TableField
-    private String endTime;
-    @TableField
     private String timely;
     @TableField
     private String quality;
@@ -45,6 +41,8 @@ public class TaskPo implements Serializable {
     @TableField
     private String module;
     @TableField
+    private Integer haveDocument;
+    @TableField
     private String updateTime;
     @TableField
     private String createTime;
@@ -52,7 +50,7 @@ public class TaskPo implements Serializable {
     public TaskPo() {
     }
 
-    public TaskPo(Integer id, String taskType, String task, String status, Integer uid, Integer pid, String playStartTime, String playEndTime, String startTime, String endTime, String timely, String quality, String document, String remark, String link, String module, String updateTime, String createTime) {
+    public TaskPo(Integer id, String taskType, String task, String status, Integer uid, Integer pid, String playStartTime, String playEndTime, String timely, String quality, String document, String remark, String link, String module,Integer haveDocument, String updateTime, String createTime) {
         this.id = id;
         this.taskType = taskType;
         this.task = task;
@@ -61,14 +59,13 @@ public class TaskPo implements Serializable {
         this.pid = pid;
         this.playStartTime = playStartTime;
         this.playEndTime = playEndTime;
-        this.startTime = startTime;
-        this.endTime = endTime;
         this.timely = timely;
         this.quality = quality;
         this.document = document;
         this.remark = remark;
         this.link = link;
         this.module = module;
+        this.haveDocument = haveDocument;
         this.updateTime = updateTime;
         this.createTime = createTime;
     }
@@ -137,22 +134,6 @@ public class TaskPo implements Serializable {
         this.playEndTime = playEndTime;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
     public String getTimely() {
         return timely;
     }
@@ -209,6 +190,14 @@ public class TaskPo implements Serializable {
         return createTime;
     }
 
+    public Integer getHaveDocument() {
+        return haveDocument;
+    }
+
+    public void setHaveDocument(Integer haveDocument) {
+        this.haveDocument = haveDocument;
+    }
+
     @Override
     public String toString() {
         return "TaskPo{" +
@@ -220,14 +209,13 @@ public class TaskPo implements Serializable {
                 ", pid=" + pid +
                 ", playStartTime='" + playStartTime + '\'' +
                 ", playEndTime='" + playEndTime + '\'' +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
                 ", timely='" + timely + '\'' +
                 ", quality='" + quality + '\'' +
                 ", document='" + document + '\'' +
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
                 ", module='" + module + '\'' +
+                ", haveDocument='" + haveDocument + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
