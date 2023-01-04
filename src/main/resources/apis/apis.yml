@@ -576,6 +576,56 @@ paths:
             $ref: "#/definitions/TaskChangeListResponse"
         500:
           description: server error
+  /v1/task/log:
+    post:
+      tags:
+        - taskLog
+      summary: 添加任务日志
+      description: 添加任务日志
+      operationId: createTaskLog
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateTaskLogRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+    get:
+      tags:
+        - taskLog
+      summary: 获取任务日志列表
+      description: 获取任务日志列表
+      operationId: getTaskLog
+      produces:
+        - "application/json"
+      parameters:
+        - name: taskId
+          in: query
+          type: integer
+          description: 任务id
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskLogListResponse"
+        500:
+          description: server error
   /v1/operationLog/list:
     get:
       tags:
@@ -1161,6 +1211,59 @@ definitions:
       time:
         type: string
       reason:
+        type: string
+      createTime:
+        type: string
+  CreateTaskLogRequest:
+    type: object
+    required:
+      - taskId
+      - uid
+      - workTime
+      - progress
+      - log
+    properties:
+      taskId:
+        type: integer
+        description: 任务id
+      uid:
+        type: integer
+        description: 申请变更用户id
+      workTime:
+        type: string
+        description: 工时
+      progress:
+        type: string
+        description: 进度
+      log:
+        type: string
+        maxLength: 1023
+        description: 日志内容
+  TaskLogListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/TaskLogResponse"
+  TaskLogResponse:
+    type: object
+    properties:
+      taskId:
+        type: integer
+      uid:
+        type: integer
+      userName:
+        type: string
+      nickName:
+        type: string
+      workTime:
+        type: string
+      progress:
+        type: string
+      log:
         type: string
       createTime:
         type: string

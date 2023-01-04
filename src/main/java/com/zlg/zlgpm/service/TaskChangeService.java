@@ -49,7 +49,7 @@ public class TaskChangeService {
     }
 
     public Page<TaskChangeListBo> getTaskChange(Integer currentPage, Integer pageSize,Integer taskId){
-        QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<TaskChangeListBo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("taskId",taskId);
 
         Page<TaskChangeListBo> page = new Page<>();

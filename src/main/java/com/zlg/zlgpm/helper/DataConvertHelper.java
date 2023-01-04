@@ -280,4 +280,34 @@ public class DataConvertHelper {
         apiTaskChangeResponse.setCreateTime(taskChangeListBo.getCreateTime());
         return apiTaskChangeResponse;
     }
+
+    public TaskLogPo convert2TaskLogPo(ApiCreateTaskLogRequest body){
+        TaskLogPo taskLogPo = new TaskLogPo();
+        taskLogPo.setTaskId(body.getTaskId());
+        taskLogPo.setUid(body.getUid());
+        taskLogPo.setWorkTime(body.getWorkTime());
+        taskLogPo.setProgress(body.getProgress());
+        taskLogPo.setLog(body.getLog());
+        return taskLogPo;
+    }
+
+    public ApiTaskLogListResponse convert2ApiTaskLogListResponse(Page<TaskLogListBo> taskLogListBoPage){
+        ApiTaskLogListResponse response = new ApiTaskLogListResponse();
+        fillApiPage(response,taskLogListBoPage);
+        response.setList(taskLogListBoPage.getRecords().stream().map(this::convert2ApiTaskLogResponse).collect(Collectors.toList()));
+        return  response;
+    }
+
+    public ApiTaskLogResponse convert2ApiTaskLogResponse(TaskLogListBo taskLogListBo){
+        ApiTaskLogResponse apiTaskLogResponse = new ApiTaskLogResponse();
+        apiTaskLogResponse.setTaskId(taskLogListBo.getTaskId());
+        apiTaskLogResponse.setUid(taskLogListBo.getUid());
+        apiTaskLogResponse.setUserName(taskLogListBo.getUserName());
+        apiTaskLogResponse.setNickName(taskLogListBo.getNickName());
+        apiTaskLogResponse.setWorkTime(taskLogListBo.getWorkTime());
+        apiTaskLogResponse.setProgress(taskLogListBo.getProgress());
+        apiTaskLogResponse.setLog(taskLogListBo.getLog());
+        apiTaskLogResponse.setCreateTime(taskLogListBo.getCreateTime());
+        return apiTaskLogResponse;
+    }
 }
