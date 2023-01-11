@@ -175,8 +175,6 @@ public class DataConvertHelper {
         response.setNickName(task.getNickName());
         response.setPlayStartTime(task.getPlayStartTime());
         response.setPlayEndTime(task.getPlayEndTime());
-        response.setStartTime(task.getStartTime());
-        response.setEndTime(task.getEndTime());
         response.setTimely(task.getTimely());
         response.setQuality(task.getQuality());
         response.setDocument(task.getDocument());
@@ -185,6 +183,8 @@ public class DataConvertHelper {
         response.setModule(task.getModule());
         response.setWarning(task.getWarning());
         response.setOvertime(task.getOvertime());
+        response.setWorkTimeCount(task.getWorkTimeCount());
+        response.setProgress(task.getProgress());
         return response;
     }
 

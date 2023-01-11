@@ -1127,12 +1127,6 @@ definitions:
       playEndTime:
         type: string
         description: 计划结束时间
-      startTime:
-        type: string
-        description: 实际开始时间
-      endTime:
-        type: string
-        description: 实际结束时间
       timely:
         type: string
         description: 及时性,1是;2否
@@ -1157,6 +1151,12 @@ definitions:
       module:
         type: string
         description: 功能模块
+      workTimeCount:
+        type: string
+        description: 累计工时
+      progress:
+        type: string
+        description: 任务进度
   TaskStatisticsResponse:
     type: object
     properties:

@@ -15,8 +15,6 @@ public class TaskListBo {
     private String nickName;
     private String playStartTime;
     private String playEndTime;
-    private String startTime;
-    private String endTime;
     private String timely;
     private String quality;
     private String document;
@@ -27,6 +25,8 @@ public class TaskListBo {
     private String createTime;
     private String overtime;
     private String warning;
+    private String workTimeCount;
+    private String progress;
 
     public TaskListBo() {
     }
@@ -101,22 +101,6 @@ public class TaskListBo {
 
     public void setPlayEndTime(String playEndTime) {
         this.playEndTime = playEndTime;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 
     public String getTimely() {
@@ -199,6 +183,22 @@ public class TaskListBo {
         this.module = module;
     }
 
+    public String getWorkTimeCount() {
+        return workTimeCount;
+    }
+
+    public void setWorkTimeCount(String workTimeCount) {
+        this.workTimeCount = workTimeCount;
+    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
     @Override
     public String toString() {
         return "TaskListBo{" +
@@ -211,18 +211,18 @@ public class TaskListBo {
                 ", nickName='" + nickName + '\'' +
                 ", playStartTime='" + playStartTime + '\'' +
                 ", playEndTime='" + playEndTime + '\'' +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
                 ", timely='" + timely + '\'' +
                 ", quality='" + quality + '\'' +
                 ", document='" + document + '\'' +
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
+                ", module='" + module + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", overtime='" + overtime + '\'' +
                 ", warning='" + warning + '\'' +
-                ", module='" + module + '\'' +
+                ", workTimeCount='" + workTimeCount + '\'' +
+                ", progress='" + progress + '\'' +
                 '}';
     }
 }
