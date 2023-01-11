@@ -2,13 +2,13 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.dao.OperationLogMapper;
 import com.zlg.zlgpm.pojo.po.OperationLogPo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -35,18 +35,18 @@ public class OperationLogService {
             wrapper.like("record", record);
         }
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
-            wrapper.between("createTime", convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
+            wrapper.between("createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
         }
         wrapper.orderByDesc("createTime");
         return operationLogMapper.selectPage(page, wrapper);
     }
 
-    private String convertTimestamp2Date(Long timestamp, String pattern) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        //设定时区
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
-        return simpleDateFormat.format(new Date(timestamp));
-    }
+//    private String convertTimestamp2Date(Long timestamp, String pattern) {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+//        //设定时区
+//        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+//        return simpleDateFormat.format(new Date(timestamp));
+//    }
 
 
 }

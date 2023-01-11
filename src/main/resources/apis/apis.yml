@@ -626,6 +626,47 @@ paths:
             $ref: "#/definitions/TaskLogListResponse"
         500:
           description: server error
+  /v1/task/log/aggregation:
+    get:
+      tags:
+        - taskLog
+      summary: 获取任务日志聚合列表
+      description: 获取任务日志聚合列表,用于任务日志页面
+      operationId: getTaskLogAggregation
+      produces:
+        - "application/json"
+      parameters:
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+        - name: uid
+          in: query
+          type: integer
+        - name: log
+          in: query
+          type: string
+          maxLength: 255
+          description: 日志内容,支持模糊查询
+        - in: query
+          name: startTime
+          type: string
+          description: 开始时间,时间戳(ms)
+        - in: query
+          name: endTime
+          type: string
+          description: 结束时间.时间戳(ms)
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskLogAggregationListResponse"
+        500:
+          description: server error
   /v1/operationLog/list:
     get:
       tags:
@@ -1251,6 +1292,8 @@ definitions:
   TaskLogResponse:
     type: object
     properties:
+      id:
+        type: integer
       taskId:
         type: integer
       uid:
@@ -1267,3 +1310,34 @@ definitions:
         type: string
       createTime:
         type: string
+  TaskLogAggregationListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/TaskLogAggregationResponse"
+  TaskLogAggregationResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      uid:
+        type: integer
+      userName:
+        type: string
+      nickName:
+        type: string
+      taskId:
+        type: integer
+      name:
+        type: string
+      version:
+        type: string
+      log:
+        type: string
+      createTime:
+        type: string
+

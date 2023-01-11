@@ -250,7 +250,7 @@ public class DataConvertHelper {
         return response;
     }
 
-    public TaskChangePo convert2TaskChangePo(ApiCreateTaskChangeRequest taskChangeRequest){
+    public TaskChangePo convert2TaskChangePo(ApiCreateTaskChangeRequest taskChangeRequest) {
         TaskChangePo taskChangePo = new TaskChangePo();
         taskChangePo.setTaskId(taskChangeRequest.getTaskId());
         taskChangePo.setUid(taskChangeRequest.getUid());
@@ -260,14 +260,14 @@ public class DataConvertHelper {
         return taskChangePo;
     }
 
-    public ApiTaskChangeListResponse convert2ApiTaskChangeListResponse(Page<TaskChangeListBo>  taskChangeListBoPage){
+    public ApiTaskChangeListResponse convert2ApiTaskChangeListResponse(Page<TaskChangeListBo> taskChangeListBoPage) {
         ApiTaskChangeListResponse response = new ApiTaskChangeListResponse();
-        fillApiPage(response,taskChangeListBoPage);
+        fillApiPage(response, taskChangeListBoPage);
         response.setList(taskChangeListBoPage.getRecords().stream().map(this::convert2ApiTaskChangeResponse).collect(Collectors.toList()));
         return response;
     }
 
-    public ApiTaskChangeResponse convert2ApiTaskChangeResponse(TaskChangeListBo taskChangeListBo){
+    public ApiTaskChangeResponse convert2ApiTaskChangeResponse(TaskChangeListBo taskChangeListBo) {
         ApiTaskChangeResponse apiTaskChangeResponse = new ApiTaskChangeResponse();
         apiTaskChangeResponse.setId(taskChangeListBo.getId());
         apiTaskChangeResponse.setTaskId(taskChangeListBo.getTaskId());
@@ -281,7 +281,7 @@ public class DataConvertHelper {
         return apiTaskChangeResponse;
     }
 
-    public TaskLogPo convert2TaskLogPo(ApiCreateTaskLogRequest body){
+    public TaskLogPo convert2TaskLogPo(ApiCreateTaskLogRequest body) {
         TaskLogPo taskLogPo = new TaskLogPo();
         taskLogPo.setTaskId(body.getTaskId());
         taskLogPo.setUid(body.getUid());
@@ -291,15 +291,16 @@ public class DataConvertHelper {
         return taskLogPo;
     }
 
-    public ApiTaskLogListResponse convert2ApiTaskLogListResponse(Page<TaskLogListBo> taskLogListBoPage){
+    public ApiTaskLogListResponse convert2ApiTaskLogListResponse(Page<TaskLogListBo> taskLogListBoPage) {
         ApiTaskLogListResponse response = new ApiTaskLogListResponse();
-        fillApiPage(response,taskLogListBoPage);
+        fillApiPage(response, taskLogListBoPage);
         response.setList(taskLogListBoPage.getRecords().stream().map(this::convert2ApiTaskLogResponse).collect(Collectors.toList()));
-        return  response;
+        return response;
     }
 
-    public ApiTaskLogResponse convert2ApiTaskLogResponse(TaskLogListBo taskLogListBo){
+    public ApiTaskLogResponse convert2ApiTaskLogResponse(TaskLogListBo taskLogListBo) {
         ApiTaskLogResponse apiTaskLogResponse = new ApiTaskLogResponse();
+        apiTaskLogResponse.setId(taskLogListBo.getId());
         apiTaskLogResponse.setTaskId(taskLogListBo.getTaskId());
         apiTaskLogResponse.setUid(taskLogListBo.getUid());
         apiTaskLogResponse.setUserName(taskLogListBo.getUserName());
@@ -309,5 +310,26 @@ public class DataConvertHelper {
         apiTaskLogResponse.setLog(taskLogListBo.getLog());
         apiTaskLogResponse.setCreateTime(taskLogListBo.getCreateTime());
         return apiTaskLogResponse;
+    }
+
+    public ApiTaskLogAggregationListResponse convertToAggregationListResponse(Page<TaskLogAggregationListBo> page) {
+        ApiTaskLogAggregationListResponse response = new ApiTaskLogAggregationListResponse();
+        fillApiPage(response, page);
+        response.setList(page.getRecords().stream().map(this::convert2ApiTaskLogAggregationResponse).collect(Collectors.toList()));
+        return response;
+    }
+
+    public ApiTaskLogAggregationResponse convert2ApiTaskLogAggregationResponse(TaskLogAggregationListBo taskLogAggregationListBo) {
+        ApiTaskLogAggregationResponse response = new ApiTaskLogAggregationResponse();
+        response.setId(taskLogAggregationListBo.getId());
+        response.setUid(taskLogAggregationListBo.getUid());
+        response.setUserName(taskLogAggregationListBo.getUserName());
+        response.setNickName(taskLogAggregationListBo.getNickName());
+        response.setTaskId(taskLogAggregationListBo.getTaskId());
+        response.setName(taskLogAggregationListBo.getName());
+        response.setVersion(taskLogAggregationListBo.getVersion());
+        response.setLog(taskLogAggregationListBo.getLog());
+        response.setCreateTime(taskLogAggregationListBo.getCreateTime());
+        return response;
     }
 }

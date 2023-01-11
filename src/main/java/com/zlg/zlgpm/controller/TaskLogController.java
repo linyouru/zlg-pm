@@ -2,8 +2,10 @@ package com.zlg.zlgpm.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskLogRequest;
+import com.zlg.zlgpm.controller.model.ApiTaskLogAggregationListResponse;
 import com.zlg.zlgpm.controller.model.ApiTaskLogListResponse;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import com.zlg.zlgpm.pojo.bo.TaskLogAggregationListBo;
 import com.zlg.zlgpm.pojo.bo.TaskLogListBo;
 import com.zlg.zlgpm.service.TaskLogService;
 import io.swagger.annotations.Api;
@@ -14,7 +16,7 @@ import javax.annotation.Resource;
 
 @RestController
 @Api(tags = "taskLog")
-public class TaskLogController implements TaskLogApi{
+public class TaskLogController implements TaskLogApi {
     @Resource
     private TaskLogService taskLogService;
     @Resource
@@ -32,4 +34,13 @@ public class TaskLogController implements TaskLogApi{
         ApiTaskLogListResponse response = dataConvertHelper.convert2ApiTaskLogListResponse(taskLog);
         return ResponseEntity.ok().body(response);
     }
+
+    @Override
+    public ResponseEntity<ApiTaskLogAggregationListResponse> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, String startTime, String endTime) {
+        Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, startTime, endTime);
+        ApiTaskLogAggregationListResponse response = dataConvertHelper.convertToAggregationListResponse(taskLogAggregation);
+        return ResponseEntity.ok().body(response);
+    }
+
+
 }

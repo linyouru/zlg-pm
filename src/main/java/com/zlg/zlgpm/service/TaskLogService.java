@@ -2,18 +2,21 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskLogRequest;
 import com.zlg.zlgpm.dao.TaskLogMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import com.zlg.zlgpm.pojo.bo.TaskLogAggregationListBo;
 import com.zlg.zlgpm.pojo.bo.TaskLogListBo;
 import com.zlg.zlgpm.pojo.po.TaskLogPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -54,6 +57,25 @@ public class TaskLogService {
         page.setCurrent(currentPage);
         page.setSize(pageSize);
         return taskLogMapper.selectPage(page, queryWrapper);
+    }
+
+    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, String startTime, String endTime){
+        QueryWrapper<TaskLogAggregationListBo> queryWrapper = new QueryWrapper<>();
+        if (null != uid) {
+            queryWrapper.eq("tl.uid", uid);
+        }
+        if (StringUtils.hasText(log)) {
+            queryWrapper.like("tl.log", log);
+        }
+        if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
+            queryWrapper.between("tl.createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
+        }
+        queryWrapper.orderByDesc("tl.createTime");
+
+        Page<TaskLogAggregationListBo> page = new Page<>();
+        page.setCurrent(currentPage);
+        page.setSize(pageSize);
+        return taskLogMapper.getTaskLogAggregation(page,queryWrapper);
     }
 
 }
