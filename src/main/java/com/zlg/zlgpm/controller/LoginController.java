@@ -4,6 +4,7 @@ package com.zlg.zlgpm.controller;
 import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiLoginRequest;
 import com.zlg.zlgpm.controller.model.ApiLoginResponse;
+import com.zlg.zlgpm.controller.model.ApiUserLoginResponse;
 import com.zlg.zlgpm.controller.model.ApiUserResponse;
 import com.zlg.zlgpm.service.UserService;
 import io.swagger.annotations.Api;
@@ -40,7 +41,7 @@ public class LoginController implements AuthApi {
         ApiLoginResponse response = new ApiLoginResponse();
         try {
             subject.login(token);
-            ApiUserResponse apiUserResponse = userService.queryUserByName(userName);
+            ApiUserLoginResponse apiUserResponse = userService.queryUserByName(userName);
             response.setResult(apiUserResponse);
             return ResponseEntity.ok(response);
         } catch (UnknownAccountException | IncorrectCredentialsException | LockedAccountException e) {

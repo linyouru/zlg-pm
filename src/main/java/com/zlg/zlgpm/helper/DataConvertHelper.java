@@ -46,8 +46,8 @@ public class DataConvertHelper {
         return userPo;
     }
 
-    public ApiUserResponse convert2ApiUserResponse(UserPo userPo) {
-        ApiUserResponse apiUserResponse = new ApiUserResponse();
+    public ApiUserLoginResponse convert2ApiUserLoginResponse(UserPo userPo) {
+        ApiUserLoginResponse apiUserResponse = new ApiUserLoginResponse();
         apiUserResponse.setId(Math.toIntExact(userPo.getId()));
         apiUserResponse.setUserName(userPo.getUserName());
         apiUserResponse.setNickName(userPo.getNickName());
@@ -59,10 +59,27 @@ public class DataConvertHelper {
         return apiUserResponse;
     }
 
-    public ApiUserListResponse convert2ApiUserListResponse(Page<UserPo> userPage) {
+    public ApiUserResponse convert2ApiUserResponse(UserListBo userListBo) {
+        ApiUserResponse apiUserResponse = new ApiUserResponse();
+        apiUserResponse.setId(Math.toIntExact(userListBo.getId()));
+        apiUserResponse.setUserName(userListBo.getUserName());
+        apiUserResponse.setNickName(userListBo.getNickName());
+        apiUserResponse.setEmail(userListBo.getEmail());
+        apiUserResponse.setRemark(userListBo.getRemark());
+        apiUserResponse.setCreateTime(userListBo.getCreateTime());
+        apiUserResponse.setUpdateTime(userListBo.getUpdateTime());
+        apiUserResponse.setTaskTitle(userListBo.getTaskTitle());
+        apiUserResponse.setTaskTotal(userListBo.getTaskTotal());
+        apiUserResponse.setTaskFinishCount(userListBo.getTaskFinishCount());
+        apiUserResponse.setTaskTimelyCount(userListBo.getTaskTimelyCount());
+        apiUserResponse.setTaskTimeoutCount(userListBo.getTaskTimeoutCount());
+        return apiUserResponse;
+    }
+
+    public ApiUserListResponse convert2ApiUserListResponse(Page<UserListBo> userListBoPage) {
         ApiUserListResponse apiUserResponse = new ApiUserListResponse();
-        fillApiPage(apiUserResponse, userPage);
-        apiUserResponse.setList(userPage.getRecords().stream().map(this::convert2ApiUserResponse).collect(Collectors.toList()));
+        fillApiPage(apiUserResponse, userListBoPage);
+        apiUserResponse.setList(userListBoPage.getRecords().stream().map(this::convert2ApiUserResponse).collect(Collectors.toList()));
         return apiUserResponse;
     }
 

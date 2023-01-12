@@ -1,0 +1,155 @@
+package com.zlg.zlgpm.pojo.bo;
+
+
+public class UserListBo {
+
+    private Long id;
+    private String userName;
+    private String password;
+    private String nickName;
+    private String email;
+    private String updateTime;
+    private String createTime;
+    private Integer status;
+    private String remark;
+    private String taskTitle;
+    private String taskTotal;
+    private String taskFinishCount;
+    private String taskTimelyCount;
+    private String taskTimeoutCount;
+
+    public UserListBo() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getTaskTitle() {
+        return taskTitle;
+    }
+
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle = taskTitle;
+    }
+
+    public String getTaskTotal() {
+        return taskTotal;
+    }
+
+    public void setTaskTotal(String taskTotal) {
+        this.taskTotal = taskTotal;
+    }
+
+    public String getTaskFinishCount() {
+        return taskFinishCount;
+    }
+
+    public void setTaskFinishCount(String taskFinishCount) {
+        this.taskFinishCount = taskFinishCount;
+    }
+
+    public String getTaskTimelyCount() {
+        return taskTimelyCount;
+    }
+
+    public void setTaskTimelyCount(String taskTimelyCount) {
+        this.taskTimelyCount = taskTimelyCount;
+    }
+
+    public String getTaskTimeoutCount() {
+        return taskTimeoutCount;
+    }
+
+    public void setTaskTimeoutCount(String taskTimeoutCount) {
+        this.taskTimeoutCount = taskTimeoutCount;
+    }
+
+    @Override
+    public String toString() {
+        return "UserListBo{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", email='" + email + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", status=" + status +
+                ", remark='" + remark + '\'' +
+                ", taskTitle='" + taskTitle + '\'' +
+                ", taskTotal='" + taskTotal + '\'' +
+                ", taskFinishCount='" + taskFinishCount + '\'' +
+                ", taskTimelyCount='" + taskTimelyCount + '\'' +
+                ", TaskTimeoutCount='" + taskTimeoutCount + '\'' +
+                '}';
+    }
+}

@@ -5,18 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zlg.zlgpm.commom.OperationLog;
-import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
-import com.zlg.zlgpm.controller.model.ApiUserListResponse;
-import com.zlg.zlgpm.controller.model.ApiUserResponse;
+import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserRoleMapper;
+import com.zlg.zlgpm.pojo.bo.UserListBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.pojo.po.UserRolePo;
 import com.zlg.zlgpm.exception.BizException;
-import com.zlg.zlgpm.controller.model.ApiCreateUserRequest;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 
@@ -92,13 +90,17 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         if (null != userName) {
             wrapper.likeRight("userName", userName);
         }
-        Page<UserPo> userPage = userMapper.selectPage(new Page<UserPo>().setCurrent(currentPage).setSize(pageSize), wrapper);
-        return dataConvertHelper.convert2ApiUserListResponse(userPage);
+//        Page<UserPo> userPage = userMapper.selectPage(new Page<UserPo>().setCurrent(currentPage).setSize(pageSize), wrapper);
+        Page<UserListBo> page = new Page<>();
+        page.setSize(pageSize);
+        page.setCurrent(currentPage);
+        Page<UserListBo> userListBoPage = userMapper.queryUserList(page, wrapper);
+        return dataConvertHelper.convert2ApiUserListResponse(userListBoPage);
     }
 
-    public ApiUserResponse queryUserByName(String userName) {
+    public ApiUserLoginResponse queryUserByName(String userName) {
         UserPo userPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("userName", userName));
-        return dataConvertHelper.convert2ApiUserResponse(userPo);
+        return dataConvertHelper.convert2ApiUserLoginResponse(userPo);
     }
 
     @Transactional(rollbackFor = Exception.class)

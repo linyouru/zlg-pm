@@ -766,7 +766,7 @@ definitions:
         type: string
       result:
         type: object
-        $ref: "#/definitions/UserResponse"
+        $ref: "#/definitions/UserLoginResponse"
   CreateUserRequest:
     type: object
     required:
@@ -829,6 +829,37 @@ definitions:
             items:
               $ref: "#/definitions/UserResponse"
   UserResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      userName:
+        type: string
+      nickName:
+        type: string
+      email:
+        type: string
+      updateTime:
+        type: string
+      createTime:
+        type: string
+      remark:
+        type: string
+      taskTitle:
+        type: string
+      taskTotal:
+        type: string
+        description: 任务总数
+      taskFinishCount:
+        type: string
+        description: 已完成任务数
+      taskTimelyCount:
+        type: string
+        description: 及时完成任务数
+      taskTimeoutCount:
+        type: string
+        description: 超期任务数
+  UserLoginResponse:
     type: object
     properties:
       id:
