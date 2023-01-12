@@ -1,6 +1,7 @@
 package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
@@ -15,6 +16,8 @@ import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,6 +32,7 @@ import java.util.Map;
 @Service
 public class TaskService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private TaskMapper taskMapper;
     @Resource
@@ -97,6 +101,13 @@ public class TaskService {
             mailSender.send(message);
         }
         return retTask;
+    }
+
+    /**
+     * 用于定时更新任务及时性
+     */
+    public void updateTaskTimely(TaskPo taskPo,UpdateWrapper<TaskPo> updateWrapper) {
+        int update = taskMapper.update(taskPo, updateWrapper);
     }
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, String status, String projectName, String projectVersion,
