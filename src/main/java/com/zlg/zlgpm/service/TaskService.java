@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.OperationLog;
+import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
@@ -11,6 +12,7 @@ import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import com.zlg.zlgpm.helper.EmailHelper;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
@@ -43,6 +45,10 @@ public class TaskService {
     private DataConvertHelper dataConvertHelper;
     @Resource
     private JavaMailSender mailSender;
+    @Resource
+    private EmailHelper emailHelper;
+
+    private static final String EMAIL_FORM = "noreply_developer@zlg.cn";
 
     @OperationLog(value = "创建任务", type = "Task")
     public TaskPo createTask(ApiCreateTaskRequest body) {
@@ -88,16 +94,19 @@ public class TaskService {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
         TaskPo retTask = taskMapper.selectById(id);
+
+        ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
+        UserPo projectUser = userMapper.selectById(projectPo.getUid());
+        UserPo taskUser = userMapper.selectById(retTask.getUid());
+        String text = assembleEmailMessage(projectPo.getName(), projectPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
         if ("2".equals(task.getStatus())) {
             //任务状态改为[待验收]需要给项目负责人发邮件
-            ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
-            UserPo userPo = userMapper.selectById(projectPo.getUid());
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("noreply_developer@zlg.cn");
-            message.setTo(userPo.getEmail());
-            message.setSubject("[项目管理系统]任务更新");
-            message.setText("项目[" + projectPo.getName() + " " + projectPo.getVersion() + "]的任务[" + retTask.getTask() + "]已更新,请查看.");
-            message.setSentDate(new Date());
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
+            mailSender.send(message);
+        }
+        if ("3".equals(task.getStatus())) {
+            //任务状态改为[已完成]需要给任务负责人发邮件
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
             mailSender.send(message);
         }
         return retTask;
@@ -106,7 +115,7 @@ public class TaskService {
     /**
      * 用于定时更新任务及时性
      */
-    public void updateTaskTimely(TaskPo taskPo,UpdateWrapper<TaskPo> updateWrapper) {
+    public void updateTaskTimely(TaskPo taskPo, UpdateWrapper<TaskPo> updateWrapper) {
         int update = taskMapper.update(taskPo, updateWrapper);
     }
 
@@ -165,6 +174,25 @@ public class TaskService {
             queryWrapper.having("p.`version` = {0}", projectVersion);
         }
         return taskMapper.aggregatedTaskModule(queryWrapper);
+    }
+
+    /**
+     * 拼接邮件信息
+     *
+     * @param projectName
+     * @param projectVersion
+     * @param projectUserName
+     * @param taskUsername
+     * @param task
+     * @return
+     */
+    private String assembleEmailMessage(String projectName, String projectVersion, String projectUserName, String taskUsername, String task) {
+        return "申请时间：" + Utils.convertTimestamp2Date(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n" +
+                "项目名称： " + projectName + "\n" +
+                "项目版本号： " + projectVersion + "\n" +
+                "项目负责人： " + projectUserName + "\n" +
+                "开发负责人： " + taskUsername + "\n" +
+                "任务内容： " + task;
     }
 
 }

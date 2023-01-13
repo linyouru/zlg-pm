@@ -25,6 +25,9 @@ public class TaskJob {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 定时计算任务及时性
+     */
     @Scheduled(cron = "0 0 0 ? * ? ")
     private void taskTimelyJob() {
         UpdateWrapper<TaskPo> updateWrapper = new UpdateWrapper();
