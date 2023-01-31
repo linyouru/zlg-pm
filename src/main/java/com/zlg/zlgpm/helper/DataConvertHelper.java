@@ -202,6 +202,7 @@ public class DataConvertHelper {
         response.setOvertime(task.getOvertime());
         response.setWorkTimeCount(task.getWorkTimeCount());
         response.setProgress(task.getProgress());
+        response.setHaveDocument(task.getHaveDocument());
         return response;
     }
 

@@ -42,7 +42,6 @@ public class TaskJob {
         updateWrapper2.lt("playEndTime", System.currentTimeMillis());
         taskPo.setTimely("2");
         taskService.updateTaskTimely(taskPo, updateWrapper2);
-        System.out.println("refresh task timely job end");
         logger.info("refresh task timely job end");
     }
 

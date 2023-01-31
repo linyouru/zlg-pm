@@ -27,6 +27,7 @@ public class TaskListBo {
     private String warning;
     private String workTimeCount;
     private String progress;
+    private Integer haveDocument;
 
     public TaskListBo() {
     }
@@ -199,6 +200,14 @@ public class TaskListBo {
         this.progress = progress;
     }
 
+    public Integer getHaveDocument() {
+        return haveDocument;
+    }
+
+    public void setHaveDocument(Integer haveDocument) {
+        this.haveDocument = haveDocument;
+    }
+
     @Override
     public String toString() {
         return "TaskListBo{" +
@@ -223,6 +232,7 @@ public class TaskListBo {
                 ", warning='" + warning + '\'' +
                 ", workTimeCount='" + workTimeCount + '\'' +
                 ", progress='" + progress + '\'' +
+                ", haveDocument=" + haveDocument +
                 '}';
     }
 }

@@ -33,6 +33,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         t.remark,\n" +
             "         t.link,\n" +
             "         t.module,\n" +
+            "         t.haveDocument,\n" +
             "         t.updateTime,\n" +
             "         t.createTime,\n" +
             "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`!= \"3\")),1,0 ) AS overtime,\n" +

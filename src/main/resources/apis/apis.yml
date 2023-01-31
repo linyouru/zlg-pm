@@ -1188,6 +1188,9 @@ definitions:
       progress:
         type: string
         description: 任务进度
+      haveDocument:
+        type: integer
+        description: 是否需要文档，0否；1是
   TaskStatisticsResponse:
     type: object
     properties:
