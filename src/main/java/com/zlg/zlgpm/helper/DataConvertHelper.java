@@ -123,6 +123,7 @@ public class DataConvertHelper {
         apiProjectResponse.setRemark(projectBo.getRemark());
         apiProjectResponse.setUpdateTime(projectBo.getUpdateTime());
         apiProjectResponse.setCreateTime(projectBo.getCreateTime());
+        apiProjectResponse.setUid(projectBo.getUid());
         return apiProjectResponse;
     }
 

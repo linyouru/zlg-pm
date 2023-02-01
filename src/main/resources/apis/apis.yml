@@ -939,6 +939,9 @@ definitions:
     properties:
       id:
         type: integer
+      uid:
+        type: integer
+        description: 项目负责人Id
       name:
         type: string
       version:
