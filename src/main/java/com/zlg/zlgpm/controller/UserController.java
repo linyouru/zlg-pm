@@ -5,12 +5,16 @@ import com.zlg.zlgpm.controller.model.ApiBaseResp;
 import com.zlg.zlgpm.controller.model.ApiCreateUserRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
 import com.zlg.zlgpm.controller.model.ApiUserListResponse;
+import com.zlg.zlgpm.exception.BizException;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.UserService;
 import io.swagger.annotations.Api;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,8 +43,12 @@ public class UserController implements UserApi {
     }
 
     @Override
-    @RequiresRoles(value = "root")
+//    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> updateUser(Integer id, ApiUpdateUserRequest body) {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        if (currentUser.getId() != id.longValue()) {
+            throw new BizException(HttpStatus.UNAUTHORIZED, "user.10006");
+        }
         userService.updateUser(id, body);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
