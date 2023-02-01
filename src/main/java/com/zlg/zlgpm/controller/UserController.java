@@ -46,7 +46,7 @@ public class UserController implements UserApi {
 //    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> updateUser(Integer id, ApiUpdateUserRequest body) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
-        if (currentUser.getId() != id.longValue()) {
+        if (currentUser.getId() != 1 && currentUser.getId() != id.longValue()) {
             throw new BizException(HttpStatus.UNAUTHORIZED, "user.10006");
         }
         userService.updateUser(id, body);
