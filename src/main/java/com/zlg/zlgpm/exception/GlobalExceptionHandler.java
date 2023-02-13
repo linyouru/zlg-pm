@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +62,27 @@ public class GlobalExceptionHandler implements MessageSourceAware {
     @ExceptionHandler(value = AuthorizationException.class)
     public ResponseEntity<String> handleAuthorizationException() {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("无操作权限");
+    }
+
+    /**
+     * 处理query参数校验不通过的异常
+     */
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public ResponseEntity<ErrResp> handleMethodArgumentNotValidException(ConstraintViolationException e, WebRequest request) {
+        final String path = getPath(request);
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String code = getCode(httpStatus,"");
+        Map<String, String> errors = new HashMap<>();
+        e.getConstraintViolations().forEach(constv -> errors.put(String.valueOf(constv.getPropertyPath()),constv.getMessage()));
+        final ErrResp resp = ErrResp.builder()
+                .timestamp(new Date())
+                .status(httpStatus.value())
+                .code(code)
+                .error(httpStatus.getReasonPhrase())
+                .path(path)
+                .message(errors)
+                .build();
+        return new ResponseEntity<>(resp, httpStatus);
     }
 
     /**
