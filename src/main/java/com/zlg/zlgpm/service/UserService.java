@@ -60,7 +60,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
     }
 
     @OperationLog(value = "修改用户", type = "User")
-    public UserPo updateUser(Integer id, ApiUpdateUserRequest body) {
+    public ApiUserLoginResponse updateUser(Integer id, ApiUpdateUserRequest body) {
         Long count = userMapper.selectCount(new QueryWrapper<UserPo>().eq("id", id));
         if (count < 1) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
@@ -68,7 +68,8 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         UserPo userPo = dataConvertHelper.convert2UserPo(body);
         userPo.setId(id.longValue());
         userMapper.updateById(userPo);
-        return userMapper.selectById(id);
+        UserPo retUser = userMapper.selectById(id);
+        return dataConvertHelper.convert2ApiUserLoginResponse(retUser);
     }
 
     public void updatePassword(Integer id, String newPassword, String oldPassword) {

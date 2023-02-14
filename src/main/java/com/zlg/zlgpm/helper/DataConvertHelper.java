@@ -59,6 +59,19 @@ public class DataConvertHelper {
         return apiUserResponse;
     }
 
+    public ApiUserLoginResponse convert2ApiUserResponse(UserPo userPo) {
+        ApiUserLoginResponse apiUserLoginResponse = new ApiUserLoginResponse();
+        apiUserLoginResponse.setId(Math.toIntExact(userPo.getId()));
+        apiUserLoginResponse.setUserName(userPo.getUserName());
+        apiUserLoginResponse.setNickName(userPo.getNickName());
+        apiUserLoginResponse.setEmail(userPo.getEmail());
+        apiUserLoginResponse.setRemark(userPo.getRemark());
+        apiUserLoginResponse.setCreateTime(userPo.getCreateTime());
+        apiUserLoginResponse.setUpdateTime(userPo.getUpdateTime());
+        apiUserLoginResponse.setTaskTitle(userPo.getTaskTitle());
+        return apiUserLoginResponse;
+    }
+
     public ApiUserResponse convert2ApiUserResponse(UserListBo userListBo) {
         ApiUserResponse apiUserResponse = new ApiUserResponse();
         apiUserResponse.setId(Math.toIntExact(userListBo.getId()));

@@ -25,7 +25,7 @@ paths:
           type: boolean
           required: true
           description: 记住我
-          default: false
+          default: true
         - name: body
           in: body
           schema:
@@ -80,7 +80,7 @@ paths:
       summary: 修改用户
       tags:
         - user
-      description: 修改用户(仅root)
+      description: 修改用户(普通用户仅能修改自己)
       operationId: updateUser
       consumes:
         - "application/json"
@@ -101,7 +101,7 @@ paths:
         200:
           description: success
           schema:
-            $ref: "#/definitions/BaseResp"
+            $ref: "#/definitions/UserLoginResponse"
         400:
           description: parameter error
         500:

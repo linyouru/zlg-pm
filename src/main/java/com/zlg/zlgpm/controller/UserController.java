@@ -1,10 +1,7 @@
 package com.zlg.zlgpm.controller;
 
 
-import com.zlg.zlgpm.controller.model.ApiBaseResp;
-import com.zlg.zlgpm.controller.model.ApiCreateUserRequest;
-import com.zlg.zlgpm.controller.model.ApiUpdateUserRequest;
-import com.zlg.zlgpm.controller.model.ApiUserListResponse;
+import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.UserService;
@@ -44,13 +41,13 @@ public class UserController implements UserApi {
 
     @Override
 //    @RequiresRoles(value = "root")
-    public ResponseEntity<ApiBaseResp> updateUser(Integer id, ApiUpdateUserRequest body) {
+    public ResponseEntity<ApiUserLoginResponse> updateUser(Integer id, ApiUpdateUserRequest body) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         if (currentUser.getId() != 1 && currentUser.getId() != id.longValue()) {
             throw new BizException(HttpStatus.UNAUTHORIZED, "user.10006");
         }
-        userService.updateUser(id, body);
-        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+        ApiUserLoginResponse apiUserLoginResponse = userService.updateUser(id, body);
+        return ResponseEntity.ok().body(apiUserLoginResponse);
     }
 
     @Override
