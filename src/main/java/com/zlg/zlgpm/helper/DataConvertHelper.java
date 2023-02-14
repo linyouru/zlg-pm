@@ -237,10 +237,10 @@ public class DataConvertHelper {
         return response;
     }
 
-    public List<String> convert2ApiProjectGroupNameResponse(List<Map<String, String>> maps) {
+    public List<String> convert2List(List<Map<String, String>> maps, String key) {
         ArrayList<String> list = new ArrayList<>();
         for (Map<String, String> map : maps) {
-            list.add(map.get("name"));
+            list.add(map.get(key));
         }
         return list;
     }

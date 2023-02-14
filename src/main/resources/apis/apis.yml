@@ -342,6 +342,29 @@ paths:
             $ref: "#/definitions/ProjectStatisticsListResponse"
         500:
           description: server error
+  /v1/project/versions:
+    get:
+      tags:
+        - project
+      summary: 获取项目版本
+      description: 通过项目名称获取项目版本
+      operationId: getProjectVersions
+      produces:
+        - "application/json"
+      parameters:
+        - name: projectName
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              type: string
+        500:
+          description: server error
   /v1/task:
     post:
       tags:

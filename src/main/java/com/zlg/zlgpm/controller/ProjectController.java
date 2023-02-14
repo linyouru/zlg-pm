@@ -43,9 +43,16 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
+    public ResponseEntity<List<String>> getProjectVersions(String projectName) {
+        List<Map<String, String>> projectVersions = projectService.getProjectVersions(projectName);
+        List<String> responses = dataConvertHelper.convert2List(projectVersions, "version");
+        return ResponseEntity.ok(responses);
+    }
+
+    @Override
     public ResponseEntity<List<String>> projectGroupName() {
         List<Map<String, String>> maps = projectService.aggregatedProjectName();
-        List<String> responses = dataConvertHelper.convert2ApiProjectGroupNameResponse(maps);
+        List<String> responses = dataConvertHelper.convert2List(maps, "name");
         return ResponseEntity.ok(responses);
     }
 

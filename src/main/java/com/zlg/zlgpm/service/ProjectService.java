@@ -34,7 +34,7 @@ public class ProjectService {
     @Resource
     private DataConvertHelper dataConvertHelper;
 
-    @OperationLog(value = "创建项目",type ="Project" )
+    @OperationLog(value = "创建项目", type = "Project")
     public ProjectPo createProject(ApiCreateProjectRequest request) {
         UserPo userPo = userMapper.selectById(request.getUid());
         if (null == userPo) {
@@ -49,12 +49,12 @@ public class ProjectService {
         return projectPo;
     }
 
-    @OperationLog(value = "删除项目",type ="Project" )
+    @OperationLog(value = "删除项目", type = "Project")
     public ProjectPo deleteProject(Integer id) {
         Long taskCount = taskMapper.selectCount(new QueryWrapper<TaskPo>().eq("pid", id));
-        if(taskCount>0){
+        if (taskCount > 0) {
             //删除项目前要先删除项目下挂载的任务
-            throw new BizException(HttpStatus.BAD_REQUEST,"project.11003",id);
+            throw new BizException(HttpStatus.BAD_REQUEST, "project.11003", id);
         }
         ProjectPo projectPo = projectMapper.selectById(id);
         if (null == projectPo) {
@@ -64,7 +64,7 @@ public class ProjectService {
         return projectPo;
     }
 
-    @OperationLog(value = "修改项目",type ="Project" )
+    @OperationLog(value = "修改项目", type = "Project")
     public ProjectPo updateProject(ProjectPo projectPo) {
         try {
             int i = projectMapper.updateById(projectPo);
@@ -88,16 +88,24 @@ public class ProjectService {
         return projectMapper.selectPageByName(projectBoPage, queryWrapper);
     }
 
-    public List<Map<String, String>> aggregatedProjectName(){
+    public List<Map<String, String>> aggregatedProjectName() {
         QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
         queryWrapper.groupBy("name");
         return projectMapper.aggregatedProjectName(queryWrapper);
     }
 
-    public Page<ProjectStatisticsBo> selectProjectStatistics(Integer currentPage, Integer pageSize){
+    public Page<ProjectStatisticsBo> selectProjectStatistics(Integer currentPage, Integer pageSize) {
         Page<ProjectStatisticsBo> projectStatisticsBo = new Page<>();
         projectStatisticsBo.setCurrent(currentPage);
         projectStatisticsBo.setSize(pageSize);
         return projectMapper.selectProjectStatistics(projectStatisticsBo);
+    }
+
+    public List<Map<String, String>> getProjectVersions(String projectName) {
+        QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("name");
+        queryWrapper.groupBy("version");
+        queryWrapper.having("name = {0}", projectName);
+        return projectMapper.aggregatedProjectVersions(queryWrapper);
     }
 }
