@@ -362,7 +362,7 @@ paths:
           schema:
             type: array
             items:
-              type: string
+              $ref: "#/definitions/ProjectVersionsResponse"
         500:
           description: server error
   /v1/task:
@@ -1044,6 +1044,18 @@ definitions:
       name:
         type: string
         description: 聚合后的项目名
+  ProjectVersionsResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: 项目id
+      name:
+        type: string
+        description: 项目名
+      version:
+        type: string
+        description: 项目版本
   CreateTaskRequest:
     type: object
     required:

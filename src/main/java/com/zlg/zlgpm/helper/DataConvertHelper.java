@@ -330,7 +330,7 @@ public class DataConvertHelper {
         return response;
     }
 
-    public ApiLastTaskLogResponse convert2ApiLastTaskLogResponse(TaskLogPo taskLogPo){
+    public ApiLastTaskLogResponse convert2ApiLastTaskLogResponse(TaskLogPo taskLogPo) {
         ApiLastTaskLogResponse response = new ApiLastTaskLogResponse();
         response.setId(taskLogPo.getId());
         response.setTaskId(taskLogPo.getTaskId());
@@ -374,6 +374,18 @@ public class DataConvertHelper {
         response.setVersion(taskLogAggregationListBo.getVersion());
         response.setLog(taskLogAggregationListBo.getLog());
         response.setCreateTime(taskLogAggregationListBo.getCreateTime());
+        return response;
+    }
+
+    public List<ApiProjectVersionsResponse> convert2ApiProjectVersionsResponse(List<ProjectBo> projects) {
+        ArrayList<ApiProjectVersionsResponse> response = new ArrayList<>();
+        projects.forEach(project -> {
+            ApiProjectVersionsResponse res = new ApiProjectVersionsResponse();
+            res.setId(project.getId());
+            res.setName(project.getName());
+            res.setVersion(project.getVersion());
+            response.add(res);
+        });
         return response;
     }
 }

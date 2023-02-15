@@ -101,7 +101,7 @@ public class ProjectService {
         return projectMapper.selectProjectStatistics(projectStatisticsBo);
     }
 
-    public List<Map<String, String>> getProjectVersions(String projectName) {
+    public List<ProjectBo> getProjectVersions(String projectName) {
         QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
         queryWrapper.groupBy("name");
         queryWrapper.groupBy("version");
