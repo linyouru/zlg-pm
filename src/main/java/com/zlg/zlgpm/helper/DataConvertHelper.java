@@ -330,6 +330,18 @@ public class DataConvertHelper {
         return response;
     }
 
+    public ApiLastTaskLogResponse convert2ApiLastTaskLogResponse(TaskLogPo taskLogPo){
+        ApiLastTaskLogResponse response = new ApiLastTaskLogResponse();
+        response.setId(taskLogPo.getId());
+        response.setTaskId(taskLogPo.getTaskId());
+        response.setUid(taskLogPo.getUid());
+        response.setWorkTime(taskLogPo.getWorkTime());
+        response.setProgress(taskLogPo.getProgress());
+        response.setLog(taskLogPo.getLog());
+        response.setCreateTime(taskLogPo.getCreateTime());
+        return response;
+    }
+
     public ApiTaskLogResponse convert2ApiTaskLogResponse(TaskLogListBo taskLogListBo) {
         ApiTaskLogResponse apiTaskLogResponse = new ApiTaskLogResponse();
         apiTaskLogResponse.setId(taskLogListBo.getId());

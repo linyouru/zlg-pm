@@ -59,7 +59,7 @@ public class TaskLogService {
         return taskLogMapper.selectPage(page, queryWrapper);
     }
 
-    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, String startTime, String endTime){
+    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, String startTime, String endTime) {
         QueryWrapper<TaskLogAggregationListBo> queryWrapper = new QueryWrapper<>();
         if (null != uid) {
             queryWrapper.eq("tl.uid", uid);
@@ -75,7 +75,15 @@ public class TaskLogService {
         Page<TaskLogAggregationListBo> page = new Page<>();
         page.setCurrent(currentPage);
         page.setSize(pageSize);
-        return taskLogMapper.getTaskLogAggregation(page,queryWrapper);
+        return taskLogMapper.getTaskLogAggregation(page, queryWrapper);
+    }
+
+    public TaskLogPo getLastTaskLog(Integer taskId) {
+        TaskPo taskPo = taskMapper.selectById(taskId);
+        if(null == taskPo){
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001");
+        }
+        return taskLogMapper.getLastTaskLog(taskId);
     }
 
 }

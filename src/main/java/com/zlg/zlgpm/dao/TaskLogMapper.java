@@ -48,4 +48,7 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
             "${ew.customSqlSegment}")
     Page<TaskLogAggregationListBo> getTaskLogAggregation(Page<TaskLogAggregationListBo> taskLogAggregationListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
+
+    @Select("SELECT * FROM `task_log` WHERE taskId = #{taskId} ORDER BY createTime DESC LIMIT 1;")
+    TaskLogPo getLastTaskLog(Integer taskId);
 }

@@ -649,6 +649,30 @@ paths:
             $ref: "#/definitions/TaskLogListResponse"
         500:
           description: server error
+  /v1/task/log/last:
+    get:
+      tags:
+        - taskLog
+      summary: 获取最新的任务日志
+      description: 获取最新的任务日志
+      operationId: getLastTaskLog
+      produces:
+        - "application/json"
+      parameters:
+        - name: taskId
+          in: query
+          required: true
+          type: integer
+          description: 任务id
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/LastTaskLogResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/task/log/aggregation:
     get:
       tags:
@@ -1362,6 +1386,23 @@ definitions:
         type: string
       nickName:
         type: string
+      workTime:
+        type: string
+      progress:
+        type: string
+      log:
+        type: string
+      createTime:
+        type: string
+  LastTaskLogResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      taskId:
+        type: integer
+      uid:
+        type: integer
       workTime:
         type: string
       progress:
