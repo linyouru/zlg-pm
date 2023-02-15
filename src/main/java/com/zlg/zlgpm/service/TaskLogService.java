@@ -52,6 +52,7 @@ public class TaskLogService {
     public Page<TaskLogListBo> getTaskLog(Integer taskId, Integer currentPage, Integer pageSize) {
         QueryWrapper<TaskLogListBo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("taskId", taskId);
+        queryWrapper.orderByDesc("createTime");
 
         Page<TaskLogListBo> page = new Page<>();
         page.setCurrent(currentPage);

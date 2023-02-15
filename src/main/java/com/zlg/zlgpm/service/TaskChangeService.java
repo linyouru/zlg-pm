@@ -51,6 +51,7 @@ public class TaskChangeService {
     public Page<TaskChangeListBo> getTaskChange(Integer currentPage, Integer pageSize,Integer taskId){
         QueryWrapper<TaskChangeListBo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("taskId",taskId);
+        queryWrapper.orderByDesc("createTime");
 
         Page<TaskChangeListBo> page = new Page<>();
         page.setCurrent(currentPage);
