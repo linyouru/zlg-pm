@@ -1,5 +1,6 @@
 package com.zlg.zlgpm.commom;
 
+import com.zlg.zlgpm.controller.model.ApiUserLoginResponse;
 import com.zlg.zlgpm.pojo.po.OperationLogPo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
@@ -48,7 +49,7 @@ public class OperationLogAspect {
             sb.append(value);
             switch (type){
                 case "User":
-                    UserPo userPo = (UserPo) returnValue;
+                    ApiUserLoginResponse userPo = (ApiUserLoginResponse) returnValue;
                     sb.append(": ").append(userPo.getUserName());
                     break;
                 case "Project":
