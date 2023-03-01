@@ -123,7 +123,8 @@ public class TaskService {
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String module) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
-            queryWrapper.eq("t.status", status);
+            String[] split = status.split(",");
+            queryWrapper.in("t.status", split);
         }
         if (StringUtils.hasText(projectName)) {
             queryWrapper.eq("p.name", projectName);

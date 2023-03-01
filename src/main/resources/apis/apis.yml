@@ -454,12 +454,7 @@ paths:
         - in: query
           name: status
           type: string
-          enum:
-            - 1
-            - 2
-            - 3
-            - 4
-          description: 任务状态 1开发中；2待验收；3已完成；4排队中
+          description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈; 多状态使用英文逗号分隔
         - in: query
           name: projectName
           type: string
@@ -720,7 +715,7 @@ paths:
         - operationLog
       summary: 操作日志
       description: 操作日志
-      operationId:  operationLogList
+      operationId: operationLogList
       produces:
         - "application/json"
       parameters:
@@ -1035,7 +1030,7 @@ definitions:
       taskTotal:
         type: integer
         description: 项目任务总数
-      rateOfFinish :
+      rateOfFinish:
         type: string
         description: 项目任务完成率
   ProjectGroupNameResponse:
