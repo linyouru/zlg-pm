@@ -42,7 +42,7 @@ public class DataConvertHelper {
         userPo.setNickName(apiUpdateUserRequest.getNickName());
         userPo.setEmail(apiUpdateUserRequest.getEmail());
         userPo.setRemark(apiUpdateUserRequest.getRemark());
-        userPo.setTaskTitle(apiUpdateUserRequest.getTaskTitle());
+        userPo.setCustom(apiUpdateUserRequest.getCustom());
         return userPo;
     }
 
@@ -55,7 +55,7 @@ public class DataConvertHelper {
         apiUserResponse.setRemark(userPo.getRemark());
         apiUserResponse.setCreateTime(userPo.getCreateTime());
         apiUserResponse.setUpdateTime(userPo.getUpdateTime());
-        apiUserResponse.setTaskTitle(userPo.getTaskTitle());
+        apiUserResponse.setCustom(userPo.getCustom());
         return apiUserResponse;
     }
 
@@ -68,7 +68,7 @@ public class DataConvertHelper {
         apiUserLoginResponse.setRemark(userPo.getRemark());
         apiUserLoginResponse.setCreateTime(userPo.getCreateTime());
         apiUserLoginResponse.setUpdateTime(userPo.getUpdateTime());
-        apiUserLoginResponse.setTaskTitle(userPo.getTaskTitle());
+        apiUserLoginResponse.setCustom(userPo.getCustom());
         return apiUserLoginResponse;
     }
 
@@ -81,7 +81,7 @@ public class DataConvertHelper {
         apiUserResponse.setRemark(userListBo.getRemark());
         apiUserResponse.setCreateTime(userListBo.getCreateTime());
         apiUserResponse.setUpdateTime(userListBo.getUpdateTime());
-        apiUserResponse.setTaskTitle(userListBo.getTaskTitle());
+        apiUserResponse.setCustom(userListBo.getCustom());
         apiUserResponse.setTaskTotal(userListBo.getTaskTotal());
         apiUserResponse.setTaskFinishCount(userListBo.getTaskFinishCount());
         apiUserResponse.setTaskTimelyCount(userListBo.getTaskTimelyCount());

@@ -857,10 +857,10 @@ definitions:
       remark:
         type: string
         maxLength: 255
-      taskTitle:
+      custom:
         type: string
         maxLength: 255
-        description: 任务表表头,字段用英文逗号分隔
+        description: 存储前端自定义json
   UserListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -887,7 +887,7 @@ definitions:
         type: string
       remark:
         type: string
-      taskTitle:
+      custom:
         type: string
       taskTotal:
         type: string
@@ -918,7 +918,7 @@ definitions:
         type: string
       remark:
         type: string
-      taskTitle:
+      custom:
         type: string
   CreateProjectRequest:
     type: object

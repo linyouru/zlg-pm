@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `user`
     `createTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `status`     int(8)       NOT NULL COMMENT '1启用；2禁用',
     `remark`     varchar(255)          DEFAULT NULL,
-    `taskTitle`  varchar(255)          DEFAULT NULL COMMENT '任务表表头',
+    `custom`  varchar(255)          DEFAULT NULL COMMENT '存储前端自定义json',
     PRIMARY KEY (`id`),
     UNIQUE KEY `index_username_unique` (`userName`) USING BTREE
 ) ENGINE = InnoDB
@@ -17,6 +17,6 @@ CREATE TABLE IF NOT EXISTS `user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-insert into `user` (id, userName, password, nickName, email, status, remark, taskTitle)
+insert into `user` (id, userName, password, nickName, email, status, remark, custom)
 values (1, "root", "4f1e174007fc5daf5ca6ad8f9bf9c746", "超级管理员", "", 1, "", "")
 ON DUPLICATE KEY UPDATE id = 1;

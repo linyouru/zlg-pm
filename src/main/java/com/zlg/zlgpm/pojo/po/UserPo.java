@@ -31,19 +31,19 @@ public class UserPo implements Serializable {
     @TableField
     private String remark;
     @TableField
-    private String taskTitle;
+    private String custom;
 
     public UserPo() {
     }
 
-    public UserPo(String userName, String password, String nickName, String email, Integer status, String remark, String taskTitle) {
+    public UserPo(String userName, String password, String nickName, String email, Integer status, String remark, String custom) {
         this.userName = userName;
         this.password = password;
         this.nickName = nickName;
         this.email = email;
         this.status = status;
         this.remark = remark;
-        this.taskTitle = taskTitle;
+        this.custom = custom;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class UserPo implements Serializable {
                 ", createTime='" + createTime + '\'' +
                 ", status=" + status +
                 ", remark='" + remark + '\'' +
-                ", taskTitle='" + taskTitle + '\'' +
+                ", custom='" + custom + '\'' +
                 '}';
     }
 
@@ -126,12 +126,12 @@ public class UserPo implements Serializable {
         this.remark = remark;
     }
 
-    public String getTaskTitle() {
-        return taskTitle;
+    public String getCustom() {
+        return custom;
     }
 
-    public void setTaskTitle(String taskTitle) {
-        this.taskTitle = taskTitle;
+    public void setCustom(String custom) {
+        this.custom = custom;
     }
 
     public static UserPo.UserBuilder builder() {
@@ -146,7 +146,7 @@ public class UserPo implements Serializable {
         private String email;
         private Integer status;
         private String remark;
-        private String taskTitle;
+        private String custom;
 
         public UserBuilder userName(final String userName) {
             this.userName = userName;
@@ -178,13 +178,13 @@ public class UserPo implements Serializable {
             return this;
         }
 
-        public UserBuilder taskTitle(final String taskTitle) {
-            this.taskTitle = taskTitle;
+        public UserBuilder custom(final String custom) {
+            this.custom = custom;
             return this;
         }
 
         public UserPo build() {
-            return new UserPo(this.userName, this.password, this.nickName, this.email, this.status, this.remark, this.taskTitle);
+            return new UserPo(this.userName, this.password, this.nickName, this.email, this.status, this.remark, this.custom);
         }
     }
 }

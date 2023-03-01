@@ -12,7 +12,7 @@ public class UserListBo {
     private String createTime;
     private Integer status;
     private String remark;
-    private String taskTitle;
+    private String custom;
     private String taskTotal;
     private String taskFinishCount;
     private String taskTimelyCount;
@@ -93,12 +93,12 @@ public class UserListBo {
         this.remark = remark;
     }
 
-    public String getTaskTitle() {
-        return taskTitle;
+    public String getCustom() {
+        return custom;
     }
 
-    public void setTaskTitle(String taskTitle) {
-        this.taskTitle = taskTitle;
+    public void setCustom(String custom) {
+        this.custom = custom;
     }
 
     public String getTaskTotal() {
@@ -145,7 +145,7 @@ public class UserListBo {
                 ", createTime='" + createTime + '\'' +
                 ", status=" + status +
                 ", remark='" + remark + '\'' +
-                ", taskTitle='" + taskTitle + '\'' +
+                ", custom='" + custom + '\'' +
                 ", taskTotal='" + taskTotal + '\'' +
                 ", taskFinishCount='" + taskFinishCount + '\'' +
                 ", taskTimelyCount='" + taskTimelyCount + '\'' +
