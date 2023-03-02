@@ -1059,6 +1059,7 @@ definitions:
       - status
       - module
       - haveDocument
+      - createdUid
     properties:
       pid:
         type: integer
@@ -1066,6 +1067,9 @@ definitions:
       uid:
         type: integer
         description: 负责人用户id
+      createdUid:
+        type: integer
+        description: 任务创建者id
       taskType:
         type: string
         enum:
@@ -1151,6 +1155,9 @@ definitions:
       playEndTime:
         type: string
         description: 计划结束时间,时间戳(ms)
+      acceptanceTime:
+        type: string
+        description: 验收时间,时间戳(ms)
       timely:
         type: string
         enum:
@@ -1172,6 +1179,9 @@ definitions:
       uid:
         type: integer
         description: 负责人用户id
+      pid:
+        type: integer
+        description: 项目id
       module:
         type: string
         description: 功能模块

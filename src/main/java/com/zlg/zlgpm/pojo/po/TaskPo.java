@@ -25,9 +25,13 @@ public class TaskPo implements Serializable {
     @TableField
     private Integer pid;
     @TableField
+    private Integer createdUid;
+    @TableField
     private String playStartTime;
     @TableField
     private String playEndTime;
+    @TableField
+    private String acceptanceTime;
     @TableField
     private String timely;
     @TableField
@@ -50,15 +54,17 @@ public class TaskPo implements Serializable {
     public TaskPo() {
     }
 
-    public TaskPo(Integer id, String taskType, String task, String status, Integer uid, Integer pid, String playStartTime, String playEndTime, String timely, String quality, String document, String remark, String link, String module,Integer haveDocument, String updateTime, String createTime) {
+    public TaskPo(Integer id, String taskType, String task, String status, Integer uid, Integer pid, Integer createdUid, String playStartTime, String playEndTime, String acceptanceTime, String timely, String quality, String document, String remark, String link, String module, Integer haveDocument, String updateTime, String createTime) {
         this.id = id;
         this.taskType = taskType;
         this.task = task;
         this.status = status;
         this.uid = uid;
         this.pid = pid;
+        this.createdUid = createdUid;
         this.playStartTime = playStartTime;
         this.playEndTime = playEndTime;
+        this.acceptanceTime = acceptanceTime;
         this.timely = timely;
         this.quality = quality;
         this.document = document;
@@ -198,6 +204,22 @@ public class TaskPo implements Serializable {
         this.haveDocument = haveDocument;
     }
 
+    public Integer getCreatedUid() {
+        return createdUid;
+    }
+
+    public void setCreatedUid(Integer createdUid) {
+        this.createdUid = createdUid;
+    }
+
+    public String getAcceptanceTime() {
+        return acceptanceTime;
+    }
+
+    public void setAcceptanceTime(String acceptanceTime) {
+        this.acceptanceTime = acceptanceTime;
+    }
+
     @Override
     public String toString() {
         return "TaskPo{" +
@@ -207,15 +229,17 @@ public class TaskPo implements Serializable {
                 ", status='" + status + '\'' +
                 ", uid=" + uid +
                 ", pid=" + pid +
+                ", createdUid=" + createdUid +
                 ", playStartTime='" + playStartTime + '\'' +
                 ", playEndTime='" + playEndTime + '\'' +
+                ", acceptanceTime='" + acceptanceTime + '\'' +
                 ", timely='" + timely + '\'' +
                 ", quality='" + quality + '\'' +
                 ", document='" + document + '\'' +
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
                 ", module='" + module + '\'' +
-                ", haveDocument='" + haveDocument + '\'' +
+                ", haveDocument=" + haveDocument +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
