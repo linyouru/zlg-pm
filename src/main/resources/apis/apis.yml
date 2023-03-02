@@ -1084,7 +1084,8 @@ definitions:
           - 2
           - 3
           - 4
-        description: 任务状态 1开发中；2待验收；3已完成；4排队中
+          - 5
+        description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
@@ -1142,7 +1143,8 @@ definitions:
           - 2
           - 3
           - 4
-        description: 任务状态 1开发中；2待验收；3已完成；4排队中
+          - 5
+        description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
@@ -1205,7 +1207,7 @@ definitions:
         type: string
       status:
         type: string
-        description: 任务状态 1开发中；2待验收；3已完成；4排队中
+        description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈
       nickName:
         type: string
         description: 开发负责人昵称
