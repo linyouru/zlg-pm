@@ -31,14 +31,14 @@ public class TaskJob {
     @Scheduled(cron = "0 0 0 ? * ? ")
     private void taskTimelyJob() {
         UpdateWrapper<TaskPo> updateWrapper = new UpdateWrapper();
-        updateWrapper.ne("status", "3");
+        updateWrapper.eq("status", "1");
         updateWrapper.ge("playEndTime", System.currentTimeMillis());
         TaskPo taskPo = new TaskPo();
         taskPo.setTimely("1");
         taskService.updateTaskTimely(taskPo, updateWrapper);
 
         UpdateWrapper<TaskPo> updateWrapper2 = new UpdateWrapper();
-        updateWrapper2.ne("status", "3");
+        updateWrapper2.eq("status", "1");
         updateWrapper2.lt("playEndTime", System.currentTimeMillis());
         taskPo.setTimely("2");
         taskService.updateTaskTimely(taskPo, updateWrapper2);
