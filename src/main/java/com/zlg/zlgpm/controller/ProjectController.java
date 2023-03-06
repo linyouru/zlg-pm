@@ -29,7 +29,7 @@ public class ProjectController implements ProjectApi {
     private DataConvertHelper dataConvertHelper;
 
     @Override
-    @RequiresRoles(value = "root")
+//    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> createProject(ApiCreateProjectRequest body) {
         projectService.createProject(body);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
@@ -71,7 +71,7 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    @RequiresRoles(value = "root")
+//    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> updateProject(Integer id, ApiUpdateProjectRequest body) {
         ProjectPo projectPo = dataConvertHelper.convert2ProjectPo(body);
         projectPo.setId(id);
