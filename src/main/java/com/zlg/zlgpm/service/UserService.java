@@ -2,6 +2,7 @@ package com.zlg.zlgpm.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zlg.zlgpm.commom.OperationLog;
@@ -85,17 +86,17 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         userMapper.updateById(userPo);
     }
 
-    public ApiUserListResponse userList(String userName, Integer currentPage, Integer pageSize) {
+    public ApiUserListResponse userList(String userName, Integer currentPage, Integer pageSize, String startTime, String endTime) {
         QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
         wrapper.ne("id", 1);
         if (null != userName) {
             wrapper.likeRight("userName", userName);
         }
-//        Page<UserPo> userPage = userMapper.selectPage(new Page<UserPo>().setCurrent(currentPage).setSize(pageSize), wrapper);
         Page<UserListBo> page = new Page<>();
         page.setSize(pageSize);
         page.setCurrent(currentPage);
-        Page<UserListBo> userListBoPage = userMapper.queryUserList(page, wrapper);
+        //mybatis-plus对于复杂sql中有多处where的情况下好像无法使用多个条件构造器构建sql,需使用xml动态构建sql
+        Page<UserListBo> userListBoPage = userMapper.queryUserList(page, wrapper, startTime, endTime);
         return dataConvertHelper.convert2ApiUserListResponse(userListBoPage);
     }
 

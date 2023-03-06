@@ -148,6 +148,12 @@ paths:
           in: query
           type: integer
           default: 10
+        - name: startTime
+          in: query
+          type: string
+        - name: endTime
+          in: query
+          type: string
       responses:
         200:
           description: success
@@ -901,6 +907,9 @@ definitions:
       taskTimeoutCount:
         type: string
         description: 超期任务数
+      timelinessRate:
+        type: string
+        description: 任务及时达成率
   UserLoginResponse:
     type: object
     properties:

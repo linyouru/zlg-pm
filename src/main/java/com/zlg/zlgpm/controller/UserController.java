@@ -57,10 +57,10 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<ApiUserListResponse> userList(String userName, Integer currentPage, Integer pageSize) {
+    public ResponseEntity<ApiUserListResponse> userList(String userName, Integer currentPage, Integer pageSize, String startTime, String endTime) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 10 : pageSize;
-        ApiUserListResponse apiUserListResponse = userService.userList(userName, currentPage, pageSize);
+        ApiUserListResponse apiUserListResponse = userService.userList(userName, currentPage, pageSize, startTime, endTime);
         return ResponseEntity.ok().body(apiUserListResponse);
     }
 

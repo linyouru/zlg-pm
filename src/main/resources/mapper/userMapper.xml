@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlg.zlgpm.dao.UserMapper">
+
+    <select id="queryUserList" resultType="com.zlg.zlgpm.pojo.bo.UserListBo">
+        SELECT
+            u.*, t.taskTotal,
+            t.taskFinishCount,
+            t.taskTimelyCount,
+            t.taskTimeoutCount,
+            CONCAT(CAST(FORMAT((t.taskTimelyCount/t.taskFinishCount)*100,2) AS CHAR),"%") AS timelinessRate
+        FROM
+            `user` AS u
+                LEFT JOIN (
+                SELECT
+                    uid,
+                    COUNT(uid) AS taskTotal,
+                    SUM(IF(`status` = "3", 1, 0)) AS taskFinishCount,
+                    SUM(IF(timely = "1", 1, 0)) AS taskTimelyCount,
+                    SUM(IF(timely = "2", 1, 0)) AS taskTimeoutCount
+                FROM
+                    project_task
+                <if test="startTime !=null and endTime !=null">
+                    WHERE playStartTime &gt;= #{startTime} AND playEndTime &lt;= #{endTime}
+                </if>
+                GROUP BY
+                    uid
+                HAVING
+                    uid IS NOT NULL
+            ) AS t ON u.id = t.uid
+            ${ew.customSqlSegment}
+    </select>
+
+
+
+</mapper>

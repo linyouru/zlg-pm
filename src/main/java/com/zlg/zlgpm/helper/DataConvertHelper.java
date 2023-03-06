@@ -86,6 +86,7 @@ public class DataConvertHelper {
         apiUserResponse.setTaskFinishCount(userListBo.getTaskFinishCount());
         apiUserResponse.setTaskTimelyCount(userListBo.getTaskTimelyCount());
         apiUserResponse.setTaskTimeoutCount(userListBo.getTaskTimeoutCount());
+        apiUserResponse.setTimelinessRate(userListBo.getTimelinessRate());
         return apiUserResponse;
     }
 

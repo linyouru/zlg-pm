@@ -17,6 +17,7 @@ public class UserListBo {
     private String taskFinishCount;
     private String taskTimelyCount;
     private String taskTimeoutCount;
+    private String timelinessRate;
 
     public UserListBo() {
     }
@@ -133,6 +134,14 @@ public class UserListBo {
         this.taskTimeoutCount = taskTimeoutCount;
     }
 
+    public String getTimelinessRate() {
+        return timelinessRate;
+    }
+
+    public void setTimelinessRate(String timelinessRate) {
+        this.timelinessRate = timelinessRate;
+    }
+
     @Override
     public String toString() {
         return "UserListBo{" +
@@ -149,7 +158,8 @@ public class UserListBo {
                 ", taskTotal='" + taskTotal + '\'' +
                 ", taskFinishCount='" + taskFinishCount + '\'' +
                 ", taskTimelyCount='" + taskTimelyCount + '\'' +
-                ", TaskTimeoutCount='" + taskTimeoutCount + '\'' +
+                ", taskTimeoutCount='" + taskTimeoutCount + '\'' +
+                ", timelinessRate='" + timelinessRate + '\'' +
                 '}';
     }
 }
