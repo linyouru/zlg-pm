@@ -100,6 +100,17 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         return dataConvertHelper.convert2ApiUserListResponse(userListBoPage);
     }
 
+    public ApiUserListByPidResponse userListByPid(Integer pid, Integer currentPage, Integer pageSize) {
+        QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
+        wrapper.ne("id", 1);
+        wrapper.eq("up.pid", pid);
+        Page<UserListBo> page = new Page<>();
+        page.setSize(pageSize);
+        page.setCurrent(currentPage);
+        Page<UserListBo> userPoPage = userMapper.queryUserListByPid(page, wrapper);
+        return dataConvertHelper.convert2ApiUserListByPidResponse(userPoPage);
+    }
+
     public ApiUserLoginResponse queryUserByName(String userName) {
         UserPo userPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("userName", userName));
         return dataConvertHelper.convert2ApiUserLoginResponse(userPo);

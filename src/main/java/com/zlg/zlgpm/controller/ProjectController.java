@@ -6,15 +6,20 @@ import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import com.zlg.zlgpm.pojo.po.UserProjectPo;
 import com.zlg.zlgpm.service.ProjectService;
+import com.zlg.zlgpm.service.UserProjectService;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +32,17 @@ public class ProjectController implements ProjectApi {
     private ProjectService projectService;
     @Resource
     private DataConvertHelper dataConvertHelper;
+    @Resource
+    private UserProjectService userProjectService;
 
     @Override
 //    @RequiresRoles(value = "root")
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ApiBaseResp> createProject(ApiCreateProjectRequest body) {
-        projectService.createProject(body);
+        ProjectPo project = projectService.createProject(body);
+
+        List<UserProjectPo> list = generateUserProjectPoList(body.getMemberUid(), project.getUid(), project.getId());
+        userProjectService.saveBatch(list);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
@@ -39,6 +50,7 @@ public class ProjectController implements ProjectApi {
     @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> deleteProject(Integer id) {
         projectService.deleteProject(id);
+        userProjectService.deleteProjectUser(id);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
@@ -71,11 +83,32 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
 //    @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> updateProject(Integer id, ApiUpdateProjectRequest body) {
         ProjectPo projectPo = dataConvertHelper.convert2ProjectPo(body);
         projectPo.setId(id);
         projectService.updateProject(projectPo);
+
+        userProjectService.deleteProjectUser(id);
+        List<UserProjectPo> list = generateUserProjectPoList(body.getMemberUid(), body.getUid(), id);
+        userProjectService.saveBatch(list);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    }
+
+    private List<UserProjectPo> generateUserProjectPoList(String uids, int ownerId, int pid) {
+        ArrayList<UserProjectPo> list = new ArrayList<>();
+
+        String[] memberUids = uids.split(",");
+        ArrayList<String> memberUidList = new ArrayList<>();
+        Collections.addAll(memberUidList, memberUids);
+        if (!memberUidList.contains(ownerId + "")) {
+            memberUidList.add(ownerId + "");
+        }
+        for (String uid : memberUidList) {
+            UserProjectPo userProjectPo = new UserProjectPo(Integer.parseInt(uid), pid);
+            list.add(userProjectPo);
+        }
+        return list;
     }
 }

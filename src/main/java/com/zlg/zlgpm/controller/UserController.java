@@ -64,4 +64,12 @@ public class UserController implements UserApi {
         return ResponseEntity.ok().body(apiUserListResponse);
     }
 
+    @Override
+    public ResponseEntity<ApiUserListByPidResponse> userListByPid(Integer pid, Integer currentPage, Integer pageSize) {
+        currentPage = currentPage == null ? 1 : currentPage;
+        pageSize = pageSize == null ? 10 : pageSize;
+        ApiUserListByPidResponse apiUserListByPidResponse = userService.userListByPid(pid, currentPage, pageSize);
+        return ResponseEntity.ok().body(apiUserListByPidResponse);
+    }
+
 }

@@ -163,6 +163,36 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/user/project:
+    get:
+      tags:
+        - user
+      summary: 获取项目成员列表
+      description: 获取项目成员列表
+      operationId: userListByPid
+      produces:
+        - "application/json"
+      parameters:
+        - name: pid
+          in: query
+          type: integer
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/UserListByPidResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/user/password:
     put:
       summary: 修改用户密码
@@ -952,6 +982,9 @@ definitions:
         minLength: 1
         maxLength: 8
         description: 用户id
+      memberUid:
+        type: string
+        description: 项目成员uid,使用英文逗分隔
       status:
         type: string
         enum:
@@ -976,6 +1009,9 @@ definitions:
         minLength: 1
         maxLength: 8
         description: 用户id
+      memberUid:
+        type: string
+        description: 项目成员uid,使用英文逗分隔
       status:
         type: string
         enum:
@@ -1060,6 +1096,34 @@ definitions:
       version:
         type: string
         description: 项目版本
+  UserListByPidResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/UserByPidResponse"
+  UserByPidResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      userName:
+        type: string
+      nickName:
+        type: string
+      email:
+        type: string
+      updateTime:
+        type: string
+      createTime:
+        type: string
+      remark:
+        type: string
+      custom:
+        type: string
   CreateTaskRequest:
     type: object
     required:

@@ -97,6 +97,26 @@ public class DataConvertHelper {
         return apiUserResponse;
     }
 
+    public ApiUserListByPidResponse convert2ApiUserListByPidResponse(Page<UserListBo> userListBoPage) {
+        ApiUserListByPidResponse apiUserListByPidResponse = new ApiUserListByPidResponse();
+        fillApiPage(apiUserListByPidResponse, userListBoPage);
+        apiUserListByPidResponse.setList(userListBoPage.getRecords().stream().map(this::convert2ApiUserByPidResponse).collect(Collectors.toList()));
+        return apiUserListByPidResponse;
+    }
+
+    public ApiUserByPidResponse convert2ApiUserByPidResponse(UserListBo userListBo) {
+        ApiUserByPidResponse apiUserByPidResponse = new ApiUserByPidResponse();
+        apiUserByPidResponse.setId(Math.toIntExact(userListBo.getId()));
+        apiUserByPidResponse.setUserName(userListBo.getUserName());
+        apiUserByPidResponse.setNickName(userListBo.getNickName());
+        apiUserByPidResponse.setEmail(userListBo.getEmail());
+        apiUserByPidResponse.setRemark(userListBo.getRemark());
+        apiUserByPidResponse.setCreateTime(userListBo.getCreateTime());
+        apiUserByPidResponse.setUpdateTime(userListBo.getUpdateTime());
+        apiUserByPidResponse.setCustom(userListBo.getCustom());
+        return apiUserByPidResponse;
+    }
+
     public static <T> void fillApiPage(ApiOnePageData rst, Page<T> pd) {
         final ApiOnePageDataPagination pagination = new ApiOnePageDataPagination();
         pagination.setTotalSize((int) pd.getTotal());

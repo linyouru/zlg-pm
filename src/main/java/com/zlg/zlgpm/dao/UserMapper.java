@@ -40,4 +40,6 @@ public interface UserMapper extends BaseMapper<UserPo> {
 //            "${ew.customSqlSegment}\n")
     Page<UserListBo> queryUserList(Page<UserListBo> userListBoPage, @Param(Constants.WRAPPER) Wrapper ew, String startTime, String endTime);
 
+    @Select("SELECT u.*,up.pid from `user` AS u LEFT JOIN user_project AS up ON u.id = up.uid ${ew.customSqlSegment}")
+    Page<UserListBo> queryUserListByPid(Page<UserListBo> userListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 }
