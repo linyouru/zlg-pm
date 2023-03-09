@@ -43,7 +43,7 @@ public class TaskLogService {
         if (taskLogPo.getTaskId() != null) {
             TaskPo taskPo = taskMapper.selectById(taskLogPo.getTaskId());
             if (null == taskPo) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "task.12001");
+                throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskLogPo.getTaskId());
             }
         }
         taskLogMapper.insert(taskLogPo);
@@ -82,9 +82,13 @@ public class TaskLogService {
     public TaskLogPo getLastTaskLog(Integer taskId) {
         TaskPo taskPo = taskMapper.selectById(taskId);
         if(null == taskPo){
-            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001");
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskId);
         }
-        return taskLogMapper.getLastTaskLog(taskId);
+        TaskLogPo lastTaskLog = taskLogMapper.getLastTaskLog(taskId);
+        if(null == lastTaskLog){
+            throw new BizException(HttpStatus.NOT_FOUND, "taskLog.13001",taskId);
+        }
+        return lastTaskLog;
     }
 
 }

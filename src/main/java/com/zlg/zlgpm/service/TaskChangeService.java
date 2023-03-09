@@ -42,7 +42,7 @@ public class TaskChangeService {
         if (taskChangePo.getTaskId() != null) {
             TaskPo taskPo = taskMapper.selectById(taskChangePo.getTaskId());
             if (null == taskPo) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "task.12001");
+                throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskChangePo.getTaskId());
             }
         }
         taskChangeMapper.insert(taskChangePo);

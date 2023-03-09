@@ -33,10 +33,7 @@ public class TaskLogController implements TaskLogApi {
     @Override
     public ResponseEntity<ApiLastTaskLogResponse> getLastTaskLog(Integer taskId) {
         TaskLogPo lastTaskLog = taskLogService.getLastTaskLog(taskId);
-        ApiLastTaskLogResponse response = null;
-        if(null!=lastTaskLog){
-            response = dataConvertHelper.convert2ApiLastTaskLogResponse(lastTaskLog);
-        }
+        ApiLastTaskLogResponse response = dataConvertHelper.convert2ApiLastTaskLogResponse(lastTaskLog);
         return ResponseEntity.ok().body(response);
     }
 
