@@ -412,4 +412,43 @@ public class DataConvertHelper {
         });
         return response;
     }
+
+    public TaskFeedbackPo convert2TaskFeedbackPo(ApiCreateFeedbackRequest data) {
+        TaskFeedbackPo response = new TaskFeedbackPo();
+        response.setFeedback(data.getFeedback());
+        response.setUid(data.getUid());
+        response.setTid(data.getTid());
+        response.setRemark(data.getRemark());
+        return response;
+    }
+
+    public TaskFeedbackPo convert2TaskFeedbackPo(ApiUpdateFeedbackRequest data) {
+        TaskFeedbackPo response = new TaskFeedbackPo();
+        response.setFeedback(data.getFeedback());
+        response.setUid(data.getUid());
+        response.setRemark(data.getRemark());
+        return response;
+    }
+
+    public ApiFeedbackListResponse convert2ApiFeedbackListResponse(Page<TaskFeedbackListBo> page) {
+        ApiFeedbackListResponse response = new ApiFeedbackListResponse();
+        fillApiPage(response, page);
+        response.setList(page.getRecords().stream().map(this::convert2ApiFeedbackResponse).collect(Collectors.toList()));
+        return response;
+    }
+
+    public ApiFeedbackResponse convert2ApiFeedbackResponse(TaskFeedbackListBo feedback){
+        ApiFeedbackResponse response = new ApiFeedbackResponse();
+        response.setFeedback(feedback.getFeedback());
+        response.setId(feedback.getId());
+        response.setTid(feedback.getTid());
+        response.setUid(feedback.getUid());
+        response.setNickName(feedback.getNickName());
+        response.setRemark(feedback.getRemark());
+        response.setCreateTime(feedback.getCreateTime());
+        response.setUpdateTime(feedback.getUpdateTime());
+        return response;
+    }
+
+
 }

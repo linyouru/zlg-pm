@@ -1,10 +1,7 @@
 package com.zlg.zlgpm.commom;
 
 import com.zlg.zlgpm.controller.model.ApiUserLoginResponse;
-import com.zlg.zlgpm.pojo.po.OperationLogPo;
-import com.zlg.zlgpm.pojo.po.ProjectPo;
-import com.zlg.zlgpm.pojo.po.TaskPo;
-import com.zlg.zlgpm.pojo.po.UserPo;
+import com.zlg.zlgpm.pojo.po.*;
 import com.zlg.zlgpm.service.OperationLogService;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
@@ -32,7 +29,7 @@ public class OperationLogAspect {
     public void afterReturning(JoinPoint joinPoint, Object returnValue) {
         OperationLogPo operationLogPo = new OperationLogPo();
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
-        if(null==currentUser){
+        if (null == currentUser) {
             return;
         }
         operationLogPo.setUserName(currentUser.getUserName());
@@ -47,7 +44,7 @@ public class OperationLogAspect {
             String value = annotation.value();
             String type = annotation.type();
             sb.append(value);
-            switch (type){
+            switch (type) {
                 case "User":
                     ApiUserLoginResponse userPo = (ApiUserLoginResponse) returnValue;
                     sb.append(": ").append(userPo.getUserName());
@@ -60,11 +57,15 @@ public class OperationLogAspect {
                     TaskPo taskPo = (TaskPo) returnValue;
                     //判断任务状态,若为已完成则定制化日志描述
                     String status = taskPo.getStatus();
-                    if("3".equals(status)){
-                        sb.delete(0,sb.length());
+                    if ("3".equals(status)) {
+                        sb.delete(0, sb.length());
                         sb.append("验收任务");
                     }
                     sb.append(": ").append(taskPo.getTask());
+                    break;
+                case "Feedback":
+                    TaskFeedbackPo taskFeedbackPo = (TaskFeedbackPo) returnValue;
+                    sb.append(": ").append(taskFeedbackPo.getFeedback());
                     break;
                 default:
                     break;

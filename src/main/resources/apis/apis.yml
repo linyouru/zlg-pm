@@ -704,6 +704,106 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/task/feedback:
+    post:
+      tags:
+        - taskFeedback
+      summary: 创建任务验收问题反馈
+      description: 创建任务验收问题反馈
+      operationId: createFeedback
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateFeedbackRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+    put:
+      tags:
+        - taskFeedback
+      summary: 修改问题反馈
+      description: 修改问题反馈
+      operationId: updateFeedback
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: 任务问题反馈id
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateFeedbackRequest'
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+    delete:
+      tags:
+        - taskFeedback
+      summary: 删除任务问题反馈
+      description: 删除任务问题反馈
+      operationId: deleteFeedback
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+          description: 任务问题反馈id
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /v1/task/feedback/list:
+    get:
+      tags:
+        - taskFeedback
+      summary: 查询任务的反馈问题列表
+      description: 查询任务的反馈问题列表
+      operationId: getFeedbackList
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: tid
+          type: integer
+          description: 任务id
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/FeedbackListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/task/log/aggregation:
     get:
       tags:
@@ -1533,4 +1633,58 @@ definitions:
         type: string
       createTime:
         type: string
-
+  CreateFeedbackRequest:
+    type: object
+    properties:
+      uid:
+        type: integer
+        description: 反馈人id
+      tid:
+        type: integer
+        description: 关联任务id
+      feedback:
+        type: string
+        description: 反馈内容
+      remark:
+        type: string
+        description: 备注
+  UpdateFeedbackRequest:
+    type: object
+    properties:
+      uid:
+        type: integer
+        description: 反馈人id
+      feedback:
+        type: string
+        description: 反馈内容
+      remark:
+        type: string
+        description: 备注
+  FeedbackListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/FeedbackResponse"
+  FeedbackResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      uid:
+        type: integer
+      nickName:
+        type: string
+      tid:
+        type: integer
+      feedback:
+        type: string
+      remark:
+        type: string
+      updateTime:
+        type: string
+      createTime:
+        type: string

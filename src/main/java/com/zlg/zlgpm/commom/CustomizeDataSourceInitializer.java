@@ -43,6 +43,8 @@ public class CustomizeDataSourceInitializer {
     private Resource taskLogTable;
     @Value("classpath:sql/userProjectTable.sql")
     private Resource userProjectTable;
+    @Value("classpath:sql/taskFeedbackTable.sql")
+    private Resource feedbackTable;
 
 
     @Bean
@@ -67,6 +69,7 @@ public class CustomizeDataSourceInitializer {
         populator.addScript(taskChangeTable);
         populator.addScript(taskLogTable);
         populator.addScript(userProjectTable);
+        populator.addScript(feedbackTable);
         return populator;
     }
 
