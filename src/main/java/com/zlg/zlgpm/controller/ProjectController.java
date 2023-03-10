@@ -40,9 +40,12 @@ public class ProjectController implements ProjectApi {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ApiBaseResp> createProject(ApiCreateProjectRequest body) {
         ProjectPo project = projectService.createProject(body);
-
-        List<UserProjectPo> list = generateUserProjectPoList(body.getMemberUid(), project.getUid(), project.getId());
-        userProjectService.saveBatch(list);
+        //添加项目和成员关系
+        String memberUid = body.getMemberUid();
+        if(null != memberUid){
+            List<UserProjectPo> list = generateUserProjectPoList(memberUid, project.getUid(), project.getId());
+            userProjectService.saveBatch(list);
+        }
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
@@ -91,8 +94,11 @@ public class ProjectController implements ProjectApi {
         projectService.updateProject(projectPo);
 
         userProjectService.deleteProjectUser(id);
-        List<UserProjectPo> list = generateUserProjectPoList(body.getMemberUid(), body.getUid(), id);
-        userProjectService.saveBatch(list);
+        String memberUid = body.getMemberUid();
+        if(null != memberUid){
+            List<UserProjectPo> list = generateUserProjectPoList(memberUid, body.getUid(), id);
+            userProjectService.saveBatch(list);
+        }
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
