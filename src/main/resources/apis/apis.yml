@@ -1256,9 +1256,6 @@ definitions:
       uid:
         type: integer
         description: 负责人用户id
-      createdUid:
-        type: integer
-        description: 任务创建者id
       taskType:
         type: string
         enum:
@@ -1451,6 +1448,12 @@ definitions:
       haveDocument:
         type: integer
         description: 是否需要文档，0否；1是
+      acceptanceTime:
+        type: string
+        description: 验收时间
+      createdUid:
+        type: integer
+        description: 任务创建者id
   TaskStatisticsResponse:
     type: object
     properties:

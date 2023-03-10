@@ -18,6 +18,7 @@ import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,7 @@ public class TaskService {
 
     @OperationLog(value = "创建任务", type = "Task")
     public TaskPo createTask(ApiCreateTaskRequest body) {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         //任务负责人暂时改为非必填
         if (task.getUid() != null) {
@@ -64,6 +66,7 @@ public class TaskService {
         if (null == projectPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", task.getPid());
         }
+        task.setCreatedUid(currentUser.getId().intValue());
         taskMapper.insert(task);
         return task;
     }

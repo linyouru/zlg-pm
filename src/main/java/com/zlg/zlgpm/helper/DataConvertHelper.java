@@ -185,7 +185,6 @@ public class DataConvertHelper {
         task.setLink(taskRequest.getLink());
         task.setModule(taskRequest.getModule());
         task.setHaveDocument(taskRequest.getHaveDocument());
-        task.setCreatedUid(taskRequest.getCreatedUid());
         return task;
     }
 
@@ -242,6 +241,7 @@ public class DataConvertHelper {
         response.setProgress(task.getProgress());
         response.setHaveDocument(task.getHaveDocument());
         response.setPid(task.getPid());
+
         return response;
     }
 

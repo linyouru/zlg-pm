@@ -29,6 +29,8 @@ public class TaskListBo {
     private String workTimeCount;
     private String progress;
     private Integer haveDocument;
+    private String acceptanceTime;
+    private String createdUid;
 
     public TaskListBo() {
     }
@@ -217,6 +219,22 @@ public class TaskListBo {
         this.pid = pid;
     }
 
+    public String getAcceptanceTime() {
+        return acceptanceTime;
+    }
+
+    public void setAcceptanceTime(String acceptanceTime) {
+        this.acceptanceTime = acceptanceTime;
+    }
+
+    public String getCreatedUid() {
+        return createdUid;
+    }
+
+    public void setCreatedUid(String createdUid) {
+        this.createdUid = createdUid;
+    }
+
     @Override
     public String toString() {
         return "TaskListBo{" +
@@ -224,7 +242,7 @@ public class TaskListBo {
                 ", projectName='" + projectName + '\'' +
                 ", projectVersion='" + projectVersion + '\'' +
                 ", taskType='" + taskType + '\'' +
-                ", pid='" + pid + '\'' +
+                ", pid=" + pid +
                 ", task='" + task + '\'' +
                 ", status='" + status + '\'' +
                 ", nickName='" + nickName + '\'' +
@@ -243,6 +261,8 @@ public class TaskListBo {
                 ", workTimeCount='" + workTimeCount + '\'' +
                 ", progress='" + progress + '\'' +
                 ", haveDocument=" + haveDocument +
+                ", acceptanceTime='" + acceptanceTime + '\'' +
+                ", createdUid='" + createdUid + '\'' +
                 '}';
     }
 }
