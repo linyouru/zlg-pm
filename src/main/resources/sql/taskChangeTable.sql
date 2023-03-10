@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS `task_change`
     `taskId`          int(8)      NOT NULL COMMENT '任务id',
     `uid`             int(8)      NOT NULL COMMENT '变更者id',
     `auditorId`       int(8)      NOT NULL COMMENT '审核者id',
+    `auditorName`     varchar(16) NOT NULL COMMENT '审核者昵称',
+    `status`          int(8)      NOT NULL COMMENT '状态:1待审核,2通过,3未通过',
     `beforeStartTime` varchar(64)          DEFAULT NULL COMMENT '变更前开始时间',
     `beforeEndTime`   varchar(64)          DEFAULT NULL COMMENT '变更前结束时间',
     `afterStartTime`  varchar(64)          DEFAULT NULL COMMENT '变更后开始时间',

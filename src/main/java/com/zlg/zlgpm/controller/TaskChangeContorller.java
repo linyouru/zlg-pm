@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 
 @RestController
 @Api(tags = "taskChange")
-public class TaskChangeContorller implements TaskChangeApi{
+public class TaskChangeContorller implements TaskChangeApi {
 
     @Resource
     private TaskChangeService taskChangeService;
@@ -29,8 +29,8 @@ public class TaskChangeContorller implements TaskChangeApi{
     }
 
     @Override
-    public ResponseEntity<ApiTaskChangeListResponse> getTaskChange(Integer taskId, Integer currentPage, Integer pageSize) {
-        Page<TaskChangeListBo> taskChange = taskChangeService.getTaskChange(currentPage, pageSize, taskId);
+    public ResponseEntity<ApiTaskChangeListResponse> getTaskChange(Integer taskId, Integer auditorId, Integer status, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
+        Page<TaskChangeListBo> taskChange = taskChangeService.getTaskChange(taskId, auditorId, status, currentPage, pageSize, sortField, isAsc);
         ApiTaskChangeListResponse apiTaskChangeListResponse = dataConvertHelper.convert2ApiTaskChangeListResponse(taskChange);
         return ResponseEntity.ok().body(apiTaskChangeListResponse);
     }

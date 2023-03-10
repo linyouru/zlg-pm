@@ -10,6 +10,7 @@ public class TaskListBo {
     private String projectName;
     private String projectVersion;
     private String taskType;
+    private Integer pid;
     private String task;
     private String status;
     private String nickName;
@@ -208,6 +209,14 @@ public class TaskListBo {
         this.haveDocument = haveDocument;
     }
 
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
     @Override
     public String toString() {
         return "TaskListBo{" +
@@ -215,6 +224,7 @@ public class TaskListBo {
                 ", projectName='" + projectName + '\'' +
                 ", projectVersion='" + projectVersion + '\'' +
                 ", taskType='" + taskType + '\'' +
+                ", pid='" + pid + '\'' +
                 ", task='" + task + '\'' +
                 ", status='" + status + '\'' +
                 ", nickName='" + nickName + '\'' +

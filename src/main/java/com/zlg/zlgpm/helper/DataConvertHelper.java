@@ -241,6 +241,7 @@ public class DataConvertHelper {
         response.setWorkTimeCount(task.getWorkTimeCount());
         response.setProgress(task.getProgress());
         response.setHaveDocument(task.getHaveDocument());
+        response.setPid(task.getPid());
         return response;
     }
 
@@ -310,8 +311,11 @@ public class DataConvertHelper {
         TaskChangePo taskChangePo = new TaskChangePo();
         taskChangePo.setTaskId(taskChangeRequest.getTaskId());
         taskChangePo.setUid(taskChangeRequest.getUid());
-        taskChangePo.setBeforeTime(taskChangeRequest.getBeforeTime());
-        taskChangePo.setTime(taskChangeRequest.getTime());
+        taskChangePo.setStatus(taskChangeRequest.getStatus());
+        taskChangePo.setBeforeStartTime(taskChangeRequest.getBeforeStartTime());
+        taskChangePo.setBeforeEndTime(taskChangeRequest.getBeforeEndTime());
+        taskChangePo.setAfterStartTime(taskChangeRequest.getAfterStartTime());
+        taskChangePo.setAfterEndTime(taskChangeRequest.getAfterEndTime());
         taskChangePo.setReason(taskChangeRequest.getReason());
         return taskChangePo;
     }
@@ -327,11 +331,17 @@ public class DataConvertHelper {
         ApiTaskChangeResponse apiTaskChangeResponse = new ApiTaskChangeResponse();
         apiTaskChangeResponse.setId(taskChangeListBo.getId());
         apiTaskChangeResponse.setTaskId(taskChangeListBo.getTaskId());
+        apiTaskChangeResponse.setTask(taskChangeListBo.getTask());
         apiTaskChangeResponse.setUid(taskChangeListBo.getUid());
         apiTaskChangeResponse.setUserName(taskChangeListBo.getUserName());
         apiTaskChangeResponse.setNickName(taskChangeListBo.getNickName());
-        apiTaskChangeResponse.setBeforeTime(taskChangeListBo.getBeforeTime());
-        apiTaskChangeResponse.setTime(taskChangeListBo.getTime());
+        apiTaskChangeResponse.setStatus(taskChangeListBo.getStatus());
+        apiTaskChangeResponse.setAuditorId(taskChangeListBo.getAuditorId());
+        apiTaskChangeResponse.setAuditorName(taskChangeListBo.getAuditorName());
+        apiTaskChangeResponse.setBeforeStartTime(taskChangeListBo.getBeforeStartTime());
+        apiTaskChangeResponse.setBeforeEndTime(taskChangeListBo.getBeforeEndTime());
+        apiTaskChangeResponse.setAfterStartTime(taskChangeListBo.getAfterStartTime());
+        apiTaskChangeResponse.setAfterEndTime(taskChangeListBo.getAfterEndTime());
         apiTaskChangeResponse.setReason(taskChangeListBo.getReason());
         apiTaskChangeResponse.setCreateTime(taskChangeListBo.getCreateTime());
         return apiTaskChangeResponse;
@@ -437,7 +447,7 @@ public class DataConvertHelper {
         return response;
     }
 
-    public ApiFeedbackResponse convert2ApiFeedbackResponse(TaskFeedbackListBo feedback){
+    public ApiFeedbackResponse convert2ApiFeedbackResponse(TaskFeedbackListBo feedback) {
         ApiFeedbackResponse response = new ApiFeedbackResponse();
         response.setFeedback(feedback.getFeedback());
         response.setId(feedback.getId());

@@ -14,18 +14,26 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TaskChangeMapper extends BaseMapper<TaskChangePo> {
 
-    @Select("SELECT t.id,\n" +
-            "         t.taskId,\n" +
-            "         t.uid,\n" +
-            "         u.userName,\n" +
-            "         u.nickName,\n" +
-            "         t.beforeTime,\n" +
-            "         t.time,\n" +
-            "         t.reason,\n" +
-            "         t.createTime\n" +
-            "FROM `task_change` AS t\n" +
-            "LEFT JOIN `user` AS u\n" +
-            "    ON t.uid = u.id \n" +
+    @Select("SELECT\n" +
+            "\tt.id,\n" +
+            "\tt.taskId,\n" +
+            "\tpt.task,\n" +
+            "\tt.uid,\n" +
+            "\tu.userName,\n" +
+            "\tu.nickName,\n" +
+            "\tt.auditorId,\n" +
+            "\tt.auditorName,\n" +
+            "\tt.`status`,\n" +
+            "\tt.beforeStartTime,\n" +
+            "\tt.beforeEndTime,\n" +
+            "\tt.afterStartTime,\n" +
+            "\tt.afterEndTime,\n" +
+            "\tt.reason,\n" +
+            "\tt.createTime\n" +
+            "FROM\n" +
+            "\t`task_change` AS t\n" +
+            "LEFT JOIN `user` AS u ON t.uid = u.id\n" +
+            "LEFT JOIN project_task AS pt ON t.taskId = pt.id\n" +
             "${ew.customSqlSegment}")
     Page<TaskChangeListBo> selectPage(Page<TaskChangeListBo> taskChangeListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 

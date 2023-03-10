@@ -23,6 +23,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         p.version AS projectVersion,\n" +
             "         t.taskType,\n" +
             "         t.task,\n" +
+            "         t.pid,\n" +
             "         t.`status`,\n" +
             "         u.nickName,\n" +
             "         t.playStartTime,\n" +

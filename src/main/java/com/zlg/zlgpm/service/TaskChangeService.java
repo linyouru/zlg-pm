@@ -3,6 +3,7 @@ package com.zlg.zlgpm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskChangeRequest;
+import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.TaskChangeMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
@@ -10,6 +11,7 @@ import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskChangeListBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
+import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskChangePo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
@@ -29,29 +31,43 @@ public class TaskChangeService {
     private TaskMapper taskMapper;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private ProjectMapper projectMapper;
 
     public void createTaskChange(ApiCreateTaskChangeRequest body) {
         TaskChangePo taskChangePo = dataConvertHelper.convert2TaskChangePo(body);
 
-        if (taskChangePo.getUid() != null) {
-            UserPo userPo = userMapper.selectById(taskChangePo.getUid());
-            if (null == userPo) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
-            }
+        UserPo userPo = userMapper.selectById(taskChangePo.getUid());
+        if (null == userPo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
         }
-        if (taskChangePo.getTaskId() != null) {
-            TaskPo taskPo = taskMapper.selectById(taskChangePo.getTaskId());
-            if (null == taskPo) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskChangePo.getTaskId());
-            }
+        TaskPo taskPo = taskMapper.selectById(taskChangePo.getTaskId());
+        if (null == taskPo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", taskChangePo.getTaskId());
         }
+        Integer pid = taskPo.getPid();
+        ProjectPo projectPo = projectMapper.selectById(pid);
+        int auditorId = projectPo.getUid();
+        UserPo Auditor = userMapper.selectById(auditorId);
+        taskChangePo.setAuditorId(auditorId);
+        taskChangePo.setAuditorName(Auditor.getNickName());
         taskChangeMapper.insert(taskChangePo);
     }
 
-    public Page<TaskChangeListBo> getTaskChange(Integer currentPage, Integer pageSize,Integer taskId){
+    public Page<TaskChangeListBo> getTaskChange(Integer taskId, Integer auditorId, Integer status, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         QueryWrapper<TaskChangeListBo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("taskId",taskId);
-        queryWrapper.orderByDesc("createTime");
+        if (null != taskId) {
+            queryWrapper.eq("taskId", taskId);
+        }
+        if (null != auditorId) {
+            queryWrapper.eq("auditorId", auditorId);
+        }
+        if (null != status) {
+            queryWrapper.eq("t.status", status);
+        }
+        if (null != sortField) {
+            queryWrapper.orderBy(true, isAsc, sortField);
+        }
 
         Page<TaskChangeListBo> page = new Page<>();
         page.setCurrent(currentPage);

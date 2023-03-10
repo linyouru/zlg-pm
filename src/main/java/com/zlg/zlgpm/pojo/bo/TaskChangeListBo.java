@@ -4,27 +4,21 @@ public class TaskChangeListBo {
 
     private Integer id;
     private Integer taskId;
+    private String task;
     private Integer uid;
     private String userName;
     private String nickName;
-    private String beforeTime;
-    private String time;
+    private Integer auditorId;
+    private String auditorName;
+    private Integer status;
+    private String beforeStartTime;
+    private String beforeEndTime;
+    private String afterStartTime;
+    private String afterEndTime;
     private String reason;
     private String createTime;
 
     public TaskChangeListBo() {
-    }
-
-    public TaskChangeListBo(Integer id, Integer taskId, Integer uid, String userName, String nickName, String beforeTime, String time, String reason, String createTime) {
-        this.id = id;
-        this.taskId = taskId;
-        this.uid = uid;
-        this.userName = userName;
-        this.nickName = nickName;
-        this.beforeTime = beforeTime;
-        this.time = time;
-        this.reason = reason;
-        this.createTime = createTime;
     }
 
     public Integer getId() {
@@ -67,22 +61,6 @@ public class TaskChangeListBo {
         this.nickName = nickName;
     }
 
-    public String getBeforeTime() {
-        return beforeTime;
-    }
-
-    public void setBeforeTime(String beforeTime) {
-        this.beforeTime = beforeTime;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getReason() {
         return reason;
     }
@@ -99,16 +77,86 @@ public class TaskChangeListBo {
         this.createTime = createTime;
     }
 
+    public Integer getAuditorId() {
+        return auditorId;
+    }
+
+    public void setAuditorId(Integer auditorId) {
+        this.auditorId = auditorId;
+    }
+
+    public String getAuditorName() {
+        return auditorName;
+    }
+
+    public void setAuditorName(String auditorName) {
+        this.auditorName = auditorName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getBeforeStartTime() {
+        return beforeStartTime;
+    }
+
+    public void setBeforeStartTime(String beforeStartTime) {
+        this.beforeStartTime = beforeStartTime;
+    }
+
+    public String getBeforeEndTime() {
+        return beforeEndTime;
+    }
+
+    public void setBeforeEndTime(String beforeEndTime) {
+        this.beforeEndTime = beforeEndTime;
+    }
+
+    public String getAfterStartTime() {
+        return afterStartTime;
+    }
+
+    public void setAfterStartTime(String afterStartTime) {
+        this.afterStartTime = afterStartTime;
+    }
+
+    public String getAfterEndTime() {
+        return afterEndTime;
+    }
+
+    public void setAfterEndTime(String afterEndTime) {
+        this.afterEndTime = afterEndTime;
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public void setTask(String task) {
+        this.task = task;
+    }
+
     @Override
     public String toString() {
         return "TaskChangeListBo{" +
                 "id=" + id +
                 ", taskId=" + taskId +
+                ", task='" + task + '\'' +
                 ", uid=" + uid +
                 ", userName='" + userName + '\'' +
                 ", nickName='" + nickName + '\'' +
-                ", beforeTime='" + beforeTime + '\'' +
-                ", time='" + time + '\'' +
+                ", auditorId=" + auditorId +
+                ", auditorName='" + auditorName + '\'' +
+                ", status=" + status +
+                ", beforeStartTime='" + beforeStartTime + '\'' +
+                ", beforeEndTime='" + beforeEndTime + '\'' +
+                ", afterStartTime='" + afterStartTime + '\'' +
+                ", afterEndTime='" + afterEndTime + '\'' +
                 ", reason='" + reason + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';

@@ -19,9 +19,19 @@ public class TaskChangePo implements Serializable {
     @TableField
     private Integer uid;
     @TableField
-    private String beforeTime;
+    private Integer auditorId;
     @TableField
-    private String time;
+    private String auditorName;
+    @TableField
+    private Integer status;
+    @TableField
+    private String beforeStartTime;
+    @TableField
+    private String beforeEndTime;
+    @TableField
+    private String afterStartTime;
+    @TableField
+    private String afterEndTime;
     @TableField
     private String reason;
     @TableField
@@ -30,17 +40,6 @@ public class TaskChangePo implements Serializable {
     private String createTime;
 
     public TaskChangePo() {
-    }
-
-    public TaskChangePo(Integer id, Integer taskId, Integer uid, String beforeTime, String time, String reason, String updateTime, String createTime) {
-        this.id = id;
-        this.taskId = taskId;
-        this.uid = uid;
-        this.beforeTime = beforeTime;
-        this.time = time;
-        this.reason = reason;
-        this.updateTime = updateTime;
-        this.createTime = createTime;
     }
 
     public Integer getId() {
@@ -67,22 +66,6 @@ public class TaskChangePo implements Serializable {
         this.uid = uid;
     }
 
-    public String getBeforeTime() {
-        return beforeTime;
-    }
-
-    public void setBeforeTime(String beforeTime) {
-        this.beforeTime = beforeTime;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getReason() {
         return reason;
     }
@@ -107,14 +90,75 @@ public class TaskChangePo implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getAuditorId() {
+        return auditorId;
+    }
+
+    public void setAuditorId(Integer auditorId) {
+        this.auditorId = auditorId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getBeforeStartTime() {
+        return beforeStartTime;
+    }
+
+    public void setBeforeStartTime(String beforeStartTime) {
+        this.beforeStartTime = beforeStartTime;
+    }
+
+    public String getBeforeEndTime() {
+        return beforeEndTime;
+    }
+
+    public void setBeforeEndTime(String beforeEndTime) {
+        this.beforeEndTime = beforeEndTime;
+    }
+
+    public String getAfterStartTime() {
+        return afterStartTime;
+    }
+
+    public void setAfterStartTime(String afterStartTime) {
+        this.afterStartTime = afterStartTime;
+    }
+
+    public String getAfterEndTime() {
+        return afterEndTime;
+    }
+
+    public void setAfterEndTime(String afterEndTime) {
+        this.afterEndTime = afterEndTime;
+    }
+
+    public String getAuditorName() {
+        return auditorName;
+    }
+
+    public void setAuditorName(String auditorName) {
+        this.auditorName = auditorName;
+    }
+
     @Override
     public String toString() {
         return "TaskChangePo{" +
                 "id=" + id +
                 ", taskId=" + taskId +
                 ", uid=" + uid +
-                ", beforeTime='" + beforeTime + '\'' +
-                ", time='" + time + '\'' +
+                ", auditorId=" + auditorId +
+                ", auditorName=" + auditorName +
+                ", status=" + status +
+                ", beforeStartTime='" + beforeStartTime + '\'' +
+                ", beforeEndTime='" + beforeEndTime + '\'' +
+                ", afterStartTime='" + afterStartTime + '\'' +
+                ", afterEndTime='" + afterEndTime + '\'' +
                 ", reason='" + reason + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +

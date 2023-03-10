@@ -615,6 +615,14 @@ paths:
           in: query
           type: integer
           description: 任务id
+        - name: auditorId
+          in: query
+          type: integer
+          description: 审核人id
+        - name: status
+          in: query
+          type: integer
+          description: 状态:1待审核,2通过,3未通过
         - name: currentPage
           in: query
           type: integer
@@ -623,6 +631,14 @@ paths:
           in: query
           type: integer
           default: 10
+        - in: query
+          name: sortField
+          type: string
+          description: 排序字段
+        - in: query
+          name: isAsc
+          type: boolean
+          description: 是否为升序,当指定sortField时,isAsc也必须指定
       responses:
         200:
           description: success
@@ -1388,6 +1404,8 @@ definitions:
         description: 任务类型 1前端；2后端；3产品
       task:
         type: string
+      pid:
+        type: integer
       status:
         type: string
         description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈
@@ -1481,8 +1499,11 @@ definitions:
     required:
       - taskId
       - uid
-      - beforeTime
-      - time
+      - status
+      - beforeStartTime
+      - beforeEndTime
+      - afterStartTime
+      - afterEndTime
       - reason
     properties:
       taskId:
@@ -1491,12 +1512,25 @@ definitions:
       uid:
         type: integer
         description: 申请变更用户id
-      beforeTime:
+      status:
+        type: integer
+        description: 状态:1待审核,2通过,3未通过
+        enum:
+          - 1
+          - 2
+          - 3
+      beforeStartTime:
         type: string
-        description: 变更前时间(时间戳,毫秒)
-      time:
+        description: 变更前开始时间(时间戳,毫秒)
+      beforeEndTime:
         type: string
-        description: 变更后时间(时间戳,毫秒)
+        description: 变更前结束时间(时间戳,毫秒)
+      afterStartTime:
+        type: string
+        description: 变更后开始时间(时间戳,毫秒)
+      afterEndTime:
+        type: string
+        description: 变更后结束时间(时间戳,毫秒)
       reason:
         type: string
         maxLength: 255
@@ -1517,15 +1551,33 @@ definitions:
         type: integer
       taskId:
         type: integer
+      task:
+        type: string
       uid:
         type: integer
+        description: 申请人id
       userName:
         type: string
+        description: 申请人userName
       nickName:
         type: string
-      beforeTime:
+        description: 申请人nickName
+      auditorId:
+        type: integer
+        description: 审核人id
+      auditorName:
         type: string
-      time:
+        description: 审核人昵称
+      status:
+        type: integer
+        description: 状态:1待审核,2通过,3未通过
+      beforeStartTime:
+        type: string
+      beforeEndTime:
+        type: string
+      afterStartTime:
+        type: string
+      afterEndTime:
         type: string
       reason:
         type: string
