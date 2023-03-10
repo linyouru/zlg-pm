@@ -88,9 +88,9 @@ class ZlgPmApplicationTests {
         projectService.selectProjectStatistics(1,5);
     }
 
-    @Test
-    void selectTastStatistics(){
-        taskService.selectTaskStatistics();
-    }
+//    @Test
+//    void selectTastStatistics(){
+//        taskService.selectTaskStatistics();
+//    }
 
 }

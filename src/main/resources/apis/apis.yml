@@ -546,6 +546,13 @@ paths:
       operationId: taskStatistics
       produces:
         - "application/json"
+      parameters:
+        - name: pid
+          in: query
+          type: integer
+        - name: uid
+          in: query
+          type: integer
       responses:
         200:
           description: success

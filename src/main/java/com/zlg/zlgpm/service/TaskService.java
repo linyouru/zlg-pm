@@ -164,8 +164,15 @@ public class TaskService {
         return taskMapper.selectPage(taskListBoPage, queryWrapper);
     }
 
-    public TaskStatisticsBo selectTaskStatistics() {
-        return taskMapper.selectTaskStatistics();
+    public TaskStatisticsBo selectTaskStatistics(Integer pid, Integer uid) {
+        QueryWrapper<TaskStatisticsBo> wrapper = new QueryWrapper<>();
+        if (null != pid) {
+            wrapper.eq("pid", pid);
+        }
+        if (null != uid) {
+            wrapper.eq("uid", uid);
+        }
+        return taskMapper.selectTaskStatistics(wrapper);
     }
 
     public List<Map<String, String>> aggregatedTaskModule(String projectName, String projectVersion) {

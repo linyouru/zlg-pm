@@ -58,8 +58,8 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskStatisticsResponse> taskStatistics() {
-        TaskStatisticsBo taskStatisticsBo = taskService.selectTaskStatistics();
+    public ResponseEntity<ApiTaskStatisticsResponse> taskStatistics(Integer pid, Integer uid) {
+        TaskStatisticsBo taskStatisticsBo = taskService.selectTaskStatistics(pid, uid);
         ApiTaskStatisticsResponse response = dataConvertHelper.convert2ApiTaskStatisticsResponse(taskStatisticsBo);
         return ResponseEntity.ok(response);
     }
