@@ -241,7 +241,7 @@ public class DataConvertHelper {
         response.setProgress(task.getProgress());
         response.setHaveDocument(task.getHaveDocument());
         response.setPid(task.getPid());
-
+        response.setUid(task.getUid());
         return response;
     }
 

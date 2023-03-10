@@ -11,6 +11,7 @@ public class TaskListBo {
     private String projectVersion;
     private String taskType;
     private Integer pid;
+    private Integer uid;
     private String task;
     private String status;
     private String nickName;
@@ -61,6 +62,14 @@ public class TaskListBo {
 
     public String getTaskType() {
         return taskType;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     public void setTaskType(String taskType) {
@@ -243,6 +252,7 @@ public class TaskListBo {
                 ", projectVersion='" + projectVersion + '\'' +
                 ", taskType='" + taskType + '\'' +
                 ", pid=" + pid +
+                ", uid=" + uid +
                 ", task='" + task + '\'' +
                 ", status='" + status + '\'' +
                 ", nickName='" + nickName + '\'' +
