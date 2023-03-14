@@ -36,6 +36,14 @@ public class TaskChangeService {
     private ProjectMapper projectMapper;
 
     public void createTaskChange(ApiCreateTaskChangeRequest body) {
+        //存在待审核的变更记录则不能再创建
+        QueryWrapper<TaskChangePo> wrapper = new QueryWrapper<>();
+        wrapper.eq("status", 1);
+        Long count = taskChangeMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "taskChange.15001", body.getTaskId());
+        }
+
         TaskChangePo taskChangePo = dataConvertHelper.convert2TaskChangePo(body);
 
         UserPo userPo = userMapper.selectById(taskChangePo.getUid());
@@ -76,7 +84,7 @@ public class TaskChangeService {
         return taskChangeMapper.selectPage(page, queryWrapper);
     }
 
-    public void updateTaskChange(ApiUpdateTaskChangeRequest body, Integer id){
+    public void updateTaskChange(ApiUpdateTaskChangeRequest body, Integer id) {
         TaskChangePo taskChangePo = new TaskChangePo();
         taskChangePo.setStatus(body.getStatus());
         taskChangePo.setId(id);
