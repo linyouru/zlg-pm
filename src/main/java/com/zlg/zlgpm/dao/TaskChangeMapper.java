@@ -17,6 +17,8 @@ public interface TaskChangeMapper extends BaseMapper<TaskChangePo> {
     @Select("SELECT\n" +
             "\tt.id,\n" +
             "\tt.taskId,\n" +
+            "\tp.`name` AS projectName,\n" +
+            "\tp.version AS projectVersion,\n"+
             "\tpt.task,\n" +
             "\tt.uid,\n" +
             "\tu.userName,\n" +
@@ -34,6 +36,7 @@ public interface TaskChangeMapper extends BaseMapper<TaskChangePo> {
             "\t`task_change` AS t\n" +
             "LEFT JOIN `user` AS u ON t.uid = u.id\n" +
             "LEFT JOIN project_task AS pt ON t.taskId = pt.id\n" +
+            "LEFT JOIN project AS p ON pt.pid = p.id\n"+
             "${ew.customSqlSegment}")
     Page<TaskChangeListBo> selectPage(Page<TaskChangeListBo> taskChangeListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 

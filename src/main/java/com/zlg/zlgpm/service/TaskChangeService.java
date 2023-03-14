@@ -3,6 +3,7 @@ package com.zlg.zlgpm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskChangeRequest;
+import com.zlg.zlgpm.controller.model.ApiUpdateTaskChangeRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.TaskChangeMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
@@ -73,6 +74,13 @@ public class TaskChangeService {
         page.setCurrent(currentPage);
         page.setSize(pageSize);
         return taskChangeMapper.selectPage(page, queryWrapper);
+    }
+
+    public void updateTaskChange(ApiUpdateTaskChangeRequest body, Integer id){
+        TaskChangePo taskChangePo = new TaskChangePo();
+        taskChangePo.setStatus(body.getStatus());
+        taskChangePo.setId(id);
+        taskChangeMapper.updateById(taskChangePo);
     }
 
 }

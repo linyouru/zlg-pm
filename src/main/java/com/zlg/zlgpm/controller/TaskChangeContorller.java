@@ -3,6 +3,7 @@ package com.zlg.zlgpm.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskChangeRequest;
 import com.zlg.zlgpm.controller.model.ApiTaskChangeListResponse;
+import com.zlg.zlgpm.controller.model.ApiUpdateTaskChangeRequest;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskChangeListBo;
 import com.zlg.zlgpm.service.TaskChangeService;
@@ -33,6 +34,12 @@ public class TaskChangeContorller implements TaskChangeApi {
         Page<TaskChangeListBo> taskChange = taskChangeService.getTaskChange(taskId, auditorId, status, currentPage, pageSize, sortField, isAsc);
         ApiTaskChangeListResponse apiTaskChangeListResponse = dataConvertHelper.convert2ApiTaskChangeListResponse(taskChange);
         return ResponseEntity.ok().body(apiTaskChangeListResponse);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateTaskChange(ApiUpdateTaskChangeRequest body, Integer id) {
+        taskChangeService.updateTaskChange(body,id);
+        return ResponseEntity.ok(null);
     }
 
 }

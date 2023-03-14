@@ -344,6 +344,8 @@ public class DataConvertHelper {
         apiTaskChangeResponse.setAfterEndTime(taskChangeListBo.getAfterEndTime());
         apiTaskChangeResponse.setReason(taskChangeListBo.getReason());
         apiTaskChangeResponse.setCreateTime(taskChangeListBo.getCreateTime());
+        apiTaskChangeResponse.setProjectName(taskChangeListBo.getProjectName());
+        apiTaskChangeResponse.setProjectVersion(taskChangeListBo.getProjectVersion());
         return apiTaskChangeResponse;
     }
 

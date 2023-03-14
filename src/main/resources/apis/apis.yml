@@ -609,6 +609,31 @@ paths:
           description: parameter error
         500:
           description: server error
+    put:
+      tags:
+        - taskChange
+      summary: 修改任务变更
+      description: 修改任务变更
+      operationId: updateTaskChange
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: 任务变更记录id
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTaskChangeRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
     get:
       tags:
         - taskChange
@@ -1550,6 +1575,18 @@ definitions:
         type: string
         maxLength: 255
         description: 变更原因
+  UpdateTaskChangeRequest:
+    type: object
+    required:
+      - status
+    properties:
+      status:
+        type: integer
+        description: 状态:1待审核,2通过,3未通过
+        enum:
+          - 1
+          - 2
+          - 3
   TaskChangeListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -1567,6 +1604,10 @@ definitions:
       taskId:
         type: integer
       task:
+        type: string
+      projectName:
+        type: string
+      projectVersion:
         type: string
       uid:
         type: integer

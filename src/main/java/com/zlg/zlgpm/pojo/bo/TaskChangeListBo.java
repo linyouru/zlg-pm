@@ -5,6 +5,8 @@ public class TaskChangeListBo {
     private Integer id;
     private Integer taskId;
     private String task;
+    private String projectName;
+    private String projectVersion;
     private Integer uid;
     private String userName;
     private String nickName;
@@ -141,12 +143,30 @@ public class TaskChangeListBo {
         this.task = task;
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectVersion() {
+        return projectVersion;
+    }
+
+    public void setProjectVersion(String projectVersion) {
+        this.projectVersion = projectVersion;
+    }
+
     @Override
     public String toString() {
         return "TaskChangeListBo{" +
                 "id=" + id +
                 ", taskId=" + taskId +
                 ", task='" + task + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", projectVersion='" + projectVersion + '\'' +
                 ", uid=" + uid +
                 ", userName='" + userName + '\'' +
                 ", nickName='" + nickName + '\'' +
