@@ -18,6 +18,7 @@ import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -36,9 +37,10 @@ public class TaskChangeService {
     private ProjectMapper projectMapper;
 
     public void createTaskChange(ApiCreateTaskChangeRequest body) {
-        //存在待审核的变更记录则不能再创建
+        //任务存在待审核的变更记录则不能再创建
         QueryWrapper<TaskChangePo> wrapper = new QueryWrapper<>();
         wrapper.eq("status", 1);
+        wrapper.eq("taskId",body.getTaskId());
         Long count = taskChangeMapper.selectCount(wrapper);
         if (count > 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "taskChange.15001", body.getTaskId());
@@ -57,13 +59,13 @@ public class TaskChangeService {
         Integer pid = taskPo.getPid();
         ProjectPo projectPo = projectMapper.selectById(pid);
         int auditorId = projectPo.getUid();
-        UserPo Auditor = userMapper.selectById(auditorId);
+        UserPo auditor = userMapper.selectById(auditorId);
         taskChangePo.setAuditorId(auditorId);
-        taskChangePo.setAuditorName(Auditor.getNickName());
+        taskChangePo.setAuditorName(auditor.getNickName());
         taskChangeMapper.insert(taskChangePo);
     }
 
-    public Page<TaskChangeListBo> getTaskChange(Integer taskId, Integer auditorId, Integer status, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
+    public Page<TaskChangeListBo> getTaskChange(Integer taskId, Integer auditorId, String status, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         QueryWrapper<TaskChangeListBo> queryWrapper = new QueryWrapper<>();
         if (null != taskId) {
             queryWrapper.eq("taskId", taskId);
@@ -71,8 +73,9 @@ public class TaskChangeService {
         if (null != auditorId) {
             queryWrapper.eq("auditorId", auditorId);
         }
-        if (null != status) {
-            queryWrapper.eq("t.status", status);
+        if (StringUtils.hasText(status)) {
+            String[] split = status.split(",");
+            queryWrapper.in("t.status", split);
         }
         if (null != sortField) {
             queryWrapper.orderBy(true, isAsc, sortField);

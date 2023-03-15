@@ -30,7 +30,7 @@ public class TaskChangeContorller implements TaskChangeApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskChangeListResponse> getTaskChange(Integer taskId, Integer auditorId, Integer status, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
+    public ResponseEntity<ApiTaskChangeListResponse> getTaskChange(Integer taskId, Integer auditorId, String status, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         Page<TaskChangeListBo> taskChange = taskChangeService.getTaskChange(taskId, auditorId, status, currentPage, pageSize, sortField, isAsc);
         ApiTaskChangeListResponse apiTaskChangeListResponse = dataConvertHelper.convert2ApiTaskChangeListResponse(taskChange);
         return ResponseEntity.ok().body(apiTaskChangeListResponse);

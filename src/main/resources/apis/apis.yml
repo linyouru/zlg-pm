@@ -653,8 +653,8 @@ paths:
           description: 审核人id
         - name: status
           in: query
-          type: integer
-          description: 状态:1待审核,2通过,3未通过
+          type: string
+          description: 状态:1待审核,2通过,3未通过,4不审核;多状态使用英文逗号分隔
         - name: currentPage
           in: query
           type: integer
@@ -1554,11 +1554,12 @@ definitions:
         description: 申请变更用户id
       status:
         type: integer
-        description: 状态:1待审核,2通过,3未通过
+        description: 状态:1待审核,2通过,3未通过,4不审核
         enum:
           - 1
           - 2
           - 3
+          - 4
       beforeStartTime:
         type: string
         description: 变更前开始时间(时间戳,毫秒)
@@ -1582,11 +1583,12 @@ definitions:
     properties:
       status:
         type: integer
-        description: 状态:1待审核,2通过,3未通过
+        description: 状态:1待审核,2通过,3未通过,4不审核
         enum:
           - 1
           - 2
           - 3
+          - 4
   TaskChangeListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -1626,7 +1628,7 @@ definitions:
         description: 审核人昵称
       status:
         type: integer
-        description: 状态:1待审核,2通过,3未通过
+        description: 状态:1待审核,2通过,3未通过,4不审核
       beforeStartTime:
         type: string
       beforeEndTime:
