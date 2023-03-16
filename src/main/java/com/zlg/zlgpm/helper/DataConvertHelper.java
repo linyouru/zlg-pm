@@ -242,6 +242,7 @@ public class DataConvertHelper {
         response.setHaveDocument(task.getHaveDocument());
         response.setPid(task.getPid());
         response.setUid(task.getUid());
+        response.setCreatedUid(task.getCreatedUid());
         return response;
     }
 

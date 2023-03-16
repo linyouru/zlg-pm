@@ -31,7 +31,7 @@ public class TaskListBo {
     private String progress;
     private Integer haveDocument;
     private String acceptanceTime;
-    private String createdUid;
+    private Integer createdUid;
 
     public TaskListBo() {
     }
@@ -236,11 +236,11 @@ public class TaskListBo {
         this.acceptanceTime = acceptanceTime;
     }
 
-    public String getCreatedUid() {
+    public Integer getCreatedUid() {
         return createdUid;
     }
 
-    public void setCreatedUid(String createdUid) {
+    public void setCreatedUid(Integer createdUid) {
         this.createdUid = createdUid;
     }
 
