@@ -2,6 +2,7 @@ package com.zlg.zlgpm.helper;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ public class EmailHelper {
         return simpleMailMessage;
     }
 
+    @Async
     public void sendSimpleMailMessage(SimpleMailMessage message) {
         mailSender.send(message);
     }

@@ -44,8 +44,7 @@ public class TaskService {
     private ProjectMapper projectMapper;
     @Resource
     private DataConvertHelper dataConvertHelper;
-    @Resource
-    private JavaMailSender mailSender;
+
     @Resource
     private EmailHelper emailHelper;
 
@@ -105,12 +104,12 @@ public class TaskService {
         if ("2".equals(task.getStatus())) {
             //任务状态改为[待验收]需要给项目负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
-            mailSender.send(message);
+            emailHelper.sendSimpleMailMessage(message);
         }
         if ("3".equals(task.getStatus())) {
             //任务状态改为[已完成]需要给任务负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
-            mailSender.send(message);
+            emailHelper.sendSimpleMailMessage(message);
         }
         return retTask;
     }
