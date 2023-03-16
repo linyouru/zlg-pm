@@ -107,6 +107,7 @@ public class ProjectService {
         queryWrapper.groupBy("name");
         queryWrapper.groupBy("version");
         queryWrapper.having("name = {0}", projectName);
+        queryWrapper.orderByDesc("createTime");
         return projectMapper.aggregatedProjectVersions(queryWrapper);
     }
 
