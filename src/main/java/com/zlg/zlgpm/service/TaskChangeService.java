@@ -40,9 +40,9 @@ public class TaskChangeService {
         //任务存在待审核的变更记录则不能再创建
         QueryWrapper<TaskChangePo> wrapper = new QueryWrapper<>();
         wrapper.eq("status", 1);
-        wrapper.eq("taskId",body.getTaskId());
+        wrapper.eq("taskId", body.getTaskId());
         Long count = taskChangeMapper.selectCount(wrapper);
-        if (count > 0) {
+        if (count > 0 && body.getStatus() == 1) {
             throw new BizException(HttpStatus.BAD_REQUEST, "taskChange.15001", body.getTaskId());
         }
 
