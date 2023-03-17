@@ -65,10 +65,11 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<ApiUserListByPidResponse> userListByPid(Integer pid, Integer currentPage, Integer pageSize) {
+    public ResponseEntity<ApiUserListByPidResponse> userListByPid(Integer pid, String projectName, Integer currentPage, Integer pageSize) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 10 : pageSize;
-        ApiUserListByPidResponse apiUserListByPidResponse = userService.userListByPid(pid, currentPage, pageSize);
+        projectName = null != pid ? null : projectName;
+        ApiUserListByPidResponse apiUserListByPidResponse = userService.userListByPid(pid, projectName, currentPage, pageSize);
         return ResponseEntity.ok().body(apiUserListByPidResponse);
     }
 

@@ -27,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService extends ServiceImpl<UserMapper, UserPo> {
@@ -100,10 +102,21 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         return dataConvertHelper.convert2ApiUserListResponse(userListBoPage);
     }
 
-    public ApiUserListByPidResponse userListByPid(Integer pid, Integer currentPage, Integer pageSize) {
+    public ApiUserListByPidResponse userListByPid(Integer pid, String projectName, Integer currentPage, Integer pageSize) {
+        ArrayList<Integer> pidList = new ArrayList<>();
+        if(StringUtils.isNotEmpty(projectName)){
+            QueryWrapper<ProjectPo> wrapper = new QueryWrapper<>();
+            wrapper.eq("name",projectName);
+            List<ProjectPo> projectPos = projectMapper.selectList(wrapper);
+            for (ProjectPo projectPo : projectPos) {
+                pidList.add(projectPo.getId());
+            }
+        }
+        pidList.add(pid);
+        Integer[] array = pidList.toArray(new Integer[0]);
         QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
         wrapper.ne("id", 1);
-        wrapper.eq("up.pid", pid);
+        wrapper.in("up.pid", array);
         Page<UserListBo> page = new Page<>();
         page.setSize(pageSize);
         page.setCurrent(currentPage);

@@ -176,6 +176,11 @@ paths:
         - name: pid
           in: query
           type: integer
+          description: 项目id,用于精确获取项目+版本关联的人员
+        - name: projectName
+          in: query
+          type: string
+          description: 项目名称,用于获取项目(多版本)关联的人员,与pid一起上报时只有pid生效
         - name: currentPage
           in: query
           type: integer
