@@ -9,6 +9,7 @@ public class TaskListBo {
     private Integer id;
     private String projectName;
     private String projectVersion;
+    private Integer projectUid;
     private String taskType;
     private Integer pid;
     private Integer uid;
@@ -34,6 +35,47 @@ public class TaskListBo {
     private Integer createdUid;
 
     public TaskListBo() {
+    }
+
+    public Integer getProjectUid() {
+        return projectUid;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskListBo{" +
+                "id=" + id +
+                ", projectName='" + projectName + '\'' +
+                ", projectVersion='" + projectVersion + '\'' +
+                ", projectUid=" + projectUid +
+                ", taskType='" + taskType + '\'' +
+                ", pid=" + pid +
+                ", uid=" + uid +
+                ", task='" + task + '\'' +
+                ", status='" + status + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", playStartTime='" + playStartTime + '\'' +
+                ", playEndTime='" + playEndTime + '\'' +
+                ", timely='" + timely + '\'' +
+                ", quality='" + quality + '\'' +
+                ", document='" + document + '\'' +
+                ", remark='" + remark + '\'' +
+                ", link='" + link + '\'' +
+                ", module='" + module + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", overtime='" + overtime + '\'' +
+                ", warning='" + warning + '\'' +
+                ", workTimeCount='" + workTimeCount + '\'' +
+                ", progress='" + progress + '\'' +
+                ", haveDocument=" + haveDocument +
+                ", acceptanceTime='" + acceptanceTime + '\'' +
+                ", createdUid=" + createdUid +
+                '}';
+    }
+
+    public void setProjectUid(Integer projectUid) {
+        this.projectUid = projectUid;
     }
 
     public Integer getId() {
@@ -244,35 +286,4 @@ public class TaskListBo {
         this.createdUid = createdUid;
     }
 
-    @Override
-    public String toString() {
-        return "TaskListBo{" +
-                "id=" + id +
-                ", projectName='" + projectName + '\'' +
-                ", projectVersion='" + projectVersion + '\'' +
-                ", taskType='" + taskType + '\'' +
-                ", pid=" + pid +
-                ", uid=" + uid +
-                ", task='" + task + '\'' +
-                ", status='" + status + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", playStartTime='" + playStartTime + '\'' +
-                ", playEndTime='" + playEndTime + '\'' +
-                ", timely='" + timely + '\'' +
-                ", quality='" + quality + '\'' +
-                ", document='" + document + '\'' +
-                ", remark='" + remark + '\'' +
-                ", link='" + link + '\'' +
-                ", module='" + module + '\'' +
-                ", updateTime='" + updateTime + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", overtime='" + overtime + '\'' +
-                ", warning='" + warning + '\'' +
-                ", workTimeCount='" + workTimeCount + '\'' +
-                ", progress='" + progress + '\'' +
-                ", haveDocument=" + haveDocument +
-                ", acceptanceTime='" + acceptanceTime + '\'' +
-                ", createdUid='" + createdUid + '\'' +
-                '}';
-    }
 }

@@ -21,6 +21,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
     @Select("SELECT t.id,\n" +
             "         p.`name` AS projectName,\n" +
             "         p.version AS projectVersion,\n" +
+            "         p.uid AS projectUid,\n" +
             "         t.taskType,\n" +
             "         t.task,\n" +
             "         t.pid,\n" +

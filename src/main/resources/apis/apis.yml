@@ -493,6 +493,10 @@ paths:
           type: integer
           default: 10
         - in: query
+          name: projectUid
+          type: integer
+          description: 项目负责人id
+        - in: query
           name: status
           type: string
           description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈; 多状态使用英文逗号分隔
@@ -505,7 +509,7 @@ paths:
         - in: query
           name: uid
           type: integer
-          description: 负责人用户id
+          description: 开发者id
         - in: query
           name: startTime
           type: string
@@ -1435,6 +1439,8 @@ definitions:
         type: string
       projectVersion:
         type: string
+      projectUid:
+        type: integer
       taskType:
         type: string
         description: 任务类型 1前端；2后端；3产品

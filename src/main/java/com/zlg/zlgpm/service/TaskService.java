@@ -121,7 +121,7 @@ public class TaskService {
         int update = taskMapper.update(taskPo, updateWrapper);
     }
 
-    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, String status, String projectName, String projectVersion,
+    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize,Integer projectUid, String status, String projectName, String projectVersion,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String module) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
@@ -136,6 +136,9 @@ public class TaskService {
         }
         if (null != uid) {
             queryWrapper.eq("t.uid", uid);
+        }
+        if(null != projectUid){
+            queryWrapper.eq("p.uid",projectUid);
         }
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
             queryWrapper.ge("t.playStartTime", Long.parseLong(startTime));
