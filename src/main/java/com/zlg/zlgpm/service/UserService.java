@@ -104,9 +104,9 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     public ApiUserListByPidResponse userListByPid(Integer pid, String projectName, Integer currentPage, Integer pageSize) {
         ArrayList<Integer> pidList = new ArrayList<>();
-        if(StringUtils.isNotEmpty(projectName)){
+        if (StringUtils.isNotEmpty(projectName)) {
             QueryWrapper<ProjectPo> wrapper = new QueryWrapper<>();
-            wrapper.eq("name",projectName);
+            wrapper.eq("name", projectName);
             List<ProjectPo> projectPos = projectMapper.selectList(wrapper);
             for (ProjectPo projectPo : projectPos) {
                 pidList.add(projectPo.getId());
@@ -122,6 +122,16 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         page.setCurrent(currentPage);
         Page<UserListBo> userPoPage = userMapper.queryUserListByPid(page, wrapper);
         return dataConvertHelper.convert2ApiUserListByPidResponse(userPoPage);
+    }
+
+    public ApiUserListByPidResponse userListByProjectName(String projectName, Integer currentPage, Integer pageSize) {
+        QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
+        wrapper.eq("p.name",projectName);
+        Page<UserListBo> page = new Page<>();
+        page.setSize(pageSize);
+        page.setCurrent(currentPage);
+        Page<UserListBo> userListBoPage = userMapper.queryUserListByProjectName(page, wrapper);
+        return dataConvertHelper.convert2ApiUserListByPidResponse(userListBoPage);
     }
 
     public ApiUserLoginResponse queryUserByName(String userName) {

@@ -198,6 +198,37 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/user/project/owner:
+    get:
+      tags:
+        - user
+      summary: 通过项目名称获取项目负责人列表
+      description: 通过项目名称获取项目负责人列表
+      operationId: userListByProjectName
+      produces:
+        - "application/json"
+      parameters:
+        - name: projectName
+          in: query
+          type: string
+          description: 项目名称,用于获取项目(多版本)的项目负责人信息
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/UserListByPidResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/user/password:
     put:
       summary: 修改用户密码
