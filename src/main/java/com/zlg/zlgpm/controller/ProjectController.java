@@ -58,6 +58,13 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
+    public ResponseEntity<ApiProjectResponse> getProjectById(Integer id) {
+        ProjectBo projectById = projectService.getProjectById(id);
+        ApiProjectResponse response = dataConvertHelper.convert2ApiProjectResponse(projectById);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Override
     public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(String projectName) {
         List<ProjectBo> projectVersions = projectService.getProjectVersions(projectName);
         List<ApiProjectVersionsResponse> responses = dataConvertHelper.convert2ApiProjectVersionsResponse(projectVersions);

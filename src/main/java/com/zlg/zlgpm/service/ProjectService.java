@@ -111,4 +111,10 @@ public class ProjectService {
         return projectMapper.aggregatedProjectVersions(queryWrapper);
     }
 
+    public ProjectBo getProjectById(Integer id){
+        QueryWrapper<ProjectBo> wrapper = new QueryWrapper<>();
+        wrapper.eq("p.id",id);
+        return projectMapper.selectProjectById(wrapper);
+    }
+
 }

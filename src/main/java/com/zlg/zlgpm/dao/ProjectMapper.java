@@ -40,4 +40,7 @@ public interface ProjectMapper extends BaseMapper<ProjectPo> {
 
     @Select("SELECT id, `name`, `version` FROM `project` ${ew.customSqlSegment}")
     List<ProjectBo> aggregatedProjectVersions(@Param(Constants.WRAPPER) Wrapper ew);
+
+    @Select("SELECT p.id, p.`name`, p.version, p.uid, u.nickName, p.`status`, p.remark, p.updateTime, p.createTime FROM `project` AS `p` LEFT JOIN `user` AS `u` ON p.uid = u.id ${ew.customSqlSegment}")
+    ProjectBo selectProjectById(@Param(Constants.WRAPPER) Wrapper<ProjectBo> ew);
 }
