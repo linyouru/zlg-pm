@@ -33,6 +33,7 @@ public class TaskListBo {
     private Integer haveDocument;
     private String acceptanceTime;
     private Integer createdUid;
+    private String createdUserNickname;
 
     public TaskListBo() {
     }
@@ -286,4 +287,11 @@ public class TaskListBo {
         this.createdUid = createdUid;
     }
 
+    public String getCreatedUserNickname() {
+        return createdUserNickname;
+    }
+
+    public void setCreatedUserNickname(String createdUserNickname) {
+        this.createdUserNickname = createdUserNickname;
+    }
 }

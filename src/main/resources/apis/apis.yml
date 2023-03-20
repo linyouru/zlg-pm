@@ -1502,6 +1502,9 @@ definitions:
       createdUid:
         type: integer
         description: 任务创建者id
+      createdUserNickname:
+        type: string
+        description: 任务创建人昵称
   TaskStatisticsResponse:
     type: object
     properties:

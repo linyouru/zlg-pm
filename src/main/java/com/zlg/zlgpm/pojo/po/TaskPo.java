@@ -27,6 +27,8 @@ public class TaskPo implements Serializable {
     @TableField
     private Integer createdUid;
     @TableField
+    private String createdUserNickname;
+    @TableField
     private String playStartTime;
     @TableField
     private String playEndTime;
@@ -52,28 +54,6 @@ public class TaskPo implements Serializable {
     private String createTime;
 
     public TaskPo() {
-    }
-
-    public TaskPo(Integer id, String taskType, String task, String status, Integer uid, Integer pid, Integer createdUid, String playStartTime, String playEndTime, String acceptanceTime, String timely, String quality, String document, String remark, String link, String module, Integer haveDocument, String updateTime, String createTime) {
-        this.id = id;
-        this.taskType = taskType;
-        this.task = task;
-        this.status = status;
-        this.uid = uid;
-        this.pid = pid;
-        this.createdUid = createdUid;
-        this.playStartTime = playStartTime;
-        this.playEndTime = playEndTime;
-        this.acceptanceTime = acceptanceTime;
-        this.timely = timely;
-        this.quality = quality;
-        this.document = document;
-        this.remark = remark;
-        this.link = link;
-        this.module = module;
-        this.haveDocument = haveDocument;
-        this.updateTime = updateTime;
-        this.createTime = createTime;
     }
 
     public Integer getId() {
@@ -220,6 +200,14 @@ public class TaskPo implements Serializable {
         this.acceptanceTime = acceptanceTime;
     }
 
+    public String getCreatedUserNickname() {
+        return createdUserNickname;
+    }
+
+    public void setCreatedUserNickname(String createdUserNickname) {
+        this.createdUserNickname = createdUserNickname;
+    }
+
     @Override
     public String toString() {
         return "TaskPo{" +
@@ -230,6 +218,7 @@ public class TaskPo implements Serializable {
                 ", uid=" + uid +
                 ", pid=" + pid +
                 ", createdUid=" + createdUid +
+                ", createdUserNickname=" + createdUserNickname +
                 ", playStartTime='" + playStartTime + '\'' +
                 ", playEndTime='" + playEndTime + '\'' +
                 ", acceptanceTime='" + acceptanceTime + '\'' +

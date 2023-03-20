@@ -64,6 +64,7 @@ public class TaskService {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", task.getPid());
         }
         task.setCreatedUid(currentUser.getId().intValue());
+        task.setCreatedUserNickname(currentUser.getNickName());
         taskMapper.insert(task);
         return task;
     }
