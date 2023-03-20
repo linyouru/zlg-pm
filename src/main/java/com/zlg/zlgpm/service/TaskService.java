@@ -23,12 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -117,9 +115,9 @@ public class TaskService {
     /**
      * 用于定时更新任务及时性
      */
-    public void updateTaskTimely(TaskPo taskPo, UpdateWrapper<TaskPo> updateWrapper) {
-        int update = taskMapper.update(taskPo, updateWrapper);
-    }
+//    public void updateTaskTimely(TaskPo taskPo, UpdateWrapper<TaskPo> updateWrapper) {
+//        int update = taskMapper.update(taskPo, updateWrapper);
+//    }
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize,Integer projectUid, String status, String projectName, String projectVersion,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String module) {
