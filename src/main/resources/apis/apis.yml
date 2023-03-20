@@ -237,6 +237,27 @@ paths:
         500:
           description: server error
   /v1/project:
+    get:
+      tags:
+        - project
+      summary: 通过项目id查询项目信息
+      description: 通过项目id查询项目信息
+      operationId: getProjectById
+      produces:
+        - "application/json"
+      parameters:
+        - name: id
+          in: query
+          type: integer
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/ProjectResponse"
+        400:
+          description: parameter error;
+        500:
+          description: server error;
     post:
       tags:
         - project
@@ -1280,6 +1301,8 @@ definitions:
       remark:
         type: string
       custom:
+        type: string
+      projectName:
         type: string
   CreateTaskRequest:
     type: object
