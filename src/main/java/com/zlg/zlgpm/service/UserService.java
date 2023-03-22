@@ -48,7 +48,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     @Transactional(rollbackFor = Exception.class)
     @OperationLog(value = "创建用户", type = "User")
-    public UserPo createUser(ApiCreateUserRequest apiCreateUserRequest) {
+    public ApiUserLoginResponse createUser(ApiCreateUserRequest apiCreateUserRequest) {
         UserPo userPo = dataConvertHelper.convert2UserPo(apiCreateUserRequest);
         userPo.setStatus(1);
         Long count = userMapper.selectCount(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
@@ -59,7 +59,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         UserPo insertUserPo = userMapper.selectOne(new QueryWrapper<UserPo>().eq("username", userPo.getUserName()));
         //添加默认角色
         userRoleMapper.insert(new UserRolePo(insertUserPo.getId(), 3L));
-        return insertUserPo;
+        return dataConvertHelper.convert2ApiUserLoginResponse(insertUserPo);
     }
 
     @OperationLog(value = "修改用户", type = "User")
@@ -141,7 +141,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     @Transactional(rollbackFor = Exception.class)
     @OperationLog(value = "删除用户", type = "User")
-    public UserPo deleteUser(Integer id) {
+    public ApiUserLoginResponse deleteUser(Integer id) {
         UserPo userPo = userMapper.selectById(id);
         if (null == userPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002", id);
@@ -157,7 +157,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         }
         userMapper.delete(new QueryWrapper<UserPo>().eq("id", id));
         userRoleMapper.delete(new QueryWrapper<UserRolePo>().eq("uid", id));
-        return userPo;
+        return dataConvertHelper.convert2ApiUserLoginResponse(userPo);
     }
 
 
