@@ -13,7 +13,7 @@ public class ProjectPo implements Serializable {
     private static final long serialVersionUID =1L;
 
     @TableId(type = IdType.AUTO)
-    private int id;
+    private Integer id;
     @TableField
     private String name;
     @TableField

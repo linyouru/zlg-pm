@@ -42,8 +42,8 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         t.acceptanceTime,\n" +
             "         t.createdUid,\n" +
             "         t.createdUserNickname,\n" +
-            "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (3,4,6))),1,0 ) AS overtime,\n" +
-            "         IF(((t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (3,4,6))),1,0 ) AS warning,\n"+
+            "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS overtime,\n" +
+            "         IF(((t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS warning,\n"+
             "         task_1.workTimeCount,\n" +
             "         task_1.progress\n"+
             "FROM `project_task` AS t\n" +
@@ -66,7 +66,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "${ew.customSqlSegment}\n")
     Page<TaskListBo> selectPage(Page<TaskListBo> taskListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
-    @Select("SELECT FORMAT( COUNT(IF(`status` = 3, 1, NULL)) / COUNT(*), 2) AS rateOfFinish, COUNT(IF(`status` = 3, 1, NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(IF(`status` = 1, 1, NULL)) AS progressTaskNum, COUNT( IF( ( playEndTime - UNIX_TIMESTAMP() * 1000 ) BETWEEN 0 AND 172800000 AND `status`!=3, 1, NULL ) ) AS warningTaskNum, COUNT( IF ( UNIX_TIMESTAMP() * 1000 - playEndTime > 0 AND `status`!=3, 1, NULL ) ) AS overtimeTaskNum FROM `project_task` ${ew.customSqlSegment}")
+    @Select("SELECT FORMAT( COUNT(IF(`status` = 1, 1, NULL)) / COUNT(*), 2) AS rateOfFinish, COUNT(IF(`status` = 1, 1, NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(IF(`status` = 4, 1, NULL)) AS progressTaskNum, COUNT( IF( ( playEndTime - UNIX_TIMESTAMP() * 1000 ) BETWEEN 0 AND 172800000 AND `status`!=1, 1, NULL ) ) AS warningTaskNum, COUNT( IF ( UNIX_TIMESTAMP() * 1000 - playEndTime > 0 AND `status`!=1, 1, NULL ) ) AS overtimeTaskNum FROM `project_task` ${ew.customSqlSegment}")
     TaskStatisticsBo selectTaskStatistics(@Param(Constants.WRAPPER) Wrapper<TaskStatisticsBo> ew);
 
     @Select("SELECT t.module FROM `project_task` AS t LEFT JOIN project AS p ON t.pid = p.id ${ew.customSqlSegment}")

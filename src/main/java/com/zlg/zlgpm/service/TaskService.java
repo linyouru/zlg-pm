@@ -100,12 +100,12 @@ public class TaskService {
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
         UserPo taskUser = userMapper.selectById(retTask.getUid());
         String text = assembleEmailMessage(projectPo.getName(), projectPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
-        if ("2".equals(task.getStatus())) {
+        if ("3".equals(task.getStatus())) {
             //任务状态改为[待验收]需要给项目负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
             emailHelper.sendSimpleMailMessage(message);
         }
-        if ("3".equals(task.getStatus())) {
+        if ("1".equals(task.getStatus())) {
             //任务状态改为[已完成]需要给任务负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
             emailHelper.sendSimpleMailMessage(message);
@@ -146,10 +146,10 @@ public class TaskService {
         if (StringUtils.hasText(abnormal)) {
             if ("2".equals(abnormal)) {
                 //已过期
-                queryWrapper.apply("(UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`!= \"3\")");
+                queryWrapper.apply("(UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))");
             } else {
                 //将过期(48小时内)
-                queryWrapper.apply("(t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`!= \"3\")");
+                queryWrapper.apply("(t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))");
             }
         }
         if (StringUtils.hasText(module)) {

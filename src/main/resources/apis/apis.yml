@@ -551,7 +551,7 @@ paths:
         - in: query
           name: status
           type: string
-          description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈; 多状态使用英文逗号分隔
+          description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中; 多状态使用英文逗号分隔
         - in: query
           name: projectName
           type: string
@@ -1371,7 +1371,7 @@ definitions:
           - 4
           - 5
           - 6
-        description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈;6暂停
+        description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
@@ -1431,7 +1431,7 @@ definitions:
           - 4
           - 5
           - 6
-        description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈;6暂停
+        description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
@@ -1507,7 +1507,7 @@ definitions:
         description: 开发负责人id
       status:
         type: string
-        description: 任务状态 1开发中；2待验收；3已完成；4排队中;5反馈;6暂停
+        description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
       nickName:
         type: string
         description: 开发负责人昵称

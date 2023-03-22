@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `project_task`
     `id`                  int(8)      NOT NULL AUTO_INCREMENT,
     `taskType`            varchar(8)  NOT NULL COMMENT '任务类型 1前端；2后端；3产品',
     `task`                varchar(1023)        DEFAULT NULL COMMENT '任务内容',
-    `status`              varchar(8)  NOT NULL COMMENT '1开发中；2待验收；3已完成；4排队中,5反馈,6暂停',
+    `status`              varchar(8)  NOT NULL COMMENT '1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中',
     `uid`                 int(8)               DEFAULT NULL COMMENT '用户id',
     `pid`                 int(8)      NOT NULL COMMENT '项目id',
     `createdUid`          int(8)      NOT NULL COMMENT '任务发布者id',
