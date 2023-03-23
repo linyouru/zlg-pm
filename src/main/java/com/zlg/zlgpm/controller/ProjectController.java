@@ -1,20 +1,27 @@
 package com.zlg.zlgpm.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zlg.zlgpm.controller.model.*;
+import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
+import com.zlg.zlgpm.pojo.po.ProjectModulePo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.po.UserProjectPo;
+import com.zlg.zlgpm.service.ProjectModuleService;
 import com.zlg.zlgpm.service.ProjectService;
 import com.zlg.zlgpm.service.UserProjectService;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -34,6 +41,8 @@ public class ProjectController implements ProjectApi {
     private DataConvertHelper dataConvertHelper;
     @Resource
     private UserProjectService userProjectService;
+    @Resource
+    private ProjectModuleService projectModuleService;
 
     @Override
 //    @RequiresRoles(value = "root")
@@ -42,12 +51,39 @@ public class ProjectController implements ProjectApi {
         ProjectPo project = projectService.createProject(body);
         //添加项目和成员关系
         String memberUid = body.getMemberUid();
-        if(null != memberUid){
+        if (null != memberUid) {
             List<UserProjectPo> list = generateUserProjectPoList(memberUid, project.getUid(), project.getId());
             userProjectService.saveBatch(list);
         }
+        //添加项目功能块
+        saveBatchProjectModule(body.getModule(),project.getId());
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+//    @RequiresRoles(value = "root")
+    public ResponseEntity<ApiBaseResp> updateProject(Integer id, ApiUpdateProjectRequest body) {
+        ProjectPo updateProjectPo = dataConvertHelper.convert2ProjectPo(body);
+        updateProjectPo.setId(id);
+        ProjectPo projectPo = projectService.updateProject(updateProjectPo);
+
+        //更新项目成员
+        String memberUid = body.getMemberUid();
+        if (StringUtils.hasText(memberUid)) {
+            userProjectService.deleteProjectUser(id);
+            List<UserProjectPo> list = generateUserProjectPoList(memberUid, projectPo.getUid(), id);
+            userProjectService.saveBatch(list);
+        }
+        //更新项目模块
+        if(StringUtils.hasText(body.getModule())){
+            projectModuleService.deleteProjectModuleByPid(id);
+            saveBatchProjectModule(body.getModule(),id);
+        }
+        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    }
+
+
 
     @Override
     @RequiresRoles(value = "root")
@@ -93,20 +129,16 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-//    @RequiresRoles(value = "root")
-    public ResponseEntity<ApiBaseResp> updateProject(Integer id, ApiUpdateProjectRequest body) {
-        ProjectPo projectPo = dataConvertHelper.convert2ProjectPo(body);
-        projectPo.setId(id);
-        projectService.updateProject(projectPo);
+    public ResponseEntity<ApiProjectModuleListResponse> queryProjectModule(Integer id) {
+        List<ProjectModulePo> projectModulePos = projectModuleService.queryProjectModule(id);
+        ApiProjectModuleListResponse response = dataConvertHelper.convert2ApiProjectModuleListResponse(projectModulePos);
+        return ResponseEntity.ok().body(response);
+    }
 
-        userProjectService.deleteProjectUser(id);
-        String memberUid = body.getMemberUid();
-        if(null != memberUid){
-            List<UserProjectPo> list = generateUserProjectPoList(memberUid, body.getUid(), id);
-            userProjectService.saveBatch(list);
-        }
-        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    @Override
+    public ResponseEntity<Boolean> queryProjectModuleHaveTask(Integer id) {
+        boolean b = projectModuleService.queryProjectModuleHaveTask(id);
+        return ResponseEntity.ok(b);
     }
 
     private List<UserProjectPo> generateUserProjectPoList(String uids, int ownerId, int pid) {
@@ -123,5 +155,20 @@ public class ProjectController implements ProjectApi {
             list.add(userProjectPo);
         }
         return list;
+    }
+
+    private void saveBatchProjectModule(String moduleStr, int pid){
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<ProjectModulePo> list;
+        try {
+            list = mapper.readValue(moduleStr, mapper.getTypeFactory().constructParametricType(ArrayList.class, ProjectModulePo.class));
+        } catch (JsonProcessingException e) {
+            logger.error("createProject json analysis error",e);
+            throw new BizException(HttpStatus.BAD_REQUEST, "project.11004");
+        }
+        for (ProjectModulePo pmp : list) {
+            pmp.setPid(pid);
+        }
+        projectModuleService.saveBatch(list);
     }
 }

@@ -392,6 +392,53 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/project/module/task:
+    get:
+      tags:
+        - project
+      summary: 查询项目功能模块下是否有任务
+      description: 功能模块下有任务不能删除项目的功能模块
+      operationId: queryProjectModuleHaveTask
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+          description: 功能块id
+      responses:
+        200:
+          description: success
+          schema:
+            type: boolean
+        400:
+          description: parameter error;
+        500:
+          description: server error;
+  /v1/project/module/list:
+    get:
+      tags:
+        - project
+      summary: 查询项目功能模块
+      description: 查询项目功能模块
+      operationId: queryProjectModule
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/ProjectModuleListResponse"
+        400:
+          description: parameter error;
+        500:
+          description: server error;
   /v1/project/group/name:
     get:
       tags:
@@ -1203,6 +1250,9 @@ definitions:
       remark:
         type: string
         maxLength: 255
+      module:
+        type: string
+        description: 功能模块,json字符串
   UpdateProjectRequest:
     type: object
     required:
@@ -1230,6 +1280,9 @@ definitions:
       remark:
         type: string
         maxLength: 255
+      module:
+        type: string
+        description: 功能模块,json字符串
   ProjectResponse:
     type: object
     properties:
@@ -1254,6 +1307,24 @@ definitions:
         type: string
       createTime:
         type: string
+  ProjectModuleListResponse:
+      type: array
+      items:
+        $ref: "#/definitions/ProjectModuleResponse"
+  ProjectModuleResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      pid:
+        type: integer
+        description: 项目Id
+      module:
+        type: string
+        description: 模块名
+      level:
+        type: integer
+        description: 权重值
   ProjectListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"

@@ -139,7 +139,9 @@ public class DataConvertHelper {
     public ProjectPo convert2ProjectPo(ApiUpdateProjectRequest request) {
         ProjectPo projectPo = new ProjectPo();
         projectPo.setVersion(request.getVersion());
-        projectPo.setUid(request.getUid());
+        if(null != request.getUid()){
+            projectPo.setUid(request.getUid());
+        }
         if (null != request.getStatus()) {
             projectPo.setStatus(request.getStatus().toString());
         }
@@ -462,6 +464,19 @@ public class DataConvertHelper {
         response.setRemark(feedback.getRemark());
         response.setCreateTime(feedback.getCreateTime());
         response.setUpdateTime(feedback.getUpdateTime());
+        return response;
+    }
+
+    public ApiProjectModuleListResponse convert2ApiProjectModuleListResponse(List<ProjectModulePo> projectModulePos){
+        ApiProjectModuleListResponse response = new ApiProjectModuleListResponse();
+        for (ProjectModulePo projectModulePo : projectModulePos) {
+            ApiProjectModuleResponse projectModuleResponse = new ApiProjectModuleResponse();
+            projectModuleResponse.setId(projectModulePo.getId());
+            projectModuleResponse.setPid(projectModulePo.getPid());
+            projectModuleResponse.setModule(projectModulePo.getModule());
+            projectModuleResponse.setLevel(projectModulePo.getLevel());
+            response.add(projectModuleResponse);
+        }
         return response;
     }
 

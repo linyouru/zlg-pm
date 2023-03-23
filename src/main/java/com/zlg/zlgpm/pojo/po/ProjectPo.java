@@ -13,13 +13,13 @@ public class ProjectPo implements Serializable {
     private static final long serialVersionUID =1L;
 
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private int id;
     @TableField
     private String name;
     @TableField
     private String version;
     @TableField
-    private int uid;
+    private Integer uid;
     @TableField
     private String status;
     @TableField
@@ -30,15 +30,6 @@ public class ProjectPo implements Serializable {
     private String createTime;
 
     public ProjectPo() {
-    }
-
-    public ProjectPo(int id, String name, String version, int uid, String status, String remark) {
-        this.id = id;
-        this.name = name;
-        this.version = version;
-        this.uid = uid;
-        this.status = status;
-        this.remark = remark;
     }
 
     @Override
@@ -79,11 +70,11 @@ public class ProjectPo implements Serializable {
         this.version = version;
     }
 
-    public int getUid() {
+    public Integer getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(Integer uid) {
         this.uid = uid;
     }
 
