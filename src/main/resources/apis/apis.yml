@@ -627,7 +627,7 @@ paths:
         - in: query
           name: sortField
           type: string
-          description: 排序字段
+          description: 排序字段,多字段用英文逗号分隔
         - in: query
           name: isAsc
           type: boolean

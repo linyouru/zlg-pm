@@ -1,7 +1,6 @@
 package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.commom.Utils;
@@ -27,8 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class TaskService {
@@ -113,14 +112,7 @@ public class TaskService {
         return retTask;
     }
 
-    /**
-     * 用于定时更新任务及时性
-     */
-//    public void updateTaskTimely(TaskPo taskPo, UpdateWrapper<TaskPo> updateWrapper) {
-//        int update = taskMapper.update(taskPo, updateWrapper);
-//    }
-
-    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize,Integer projectUid, String status, String projectName, String projectVersion,
+    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, Integer mid) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
@@ -136,8 +128,8 @@ public class TaskService {
         if (null != uid) {
             queryWrapper.eq("t.uid", uid);
         }
-        if(null != projectUid){
-            queryWrapper.eq("p.uid",projectUid);
+        if (null != projectUid) {
+            queryWrapper.eq("p.uid", projectUid);
         }
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
             queryWrapper.ge("t.playStartTime", Long.parseLong(startTime));
@@ -156,7 +148,9 @@ public class TaskService {
             queryWrapper.eq("pm.id", mid);
         }
         if (StringUtils.hasText(sortField)) {
-            queryWrapper.orderBy(true, isAsc, sortField);
+            String[] split = sortField.split(",");
+            List<String> sortList = Arrays.asList(split);
+            queryWrapper.orderBy(true, isAsc, sortList);
         }
 
         Page<TaskListBo> taskListBoPage = new Page<>();
