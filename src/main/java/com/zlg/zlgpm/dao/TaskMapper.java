@@ -71,6 +71,4 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
     @Select("SELECT FORMAT( COUNT(IF(`status` = 1, 1, NULL)) / COUNT(*), 2) AS rateOfFinish, COUNT(IF(`status` = 1, 1, NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(IF(`status` = 4, 1, NULL)) AS progressTaskNum, COUNT( IF( ( playEndTime - UNIX_TIMESTAMP() * 1000 ) BETWEEN 0 AND 172800000 AND `status`!=1, 1, NULL ) ) AS warningTaskNum, COUNT( IF ( UNIX_TIMESTAMP() * 1000 - playEndTime > 0 AND `status`!=1, 1, NULL ) ) AS overtimeTaskNum FROM `project_task` ${ew.customSqlSegment}")
     TaskStatisticsBo selectTaskStatistics(@Param(Constants.WRAPPER) Wrapper<TaskStatisticsBo> ew);
 
-    @Select("SELECT t.module FROM `project_task` AS t LEFT JOIN project AS p ON t.pid = p.id ${ew.customSqlSegment}")
-    List<Map<String, String>> aggregatedTaskModule(@Param(Constants.WRAPPER) Wrapper ew);
 }

@@ -41,13 +41,6 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<List<String>> taskGroupModule(String projectName, String projectVersion) {
-        List<Map<String, String>> maps = taskService.aggregatedTaskModule(projectName, projectVersion);
-        List<String> responses = dataConvertHelper.convert2ApiTaskGroupModuleResponse(maps);
-        return ResponseEntity.ok(responses);
-    }
-
-    @Override
     public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, Integer mid) {
         if (StringUtils.hasText(sortField) && null == isAsc) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");

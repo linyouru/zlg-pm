@@ -176,18 +176,6 @@ public class TaskService {
         return taskMapper.selectTaskStatistics(wrapper);
     }
 
-    public List<Map<String, String>> aggregatedTaskModule(String projectName, String projectVersion) {
-        QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
-        queryWrapper.groupBy("p.`name`", "p.version", "t.module");
-        if (StringUtils.hasText(projectName)) {
-            queryWrapper.having("p.`name` = {0}", projectName);
-        }
-        if (StringUtils.hasText(projectVersion)) {
-            queryWrapper.having("p.`version` = {0}", projectVersion);
-        }
-        return taskMapper.aggregatedTaskModule(queryWrapper);
-    }
-
     /**
      * 拼接邮件信息
      *

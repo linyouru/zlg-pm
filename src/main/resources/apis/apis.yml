@@ -668,33 +668,6 @@ paths:
             $ref: "#/definitions/TaskStatisticsResponse"
         500:
           description: server error
-  /v1/task/group/module:
-    get:
-      tags:
-        - task
-      summary: 聚合功能模块
-      description: 聚合功能模块
-      operationId: taskGroupModule
-      produces:
-        - application/json
-      parameters:
-        - in: query
-          name: projectName
-          type: string
-          description: 项目名称
-        - in: query
-          name: projectVersion
-          type: string
-          description: 项目版本
-      responses:
-        200:
-          description: success
-          schema:
-            type: array
-            items:
-              type: string
-        500:
-          description: server error
   /v1/task/change:
     post:
       tags:
