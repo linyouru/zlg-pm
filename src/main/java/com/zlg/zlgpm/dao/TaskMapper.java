@@ -35,7 +35,8 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         t.document,\n" +
             "         t.remark,\n" +
             "         t.link,\n" +
-            "         t.module,\n" +
+            "         pm.module,\n" +
+            "         pm.level,\n" +
             "         t.haveDocument,\n" +
             "         t.updateTime,\n" +
             "         t.createTime,\n" +
@@ -63,6 +64,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "\t\tGROUP BY taskId\n" +
             "\t) as tlb ON tla.taskId = tlb.taskId\n" +
             ") AS task_1 ON t.id = task_1.taskId\n"+
+            "LEFT JOIN project_modules AS pm ON t.mid = pm.id\n"+
             "${ew.customSqlSegment}\n")
     Page<TaskListBo> selectPage(Page<TaskListBo> taskListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 

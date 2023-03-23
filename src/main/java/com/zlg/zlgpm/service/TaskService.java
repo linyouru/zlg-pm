@@ -121,7 +121,7 @@ public class TaskService {
 //    }
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize,Integer projectUid, String status, String projectName, String projectVersion,
-                                     Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String module) {
+                                     Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, Integer mid) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             String[] split = status.split(",");
@@ -152,8 +152,8 @@ public class TaskService {
                 queryWrapper.apply("(t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))");
             }
         }
-        if (StringUtils.hasText(module)) {
-            queryWrapper.eq("module", module);
+        if (null != mid) {
+            queryWrapper.eq("pm.id", mid);
         }
         if (StringUtils.hasText(sortField)) {
             queryWrapper.orderBy(true, isAsc, sortField);

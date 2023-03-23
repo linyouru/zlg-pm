@@ -633,9 +633,9 @@ paths:
           type: boolean
           description: 是否为升序,当指定sortField时,isAsc也必须指定
         - in: query
-          name: module
-          type: string
-          description: 功能模块
+          name: mid
+          type: integer
+          description: 功能模块id
       responses:
         200:
           description: success
@@ -1412,7 +1412,7 @@ definitions:
       - pid
       - taskType
       - status
-      - module
+      - mid
       - haveDocument
       - createdUid
     properties:
@@ -1469,10 +1469,9 @@ definitions:
         type: string
         description: 文档备注
         maxLength: 255
-      module:
-        type: string
-        description: 功能模块
-        maxLength: 64
+      mid:
+        type: integer
+        description: 功能模块id
       haveDocument:
         type: integer
         enum:
@@ -1536,10 +1535,9 @@ definitions:
       pid:
         type: integer
         description: 项目id
-      module:
-        type: string
-        description: 功能模块
-        maxLength: 64
+      mid:
+        type: integer
+        description: 功能模块id
       haveDocument:
         type: integer
         enum:
@@ -1611,7 +1609,10 @@ definitions:
         description: 1将过期
       module:
         type: string
-        description: 功能模块
+        description: 功能模块名
+      moduleLevel:
+        type: integer
+        description: 功能模块权重值
       workTimeCount:
         type: string
         description: 累计工时

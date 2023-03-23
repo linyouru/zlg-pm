@@ -185,7 +185,7 @@ public class DataConvertHelper {
         task.setDocument(taskRequest.getDocument());
         task.setRemark(taskRequest.getRemark());
         task.setLink(taskRequest.getLink());
-        task.setModule(taskRequest.getModule());
+        task.setMid(taskRequest.getMid());
         task.setHaveDocument(taskRequest.getHaveDocument());
         return task;
     }
@@ -206,7 +206,7 @@ public class DataConvertHelper {
         task.setDocument(taskRequest.getDocument());
         task.setRemark(taskRequest.getRemark());
         task.setLink(taskRequest.getLink());
-        task.setModule(taskRequest.getModule());
+        task.setMid(taskRequest.getMid());
         task.setHaveDocument(taskRequest.getHaveDocument());
         task.setAcceptanceTime(taskRequest.getAcceptanceTime());
         task.setPid(taskRequest.getPid());
@@ -237,6 +237,7 @@ public class DataConvertHelper {
         response.setRemark(task.getRemark());
         response.setLink(task.getLink());
         response.setModule(task.getModule());
+        response.setModuleLevel(task.getLevel());
         response.setWarning(task.getWarning());
         response.setOvertime(task.getOvertime());
         response.setWorkTimeCount(task.getWorkTimeCount());

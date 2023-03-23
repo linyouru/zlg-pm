@@ -45,7 +45,7 @@ public class TaskPo implements Serializable {
     @TableField
     private String link;
     @TableField
-    private String module;
+    private Integer mid;
     @TableField
     private Integer haveDocument;
     @TableField
@@ -160,12 +160,12 @@ public class TaskPo implements Serializable {
         this.link = link;
     }
 
-    public String getModule() {
-        return module;
+    public Integer getMid() {
+        return mid;
     }
 
-    public void setModule(String module) {
-        this.module = module;
+    public void setMid(Integer mid) {
+        this.mid = mid;
     }
 
     public String getUpdateTime() {
@@ -218,7 +218,7 @@ public class TaskPo implements Serializable {
                 ", uid=" + uid +
                 ", pid=" + pid +
                 ", createdUid=" + createdUid +
-                ", createdUserNickname=" + createdUserNickname +
+                ", createdUserNickname='" + createdUserNickname + '\'' +
                 ", playStartTime='" + playStartTime + '\'' +
                 ", playEndTime='" + playEndTime + '\'' +
                 ", acceptanceTime='" + acceptanceTime + '\'' +
@@ -227,7 +227,7 @@ public class TaskPo implements Serializable {
                 ", document='" + document + '\'' +
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
-                ", module='" + module + '\'' +
+                ", mid=" + mid +
                 ", haveDocument=" + haveDocument +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +

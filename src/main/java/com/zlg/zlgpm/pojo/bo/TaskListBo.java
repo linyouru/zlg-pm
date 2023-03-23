@@ -24,6 +24,7 @@ public class TaskListBo {
     private String remark;
     private String link;
     private String module;
+    private Integer level;
     private String updateTime;
     private String createTime;
     private String overtime;
@@ -63,6 +64,7 @@ public class TaskListBo {
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
                 ", module='" + module + '\'' +
+                ", level=" + level +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", overtime='" + overtime + '\'' +
@@ -72,6 +74,7 @@ public class TaskListBo {
                 ", haveDocument=" + haveDocument +
                 ", acceptanceTime='" + acceptanceTime + '\'' +
                 ", createdUid=" + createdUid +
+                ", createdUserNickname='" + createdUserNickname + '\'' +
                 '}';
     }
 
@@ -85,6 +88,14 @@ public class TaskListBo {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public String getProjectName() {
