@@ -113,7 +113,7 @@ public class TaskService {
     }
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion,
-                                     Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, Integer mid) {
+                                     Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             String[] split = status.split(",");
@@ -145,7 +145,8 @@ public class TaskService {
             }
         }
         if (null != mid) {
-            queryWrapper.eq("pm.id", mid);
+            String[] split = mid.split(",");
+            queryWrapper.in("pm.id", split);
         }
         if (StringUtils.hasText(sortField)) {
             String[] split = sortField.split(",");

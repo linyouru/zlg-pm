@@ -41,7 +41,7 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, Integer mid) {
+    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid) {
         if (StringUtils.hasText(sortField) && null == isAsc) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
         }
