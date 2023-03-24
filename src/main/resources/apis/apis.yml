@@ -1233,6 +1233,11 @@ definitions:
     required:
       - uid
     properties:
+      name:
+        type: string
+        minLength: 2
+        maxLength: 32
+        description: 项目名称
       version:
         type: string
         minLength: 2

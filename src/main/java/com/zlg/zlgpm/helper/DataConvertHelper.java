@@ -138,6 +138,7 @@ public class DataConvertHelper {
 
     public ProjectPo convert2ProjectPo(ApiUpdateProjectRequest request) {
         ProjectPo projectPo = new ProjectPo();
+        projectPo.setName(request.getName());
         projectPo.setVersion(request.getVersion());
         if(null != request.getUid()){
             projectPo.setUid(request.getUid());
