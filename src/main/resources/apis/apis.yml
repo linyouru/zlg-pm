@@ -434,7 +434,9 @@ paths:
         200:
           description: success
           schema:
-            $ref: "#/definitions/ProjectModuleListResponse"
+            type: array
+            items:
+              $ref: "#/definitions/ProjectModuleResponse"
         400:
           description: parameter error;
         500:
@@ -1280,10 +1282,6 @@ definitions:
         type: string
       createTime:
         type: string
-  ProjectModuleListResponse:
-      type: array
-      items:
-        $ref: "#/definitions/ProjectModuleResponse"
   ProjectModuleResponse:
     type: object
     properties:

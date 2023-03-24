@@ -468,17 +468,18 @@ public class DataConvertHelper {
         return response;
     }
 
-    public ApiProjectModuleListResponse convert2ApiProjectModuleListResponse(List<ProjectModulePo> projectModulePos){
-        ApiProjectModuleListResponse response = new ApiProjectModuleListResponse();
+    public List<ApiProjectModuleResponse> convert2ApiProjectModuleResponse(List<ProjectModulePo> projectModulePos){
+        ArrayList<ApiProjectModuleResponse> list = new ArrayList<>();
         for (ProjectModulePo projectModulePo : projectModulePos) {
             ApiProjectModuleResponse projectModuleResponse = new ApiProjectModuleResponse();
             projectModuleResponse.setId(projectModulePo.getId());
             projectModuleResponse.setPid(projectModulePo.getPid());
             projectModuleResponse.setModule(projectModulePo.getModule());
             projectModuleResponse.setLevel(projectModulePo.getLevel());
-            response.add(projectModuleResponse);
+
+            list.add(projectModuleResponse);
         }
-        return response;
+        return list;
     }
 
 

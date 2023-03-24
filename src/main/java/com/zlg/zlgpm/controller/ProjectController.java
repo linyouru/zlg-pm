@@ -129,9 +129,9 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<ApiProjectModuleListResponse> queryProjectModule(Integer id) {
+    public ResponseEntity<List<ApiProjectModuleResponse>> queryProjectModule(Integer id) {
         List<ProjectModulePo> projectModulePos = projectModuleService.queryProjectModule(id);
-        ApiProjectModuleListResponse response = dataConvertHelper.convert2ApiProjectModuleListResponse(projectModulePos);
+        List<ApiProjectModuleResponse> response = dataConvertHelper.convert2ApiProjectModuleResponse(projectModulePos);
         return ResponseEntity.ok().body(response);
     }
 
