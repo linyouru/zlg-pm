@@ -107,9 +107,8 @@ public class ProjectController implements ProjectApi {
 
     @Override
     public ResponseEntity<ApiBaseResp> deleteProjectVersion(Integer id) {
-
-
-        return null;
+        projectVersionService.deleteProjectVersion(id);
+        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
     }
 
     @Override
