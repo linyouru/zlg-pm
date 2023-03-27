@@ -7,6 +7,7 @@ import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
+import com.zlg.zlgpm.dao.ProjectVersionMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.exception.BizException;
@@ -15,6 +16,7 @@ import com.zlg.zlgpm.helper.EmailHelper;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.po.ProjectVersionPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import org.apache.shiro.SecurityUtils;
@@ -41,11 +43,16 @@ public class TaskService {
     private ProjectMapper projectMapper;
     @Resource
     private DataConvertHelper dataConvertHelper;
+    @Resource
+    private ProjectVersionMapper projectVersionMapper;
 
     @Resource
     private EmailHelper emailHelper;
 
     private static final String EMAIL_FORM = "noreply_developer@zlg.cn";
+    private static final String TASK_CHECK = "3";
+    private static final String TASK_END = "1";
+    private static final String TASK_TIMEOUT = "2";
 
     @OperationLog(value = "创建任务", type = "Task")
     public TaskPo createTask(ApiCreateTaskRequest body) {
@@ -96,15 +103,18 @@ public class TaskService {
         TaskPo retTask = taskMapper.selectById(id);
 
         ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
+        QueryWrapper<ProjectVersionPo> wrapper = new QueryWrapper<>();
+        wrapper.eq("pid",projectPo.getId());
+        ProjectVersionPo projectVersionPo = projectVersionMapper.selectOne(wrapper);
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
         UserPo taskUser = userMapper.selectById(retTask.getUid());
-        String text = assembleEmailMessage(projectPo.getName(), projectPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
-        if ("3".equals(task.getStatus())) {
+        String text = assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
+        if (TASK_CHECK.equals(task.getStatus())) {
             //任务状态改为[待验收]需要给项目负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
             emailHelper.sendSimpleMailMessage(message);
         }
-        if ("1".equals(task.getStatus())) {
+        if (TASK_END.equals(task.getStatus())) {
             //任务状态改为[已完成]需要给任务负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
             emailHelper.sendSimpleMailMessage(message);
@@ -136,7 +146,7 @@ public class TaskService {
             queryWrapper.le("t.playStartTime", Long.parseLong(endTime));
         }
         if (StringUtils.hasText(abnormal)) {
-            if ("2".equals(abnormal)) {
+            if (TASK_TIMEOUT.equals(abnormal)) {
                 //已过期
                 queryWrapper.apply("(UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))");
             } else {

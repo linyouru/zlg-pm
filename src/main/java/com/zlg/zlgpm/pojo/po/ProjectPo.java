@@ -17,8 +17,6 @@ public class ProjectPo implements Serializable {
     @TableField
     private String name;
     @TableField
-    private String version;
-    @TableField
     private Integer uid;
     @TableField
     private String status;
@@ -37,7 +35,6 @@ public class ProjectPo implements Serializable {
         return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", version='" + version + '\'' +
                 ", uid=" + uid +
                 ", status=" + status +
                 ", remark='" + remark + '\'' +
@@ -60,14 +57,6 @@ public class ProjectPo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 
     public Integer getUid() {

@@ -100,11 +100,15 @@ public class ProjectController implements ProjectApi {
 
     @Override
     public ResponseEntity<ApiBaseResp> createProjectVersion(ApiCreateProjectVersionRequest body) {
-        return null;
+        ProjectVersionPo projectVersionPo = dataConvertHelper.convert2ProjectVersionPo(body);
+        projectVersionService.createProjectVersion(projectVersionPo);
+        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
     }
 
     @Override
     public ResponseEntity<ApiBaseResp> deleteProjectVersion(Integer id) {
+
+
         return null;
     }
 
