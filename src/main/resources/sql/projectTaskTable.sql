@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `project_task`
     `remark`              varchar(255)         DEFAULT NULL COMMENT '备注',
     `link`                varchar(255)         DEFAULT NULL COMMENT '文档链接',
     `mid`                 int(8)               DEFAULT NULL COMMENT '功能模块id',
+    `vid`                 int(8)               DEFAULT NULL COMMENT '项目版本id',
     `haveDocument`        int(8)      NOT NULL DEFAULT '0' COMMENT '是否需要文档，0否；1是',
     `acceptanceTime`      varchar(64)          DEFAULT NULL COMMENT '验收时间',
     `updateTime`          datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
