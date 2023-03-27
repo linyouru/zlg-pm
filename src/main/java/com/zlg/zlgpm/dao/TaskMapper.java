@@ -20,7 +20,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
 
     @Select("SELECT t.id,\n" +
             "         p.`name` AS projectName,\n" +
-            "         p.version AS projectVersion,\n" +
+            "         pv.version AS projectVersion,\n" +
             "         p.uid AS projectUid,\n" +
             "         t.taskType,\n" +
             "         t.task,\n" +
@@ -65,6 +65,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "\t) as tlb ON tla.taskId = tlb.taskId\n" +
             ") AS task_1 ON t.id = task_1.taskId\n"+
             "LEFT JOIN project_modules AS pm ON t.mid = pm.id\n"+
+            "LEFT JOIN project_version AS pv ON t.vid = pv.id\n"+
             "${ew.customSqlSegment}\n")
     Page<TaskListBo> selectPage(Page<TaskListBo> taskListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
