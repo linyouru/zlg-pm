@@ -420,12 +420,11 @@ public class DataConvertHelper {
         return response;
     }
 
-    public List<ApiProjectVersionsResponse> convert2ApiProjectVersionsResponse(List<ProjectBo> projects) {
+    public List<ApiProjectVersionsResponse> convert2ApiProjectVersionsResponse(List<ProjectVersionPo> projects) {
         ArrayList<ApiProjectVersionsResponse> response = new ArrayList<>();
         projects.forEach(project -> {
             ApiProjectVersionsResponse res = new ApiProjectVersionsResponse();
             res.setId(project.getId());
-            res.setName(project.getName());
             res.setVersion(project.getVersion());
             response.add(res);
         });

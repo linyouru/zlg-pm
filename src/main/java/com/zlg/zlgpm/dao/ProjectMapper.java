@@ -27,19 +27,16 @@ public interface ProjectMapper extends BaseMapper<ProjectPo> {
      * mybatis-plus 使用 Wrapper 自定义SQL,查询项目管理列表数据
      */
     @Select("SELECT p.id, p.`name`, p.version, p.uid, u.nickName, p.`status`, p.remark, p.updateTime, p.createTime FROM `project` AS `p` LEFT JOIN `user` AS `u` ON p.uid = u.id ${ew.customSqlSegment}")
-    Page<ProjectBo> selectPageByName(Page<ProjectBo> projectBoPage, @Param(Constants.WRAPPER) Wrapper ew);
+    Page<ProjectBo> selectPageByName(Page<ProjectBo> projectBoPage, @Param(Constants.WRAPPER) Wrapper<ProjectBo> ew);
 
     @Select("SELECT `name` FROM `project` ${ew.customSqlSegment}")
-    List<Map<String, String>> aggregatedProjectName(@Param(Constants.WRAPPER) Wrapper ew);
+    List<Map<String, String>> aggregatedProjectName(@Param(Constants.WRAPPER) Wrapper<List<Map<String, String>>> ew);
 
     /**
      * 活动中的项目任务情况统计
      */
     @Select("SELECT t1.id, t1.`name`, t1.version, SUM(if(ISNULL(t1.`status`),0,t1.numb)) as taskTotal, SUM(if(t1.`status`=3,t1.numb,0)) as finishTaskNum FROM( SELECT p.id, p.`name`, p.version, t.`status`, count(*) AS numb FROM `project` AS p LEFT JOIN project_task AS t ON p.id = t.pid WHERE p.`status`=1 GROUP BY p.id, p.`name`, p.version, t.`status`) AS t1 GROUP BY t1.id, t1.`name`, t1.version ORDER BY t1.`name`, t1.version")
     Page<ProjectStatisticsBo> selectProjectStatistics(Page<ProjectStatisticsBo> projectStatisticsBo);
-
-    @Select("SELECT id, `name`, `version` FROM `project` ${ew.customSqlSegment}")
-    List<ProjectBo> aggregatedProjectVersions(@Param(Constants.WRAPPER) Wrapper ew);
 
     @Select("SELECT p.id, p.`name`, p.version, p.uid, u.nickName, p.`status`, p.remark, p.updateTime, p.createTime FROM `project` AS `p` LEFT JOIN `user` AS `u` ON p.uid = u.id ${ew.customSqlSegment}")
     ProjectBo selectProjectById(@Param(Constants.WRAPPER) Wrapper<ProjectBo> ew);

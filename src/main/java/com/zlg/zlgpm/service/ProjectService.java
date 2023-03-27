@@ -2,7 +2,6 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiCreateProjectRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
@@ -100,15 +99,6 @@ public class ProjectService {
         projectStatisticsBo.setCurrent(currentPage);
         projectStatisticsBo.setSize(pageSize);
         return projectMapper.selectProjectStatistics(projectStatisticsBo);
-    }
-
-    public List<ProjectBo> getProjectVersions(String projectName) {
-        QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
-        queryWrapper.groupBy("name");
-        queryWrapper.groupBy("version");
-        queryWrapper.having("name = {0}", projectName);
-        queryWrapper.orderByDesc("createTime");
-        return projectMapper.aggregatedProjectVersions(queryWrapper);
     }
 
     public ProjectBo getProjectById(Integer id){

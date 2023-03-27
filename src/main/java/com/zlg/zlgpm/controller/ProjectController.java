@@ -10,9 +10,11 @@ import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
 import com.zlg.zlgpm.pojo.po.ProjectModulePo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import com.zlg.zlgpm.pojo.po.ProjectVersionPo;
 import com.zlg.zlgpm.pojo.po.UserProjectPo;
 import com.zlg.zlgpm.service.ProjectModuleService;
 import com.zlg.zlgpm.service.ProjectService;
+import com.zlg.zlgpm.service.ProjectVersionService;
 import com.zlg.zlgpm.service.UserProjectService;
 import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -43,6 +45,8 @@ public class ProjectController implements ProjectApi {
     private UserProjectService userProjectService;
     @Resource
     private ProjectModuleService projectModuleService;
+    @Resource
+    private ProjectVersionService projectVersionService;
 
     @Override
 //    @RequiresRoles(value = "root")
@@ -93,6 +97,17 @@ public class ProjectController implements ProjectApi {
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
+
+    @Override
+    public ResponseEntity<ApiBaseResp> createProjectVersion(ApiCreateProjectVersionRequest body) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> deleteProjectVersion(Integer id) {
+        return null;
+    }
+
     @Override
     public ResponseEntity<ApiProjectResponse> getProjectById(Integer id) {
         ProjectBo projectById = projectService.getProjectById(id);
@@ -101,8 +116,8 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(String projectName) {
-        List<ProjectBo> projectVersions = projectService.getProjectVersions(projectName);
+    public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(Integer pid) {
+        List<ProjectVersionPo> projectVersions = projectVersionService.getProjectVersions(pid);
         List<ApiProjectVersionsResponse> responses = dataConvertHelper.convert2ApiProjectVersionsResponse(projectVersions);
         return ResponseEntity.ok().body(responses);
     }
