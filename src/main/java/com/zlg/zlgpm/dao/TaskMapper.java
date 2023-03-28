@@ -36,7 +36,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         t.remark,\n" +
             "         t.link,\n" +
             "         pm.module,\n" +
-            "         pm.`level` AS moduleLevel,\n" +
+            "         pm.level,\n" +
             "         t.haveDocument,\n" +
             "         t.updateTime,\n" +
             "         t.createTime,\n" +
