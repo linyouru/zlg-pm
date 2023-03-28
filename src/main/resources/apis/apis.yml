@@ -284,7 +284,7 @@ paths:
         200:
           description: success
           schema:
-            $ref: "#/definitions/ProjectResponse"
+            $ref: "#/definitions/GetProjectByIdResponse"
         400:
           description: parameter error;
         500:
@@ -1320,6 +1320,28 @@ definitions:
       module:
         type: string
         description: 功能模块,json字符串
+  GetProjectByIdResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      uid:
+        type: integer
+        description: 项目负责人Id
+      name:
+        type: string
+      nickName:
+        type: string
+        description: 项目负责人昵称
+      status:
+        type: string
+        description: "项目状态,1:开发中;2:已完成"
+      remark:
+        type: string
+      updateTime:
+        type: string
+      createTime:
+        type: string
   ProjectResponse:
     type: object
     properties:

@@ -101,10 +101,14 @@ public class ProjectService {
         return projectMapper.selectProjectStatistics(projectStatisticsBo);
     }
 
-    public ProjectBo getProjectById(Integer id){
+    public ProjectBo getProjectById(Integer id) {
         QueryWrapper<ProjectBo> wrapper = new QueryWrapper<>();
-        wrapper.eq("p.id",id);
-        return projectMapper.selectProjectById(wrapper);
+        wrapper.eq("p.id", id);
+        ProjectBo projectBo = projectMapper.selectProjectById(wrapper);
+        if (null == projectBo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", id);
+        }
+        return projectBo;
     }
 
 }

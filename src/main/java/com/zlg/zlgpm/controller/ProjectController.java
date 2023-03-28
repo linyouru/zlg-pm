@@ -87,8 +87,6 @@ public class ProjectController implements ProjectApi {
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
-
-
     @Override
     @RequiresRoles(value = "root")
     public ResponseEntity<ApiBaseResp> deleteProject(Integer id) {
@@ -97,32 +95,11 @@ public class ProjectController implements ProjectApi {
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
-
     @Override
-    public ResponseEntity<ApiBaseResp> createProjectVersion(ApiCreateProjectVersionRequest body) {
-        ProjectVersionPo projectVersionPo = dataConvertHelper.convert2ProjectVersionPo(body);
-        projectVersionService.createProjectVersion(projectVersionPo);
-        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
-    }
-
-    @Override
-    public ResponseEntity<ApiBaseResp> deleteProjectVersion(Integer id) {
-        projectVersionService.deleteProjectVersion(id);
-        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
-    }
-
-    @Override
-    public ResponseEntity<ApiProjectResponse> getProjectById(Integer id) {
+    public ResponseEntity<ApiGetProjectByIdResponse> getProjectById(Integer id) {
         ProjectBo projectById = projectService.getProjectById(id);
-        ApiProjectResponse response = dataConvertHelper.convert2ApiProjectResponse(projectById);
+        ApiGetProjectByIdResponse response = dataConvertHelper.convert2ApiGetProjectByIdResponse(projectById);
         return ResponseEntity.ok().body(response);
-    }
-
-    @Override
-    public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(Integer pid) {
-        List<ProjectVersionPo> projectVersions = projectVersionService.getProjectVersions(pid);
-        List<ApiProjectVersionsResponse> responses = dataConvertHelper.convert2ApiProjectVersionsResponse(projectVersions);
-        return ResponseEntity.ok().body(responses);
     }
 
     @Override
@@ -144,6 +121,26 @@ public class ProjectController implements ProjectApi {
         Page<ProjectStatisticsBo> projectStatisticsBoPage = projectService.selectProjectStatistics(currentPage, pageSize);
         ApiProjectStatisticsListResponse apiProjectStatisticsListResponse = dataConvertHelper.convert2ApiProjectStatisticsListResponse(projectStatisticsBoPage);
         return ResponseEntity.ok().body(apiProjectStatisticsListResponse);
+    }
+
+    @Override
+    public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(Integer pid) {
+        List<ProjectVersionPo> projectVersions = projectVersionService.getProjectVersions(pid);
+        List<ApiProjectVersionsResponse> responses = dataConvertHelper.convert2ApiProjectVersionsResponse(projectVersions);
+        return ResponseEntity.ok().body(responses);
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> createProjectVersion(ApiCreateProjectVersionRequest body) {
+        ProjectVersionPo projectVersionPo = dataConvertHelper.convert2ProjectVersionPo(body);
+        projectVersionService.createProjectVersion(projectVersionPo);
+        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> deleteProjectVersion(Integer id) {
+        projectVersionService.deleteProjectVersion(id);
+        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
     }
 
     @Override

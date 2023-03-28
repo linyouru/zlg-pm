@@ -162,6 +162,19 @@ public class DataConvertHelper {
         return apiProjectResponse;
     }
 
+    public ApiGetProjectByIdResponse convert2ApiGetProjectByIdResponse(ProjectBo projectBo) {
+        ApiGetProjectByIdResponse response = new ApiGetProjectByIdResponse();
+        response.setId(projectBo.getId());
+        response.setName(projectBo.getName());
+        response.setNickName(projectBo.getNickName());
+        response.setStatus(projectBo.getStatus());
+        response.setRemark(projectBo.getRemark());
+        response.setUpdateTime(projectBo.getUpdateTime());
+        response.setCreateTime(projectBo.getCreateTime());
+        response.setUid(projectBo.getUid());
+        return response;
+    }
+
     public ApiProjectListResponse convert2ApiProjectListResponse(Page<ProjectBo> projectBoPage) {
         ApiProjectListResponse response = new ApiProjectListResponse();
         fillApiPage(response, projectBoPage);
