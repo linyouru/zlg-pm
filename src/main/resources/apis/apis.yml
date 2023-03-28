@@ -316,7 +316,7 @@ paths:
       tags:
         - project
       summary: 修改项目信息
-      description: 修改项目信息(仅root),name+version要唯一
+      description: 修改项目信息
       operationId: updateProject
       produces:
         - "application/json"
@@ -1295,11 +1295,6 @@ definitions:
         minLength: 2
         maxLength: 32
         description: 项目名称
-      version:
-        type: string
-        minLength: 2
-        maxLength: 8
-        description: 项目版本号
       uid:
         type: integer
         minLength: 1
