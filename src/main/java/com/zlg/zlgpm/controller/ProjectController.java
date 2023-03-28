@@ -56,7 +56,8 @@ public class ProjectController implements ProjectApi {
             userProjectService.saveBatch(list);
         }
         //添加项目功能块
-        saveBatchProjectModule(body.getModule(),project.getId());
+        ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), project.getId());
+        projectModuleService.saveBatch(list);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
@@ -77,8 +78,9 @@ public class ProjectController implements ProjectApi {
         }
         //更新项目模块
         if(StringUtils.hasText(body.getModule())){
-            projectModuleService.deleteProjectModuleByPid(id);
-            saveBatchProjectModule(body.getModule(),id);
+            ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), id);
+            projectModuleService.updateBatchById(list);
+            projectModuleService.deleteProjectModuleForUpdate(list,id);
         }
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
@@ -157,7 +159,7 @@ public class ProjectController implements ProjectApi {
         return list;
     }
 
-    private void saveBatchProjectModule(String moduleStr, int pid){
+    private ArrayList<ProjectModulePo> batchProjectModule(String moduleStr, int pid){
         ObjectMapper mapper = new ObjectMapper();
         ArrayList<ProjectModulePo> list;
         try {
@@ -169,6 +171,6 @@ public class ProjectController implements ProjectApi {
         for (ProjectModulePo pmp : list) {
             pmp.setPid(pid);
         }
-        projectModuleService.saveBatch(list);
+       return list;
     }
 }

@@ -10,6 +10,7 @@ import com.zlg.zlgpm.pojo.po.TaskPo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,17 @@ public class ProjectModuleService extends ServiceImpl<ProjectModuleMapper, Proje
         QueryWrapper<ProjectModulePo> wrapper = new QueryWrapper<>();
         wrapper.eq("pid", pid);
         int delete = projectModuleMapper.delete(wrapper);
+    }
+
+    public void deleteProjectModuleForUpdate(ArrayList<ProjectModulePo> list, Integer pid) {
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (ProjectModulePo projectModulePo : list) {
+            ids.add(projectModulePo.getId());
+        }
+        QueryWrapper<ProjectModulePo> wrapper = new QueryWrapper<>();
+        wrapper.notIn("id", ids);
+        wrapper.eq("pid", pid);
+        projectModuleMapper.delete(wrapper);
     }
 
     public List<ProjectModulePo> queryProjectModule(int pid) {
