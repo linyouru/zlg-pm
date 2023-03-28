@@ -77,21 +77,27 @@ public class ProjectController implements ProjectApi {
             userProjectService.saveBatch(list);
         }
         //创建,更新,删除项目模块
-        if(StringUtils.hasText(body.getModule())){
+        if (StringUtils.hasText(body.getModule())) {
             ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), id);
             ArrayList<ProjectModulePo> createList = new ArrayList<>();
+            ArrayList<ProjectModulePo> updateList = new ArrayList<>();
             for (ProjectModulePo projectModulePo : list) {
-                if(null==projectModulePo.getId()){
+                if (null == projectModulePo.getId()) {
                     createList.add(projectModulePo);
+                } else {
+                    updateList.add(projectModulePo);
                 }
             }
-            projectModuleService.updateBatchById(list);
-            projectModuleService.deleteProjectModuleForUpdate(list,id);
-            projectModuleService.saveBatch(createList);
+//            if (updateList.size() > 0) {
+                projectModuleService.updateBatchById(updateList);
+                projectModuleService.deleteProjectModuleForUpdate(updateList, id);
+//            }
+            if (createList.size() > 0) {
+                projectModuleService.saveBatch(createList);
+            }
         }
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
-
 
 
     @Override
@@ -166,18 +172,18 @@ public class ProjectController implements ProjectApi {
         return list;
     }
 
-    private ArrayList<ProjectModulePo> batchProjectModule(String moduleStr, int pid){
+    private ArrayList<ProjectModulePo> batchProjectModule(String moduleStr, int pid) {
         ObjectMapper mapper = new ObjectMapper();
         ArrayList<ProjectModulePo> list;
         try {
             list = mapper.readValue(moduleStr, mapper.getTypeFactory().constructParametricType(ArrayList.class, ProjectModulePo.class));
         } catch (JsonProcessingException e) {
-            logger.error("createProject json analysis error",e);
+            logger.error("createProject json analysis error", e);
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11004");
         }
         for (ProjectModulePo pmp : list) {
             pmp.setPid(pid);
         }
-       return list;
+        return list;
     }
 }
