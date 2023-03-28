@@ -60,7 +60,8 @@ public class ProjectController implements ProjectApi {
             userProjectService.saveBatch(list);
         }
         //添加项目功能块
-        saveBatchProjectModule(body.getModule(),project.getId());
+        ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), project.getId());
+        projectModuleService.saveBatch(list);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
@@ -79,10 +80,18 @@ public class ProjectController implements ProjectApi {
             List<UserProjectPo> list = generateUserProjectPoList(memberUid, projectPo.getUid(), id);
             userProjectService.saveBatch(list);
         }
-        //更新项目模块
+        //创建,更新,删除项目模块
         if(StringUtils.hasText(body.getModule())){
-            projectModuleService.deleteProjectModuleByPid(id);
-            saveBatchProjectModule(body.getModule(),id);
+            ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), id);
+            ArrayList<ProjectModulePo> createList = new ArrayList<>();
+            for (ProjectModulePo projectModulePo : list) {
+                if(null==projectModulePo.getId()){
+                    createList.add(projectModulePo);
+                }
+            }
+            projectModuleService.updateBatchById(list);
+            projectModuleService.deleteProjectModuleForUpdate(list,id);
+            projectModuleService.saveBatch(createList);
         }
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
@@ -172,7 +181,7 @@ public class ProjectController implements ProjectApi {
         return list;
     }
 
-    private void saveBatchProjectModule(String moduleStr, int pid){
+    private ArrayList<ProjectModulePo> batchProjectModule(String moduleStr, int pid){
         ObjectMapper mapper = new ObjectMapper();
         ArrayList<ProjectModulePo> list;
         try {
@@ -184,6 +193,6 @@ public class ProjectController implements ProjectApi {
         for (ProjectModulePo pmp : list) {
             pmp.setPid(pid);
         }
-        projectModuleService.saveBatch(list);
+       return list;
     }
 }
