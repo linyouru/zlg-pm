@@ -76,11 +76,18 @@ public class ProjectController implements ProjectApi {
             List<UserProjectPo> list = generateUserProjectPoList(memberUid, projectPo.getUid(), id);
             userProjectService.saveBatch(list);
         }
-        //更新项目模块
+        //创建,更新,删除项目模块
         if(StringUtils.hasText(body.getModule())){
             ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), id);
+            ArrayList<ProjectModulePo> createList = new ArrayList<>();
+            for (ProjectModulePo projectModulePo : list) {
+                if(null==projectModulePo.getId()){
+                    createList.add(projectModulePo);
+                }
+            }
             projectModuleService.updateBatchById(list);
             projectModuleService.deleteProjectModuleForUpdate(list,id);
+            projectModuleService.saveBatch(createList);
         }
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
