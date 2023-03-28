@@ -34,7 +34,9 @@ public class ProjectModuleService extends ServiceImpl<ProjectModuleMapper, Proje
             ids.add(projectModulePo.getId());
         }
         QueryWrapper<ProjectModulePo> wrapper = new QueryWrapper<>();
-        wrapper.notIn("id", ids);
+        if (list.size() > 0) {
+            wrapper.notIn("id", ids);
+        }
         wrapper.eq("pid", pid);
         projectModuleMapper.delete(wrapper);
     }
