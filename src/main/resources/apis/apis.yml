@@ -1548,12 +1548,6 @@ definitions:
       acceptanceTime:
         type: string
         description: 验收时间,时间戳(ms)
-      timely:
-        type: string
-        enum:
-          - 1
-          - 2
-        description: 及时性,1是;2否
       quality:
         type: string
         description: 质量分

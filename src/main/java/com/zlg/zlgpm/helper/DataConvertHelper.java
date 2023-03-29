@@ -207,8 +207,6 @@ public class DataConvertHelper {
         task.setStatus(status != null ? status.toString() : null);
         task.setPlayStartTime(taskRequest.getPlayStartTime());
         task.setPlayEndTime(taskRequest.getPlayEndTime());
-        ApiUpdateTaskRequest.TimelyEnum timely = taskRequest.getTimely();
-        task.setTimely(timely != null ? timely.toString() : null);
         task.setQuality(taskRequest.getQuality());
         task.setDocument(taskRequest.getDocument());
         task.setRemark(taskRequest.getRemark());

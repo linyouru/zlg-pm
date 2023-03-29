@@ -96,6 +96,13 @@ public class TaskService {
                 throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
             }
         }
+        //任务及时性判断
+        if (TASK_END.equals(task.getStatus())) {
+            TaskPo taskPo = taskMapper.selectById(id);
+            String playEndTime = taskPo.getPlayEndTime();
+            long now = System.currentTimeMillis();
+            task.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
+        }
         int i = taskMapper.updateById(task);
         if (i == 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
@@ -104,7 +111,7 @@ public class TaskService {
 
         ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
         QueryWrapper<ProjectVersionPo> wrapper = new QueryWrapper<>();
-        wrapper.eq("pid",projectPo.getId());
+        wrapper.eq("pid", projectPo.getId());
         ProjectVersionPo projectVersionPo = projectVersionMapper.selectOne(wrapper);
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
         UserPo taskUser = userMapper.selectById(retTask.getUid());
