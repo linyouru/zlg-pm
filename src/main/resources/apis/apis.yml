@@ -694,6 +694,29 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/tasl/relevance/list:
+    get:
+      tags:
+        - task
+      summary: 查询项目关联的外部任务
+      description: 查询项目关联的外部任务
+      operationId: getTaskRelevanceList
+      produces:
+        - "application/json"
+      parameters:
+        - name: vid
+          in: query
+          type: integer
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/task/statistics:
     get:
       tags:
