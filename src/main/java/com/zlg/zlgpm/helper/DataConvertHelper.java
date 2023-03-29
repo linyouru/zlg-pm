@@ -368,6 +368,7 @@ public class DataConvertHelper {
         taskLogPo.setWorkTime(body.getWorkTime());
         taskLogPo.setProgress(body.getProgress());
         taskLogPo.setLog(body.getLog());
+        taskLogPo.setFeedback(body.getFeedback());
         return taskLogPo;
     }
 
@@ -386,6 +387,7 @@ public class DataConvertHelper {
         response.setWorkTime(taskLogPo.getWorkTime());
         response.setProgress(taskLogPo.getProgress());
         response.setLog(taskLogPo.getLog());
+        response.setFeedback(taskLogPo.getFeedback());
         response.setCreateTime(taskLogPo.getCreateTime());
         return response;
     }
@@ -400,6 +402,7 @@ public class DataConvertHelper {
         apiTaskLogResponse.setWorkTime(taskLogListBo.getWorkTime());
         apiTaskLogResponse.setProgress(taskLogListBo.getProgress());
         apiTaskLogResponse.setLog(taskLogListBo.getLog());
+        apiTaskLogResponse.setFeedback(taskLogListBo.getFeedback());
         apiTaskLogResponse.setCreateTime(taskLogListBo.getCreateTime());
         return apiTaskLogResponse;
     }
@@ -421,6 +424,7 @@ public class DataConvertHelper {
         response.setName(taskLogAggregationListBo.getName());
         response.setVersion(taskLogAggregationListBo.getVersion());
         response.setLog(taskLogAggregationListBo.getLog());
+        response.setFeedback(taskLogAggregationListBo.getFeedback());
         response.setCreateTime(taskLogAggregationListBo.getCreateTime());
         return response;
     }

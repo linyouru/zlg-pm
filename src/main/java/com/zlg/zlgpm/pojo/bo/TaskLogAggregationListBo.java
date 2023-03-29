@@ -10,6 +10,7 @@ public class TaskLogAggregationListBo {
     private String name;
     private String version;
     private String log;
+    private String feedback;
     private String createTime;
 
     public TaskLogAggregationListBo() {
@@ -25,6 +26,30 @@ public class TaskLogAggregationListBo {
         this.version = version;
         this.log = log;
         this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskLogAggregationListBo{" +
+                "id=" + id +
+                ", uid=" + uid +
+                ", userName='" + userName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", taskId=" + taskId +
+                ", name='" + name + '\'' +
+                ", version='" + version + '\'' +
+                ", log='" + log + '\'' +
+                ", feedback='" + feedback + '\'' +
+                ", createTime='" + createTime + '\'' +
+                '}';
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
     public Integer getId() {
@@ -99,18 +124,4 @@ public class TaskLogAggregationListBo {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "TaskLogAggregationListBo{" +
-                "id=" + id +
-                ", uid=" + uid +
-                ", userName='" + userName + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", taskId=" + taskId +
-                ", name='" + name + '\'' +
-                ", version='" + version + '\'' +
-                ", log='" + log + '\'' +
-                ", createTime='" + createTime + '\'' +
-                '}';
-    }
 }
