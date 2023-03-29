@@ -133,7 +133,7 @@ public class TaskService {
             queryWrapper.eq("p.name", projectName);
         }
         if (StringUtils.hasText(projectVersion)) {
-            queryWrapper.eq("p.version", projectVersion);
+            queryWrapper.eq("pv.version", projectVersion);
         }
         if (null != uid) {
             queryWrapper.eq("t.uid", uid);

@@ -191,14 +191,9 @@ public class DataConvertHelper {
         task.setStatus(taskRequest.getStatus().toString());
         task.setPlayStartTime(StringUtils.hasText(taskRequest.getPlayStartTime()) ? taskRequest.getPlayStartTime() : null);
         task.setPlayEndTime(StringUtils.hasText(taskRequest.getPlayEndTime()) ? taskRequest.getPlayEndTime() : null);
-        ApiCreateTaskRequest.TimelyEnum timely = taskRequest.getTimely();
-        task.setTimely(timely != null ? timely.toString() : null);
-        task.setQuality(taskRequest.getQuality());
-        task.setDocument(taskRequest.getDocument());
-        task.setRemark(taskRequest.getRemark());
-        task.setLink(taskRequest.getLink());
         task.setMid(taskRequest.getMid());
         task.setHaveDocument(taskRequest.getHaveDocument());
+        task.setVid(taskRequest.getVid());
         return task;
     }
 

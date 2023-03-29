@@ -570,6 +570,8 @@ paths:
       responses:
         200:
           description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
         400:
           description: parameter error
         500:
@@ -1457,18 +1459,23 @@ definitions:
     type: object
     required:
       - pid
+      - uid
+      - vid
+      - task
       - taskType
       - status
       - mid
       - haveDocument
-      - createdUid
     properties:
       pid:
         type: integer
         description: 项目id
       uid:
         type: integer
-        description: 负责人用户id
+        description: 任务负责人用户id
+      vid:
+        type: integer
+        description: 项目版本id
       taskType:
         type: string
         enum:
@@ -1496,26 +1503,6 @@ definitions:
       playEndTime:
         type: string
         description: 计划结束时间,时间戳(ms)
-      timely:
-        type: string
-        enum:
-          - 1
-          - 2
-        description: 及时性,1是;2否
-      quality:
-        type: string
-        description: 质量分
-      document:
-        type: string
-        description: 文档分
-      remark:
-        type: string
-        description: 备注
-        maxLength: 255
-      link:
-        type: string
-        description: 文档备注
-        maxLength: 255
       mid:
         type: integer
         description: 功能模块id
@@ -1525,6 +1512,9 @@ definitions:
           - 0
           - 1
         description: 是否需要文档，0否；1是
+      relevance:
+        type: string
+        description: 任务关联项目版本id,多个用英文逗号分隔
   UpdateTaskRequest:
     type: object
     properties:

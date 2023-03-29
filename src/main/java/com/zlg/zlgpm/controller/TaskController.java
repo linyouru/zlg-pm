@@ -1,22 +1,24 @@
 package com.zlg.zlgpm.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
-import com.zlg.zlgpm.controller.model.ApiTaskListResponse;
-import com.zlg.zlgpm.controller.model.ApiTaskStatisticsResponse;
-import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
+import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
+import com.zlg.zlgpm.pojo.po.TaskPo;
+import com.zlg.zlgpm.pojo.po.TaskRelevancePo;
+import com.zlg.zlgpm.service.TaskRelevanceService;
 import com.zlg.zlgpm.service.TaskService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +29,28 @@ public class TaskController implements TaskApi {
     private TaskService taskService;
     @Resource
     private DataConvertHelper dataConvertHelper;
+    @Resource
+    private TaskRelevanceService taskRelevanceService;
 
     @Override
-    public ResponseEntity<Void> createTask(ApiCreateTaskRequest body) {
-        taskService.createTask(body);
-        return ResponseEntity.ok(null);
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<ApiBaseResp> createTask(ApiCreateTaskRequest body) {
+        TaskPo task = taskService.createTask(body);
+
+        //建立关联项目关系
+        String vidStr = body.getRelevance();
+        if(StringUtils.hasText(vidStr)){
+            String[] split = vidStr.split(",");
+            ArrayList<TaskRelevancePo> taskRelevancePos = new ArrayList<>();
+            for (String vid : split) {
+                TaskRelevancePo taskRelevancePo = new TaskRelevancePo();
+                taskRelevancePo.setVid(Integer.parseInt(vid));
+                taskRelevancePo.setTid(task.getId());
+                taskRelevancePos.add(taskRelevancePo);
+            }
+            taskRelevanceService.saveBatch(taskRelevancePos);
+        }
+        return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 
     @Override

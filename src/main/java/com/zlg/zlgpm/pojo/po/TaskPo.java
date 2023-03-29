@@ -25,6 +25,8 @@ public class TaskPo implements Serializable {
     @TableField
     private Integer pid;
     @TableField
+    private Integer vid;
+    @TableField
     private Integer createdUid;
     @TableField
     private String createdUserNickname;
@@ -206,6 +208,14 @@ public class TaskPo implements Serializable {
 
     public void setCreatedUserNickname(String createdUserNickname) {
         this.createdUserNickname = createdUserNickname;
+    }
+
+    public Integer getVid() {
+        return vid;
+    }
+
+    public void setVid(Integer vid) {
+        this.vid = vid;
     }
 
     @Override
