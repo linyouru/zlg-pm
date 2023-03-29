@@ -79,6 +79,20 @@ public class TaskController implements TaskApi {
     @Override
     public ResponseEntity<Void> updateTask(Integer id, ApiUpdateTaskRequest body) {
         taskService.updateTask(id, body);
+        //更新关联项目关系
+        String vidStr = body.getRelevance();
+        if(StringUtils.hasText(vidStr)){
+            taskRelevanceService.deleteTaskRelevanceByTid(id);
+            String[] split = vidStr.split(",");
+            ArrayList<TaskRelevancePo> taskRelevancePos = new ArrayList<>();
+            for (String vid : split) {
+                TaskRelevancePo taskRelevancePo = new TaskRelevancePo();
+                taskRelevancePo.setVid(Integer.parseInt(vid));
+                taskRelevancePo.setTid(id);
+                taskRelevancePos.add(taskRelevancePo);
+            }
+            taskRelevanceService.saveBatch(taskRelevancePos);
+        }
         return ResponseEntity.ok(null);
     }
 }

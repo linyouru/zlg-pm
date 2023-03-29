@@ -215,6 +215,7 @@ public class DataConvertHelper {
         task.setHaveDocument(taskRequest.getHaveDocument());
         task.setAcceptanceTime(taskRequest.getAcceptanceTime());
         task.setPid(taskRequest.getPid());
+        task.setVid(taskRequest.getVid());
         return task;
     }
 

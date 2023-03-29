@@ -110,9 +110,7 @@ public class TaskService {
         TaskPo retTask = taskMapper.selectById(id);
 
         ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
-        QueryWrapper<ProjectVersionPo> wrapper = new QueryWrapper<>();
-        wrapper.eq("pid", projectPo.getId());
-        ProjectVersionPo projectVersionPo = projectVersionMapper.selectOne(wrapper);
+        ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(retTask.getVid());
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
         UserPo taskUser = userMapper.selectById(retTask.getUid());
         String text = assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
@@ -191,8 +189,8 @@ public class TaskService {
     /**
      * 拼接邮件信息
      *
-     * @param projectName
-     * @param projectVersion
+     * @param projectName 项目名称
+     * @param projectVersion 项目版本
      * @param projectUserName
      * @param taskUsername
      * @param task

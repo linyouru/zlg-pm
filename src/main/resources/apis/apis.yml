@@ -1517,6 +1517,8 @@ definitions:
         description: 任务关联项目版本id,多个用英文逗号分隔
   UpdateTaskRequest:
     type: object
+    required:
+      - uid
     properties:
       taskType:
         type: string
@@ -1569,12 +1571,18 @@ definitions:
       mid:
         type: integer
         description: 功能模块id
+      vid:
+        type: integer
+        default: 项目版本id
       haveDocument:
         type: integer
         enum:
           - 0
           - 1
         description: 是否需要文档，0否；1是
+      relevance:
+        type: string
+        description: 任务关联项目版本id,多个用英文逗号分隔
   TaskListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
