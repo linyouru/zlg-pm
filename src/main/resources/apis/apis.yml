@@ -1251,7 +1251,6 @@ definitions:
     type: object
     required:
       - name
-      - version
       - uid
       - status
     properties:
@@ -1260,11 +1259,6 @@ definitions:
         minLength: 2
         maxLength: 32
         description: 项目名
-      version:
-        type: string
-        minLength: 2
-        maxLength: 8
-        description: 项目版本号
       uid:
         type: integer
         minLength: 1
