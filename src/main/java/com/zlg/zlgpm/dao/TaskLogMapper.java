@@ -29,23 +29,7 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
             "${ew.customSqlSegment}")
     Page<TaskLogListBo> selectPage(Page<TaskLogListBo> taskLogListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
-    @Select("SELECT tl.id,\n" +
-            "         tl.uid,\n" +
-            "         u.userName,\n" +
-            "         u.nickName,\n" +
-            "         tl.taskId,\n" +
-            "         p.`name`,\n" +
-            "         p.version,\n" +
-            "         tl.log,\n" +
-            "         tl.createTime\n" +
-            "FROM `task_log` AS tl\n" +
-            "LEFT JOIN `user` AS u\n" +
-            "    ON tl.uid = u.id\n" +
-            "LEFT JOIN project_task AS t\n" +
-            "    ON tl.taskId = t.id\n" +
-            "LEFT JOIN project AS p\n" +
-            "    ON t.pid = p.id\n" +
-            "${ew.customSqlSegment}")
+    @Select("SELECT tl.id, tl.uid, u.userName, u.nickName, tl.taskId, p.`name`, pv.version, tl.log, tl.createTime FROM `task_log` AS tl LEFT JOIN `user` AS u ON tl.uid = u.id LEFT JOIN project_task AS t ON tl.taskId = t.id LEFT JOIN project AS p ON t.pid = p.id LEFT JOIN project_version AS pv ON pv.id =t.vid ${ew.customSqlSegment}")
     Page<TaskLogAggregationListBo> getTaskLogAggregation(Page<TaskLogAggregationListBo> taskLogAggregationListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
 
