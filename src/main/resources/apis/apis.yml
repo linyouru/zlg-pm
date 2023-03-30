@@ -1297,7 +1297,7 @@ definitions:
         enum:
           - "1"
           - "2"
-        description: "项目状态,1:开发中;2:已完成"
+        description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
         maxLength: 255
@@ -1327,7 +1327,7 @@ definitions:
         enum:
           - "1"
           - "2"
-        description: "项目状态,1:开发中;2:已完成"
+        description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
         maxLength: 255
@@ -1349,7 +1349,7 @@ definitions:
         description: 项目负责人昵称
       status:
         type: string
-        description: "项目状态,1:开发中;2:已完成"
+        description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
       updateTime:
@@ -1373,7 +1373,7 @@ definitions:
         description: 项目负责人昵称
       status:
         type: string
-        description: "项目状态,1:开发中;2:已完成"
+        description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
       updateTime:
