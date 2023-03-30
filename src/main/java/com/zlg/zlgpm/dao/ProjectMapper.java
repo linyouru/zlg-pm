@@ -35,7 +35,7 @@ public interface ProjectMapper extends BaseMapper<ProjectPo> {
     /**
      * 活动中的项目任务情况统计
      */
-    @Select("SELECT t1.id, t1.`name`, t1.version, SUM(if(ISNULL(t1.`status`),0,t1.numb)) as taskTotal, SUM(if(t1.`status`=3,t1.numb,0)) as finishTaskNum FROM( SELECT p.id, p.`name`, p.version, t.`status`, count(*) AS numb FROM `project` AS p LEFT JOIN project_task AS t ON p.id = t.pid WHERE p.`status`=1 GROUP BY p.id, p.`name`, p.version, t.`status`) AS t1 GROUP BY t1.id, t1.`name`, t1.version ORDER BY t1.`name`, t1.version")
+    @Select("SELECT t1.id, t1.`name`, t1.version, SUM( IF( ISNULL(t1.`status`), 0, t1.numb) ) AS taskTotal, SUM( IF (t1.`status` = 1, t1.numb, 0) ) AS finishTaskNum FROM ( SELECT p.id, p.`name`, pv.version, t.`status`, count(*) AS numb FROM `project` AS p LEFT JOIN project_task AS t ON p.id = t.pid LEFT JOIN project_version AS pv ON pv.id = t.vid WHERE p.`status` = 1 GROUP BY p.id, p.`name`, pv.id, t.`status` ) AS t1 GROUP BY t1.id, t1.`name`, t1.version ORDER BY t1.`name`, t1.version")
     Page<ProjectStatisticsBo> selectProjectStatistics(Page<ProjectStatisticsBo> projectStatisticsBo);
 
     @Select("SELECT p.id, p.`name`, p.uid, u.nickName, p.`status`, p.remark, p.updateTime, p.createTime FROM `project` AS `p` LEFT JOIN `user` AS `u` ON p.uid = u.id ${ew.customSqlSegment}")

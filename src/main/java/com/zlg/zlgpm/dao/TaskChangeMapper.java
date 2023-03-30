@@ -14,30 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TaskChangeMapper extends BaseMapper<TaskChangePo> {
 
-    @Select("SELECT\n" +
-            "\tt.id,\n" +
-            "\tt.taskId,\n" +
-            "\tp.`name` AS projectName,\n" +
-            "\tp.version AS projectVersion,\n"+
-            "\tpt.task,\n" +
-            "\tt.uid,\n" +
-            "\tu.userName,\n" +
-            "\tu.nickName,\n" +
-            "\tt.auditorId,\n" +
-            "\tt.auditorName,\n" +
-            "\tt.`status`,\n" +
-            "\tt.beforeStartTime,\n" +
-            "\tt.beforeEndTime,\n" +
-            "\tt.afterStartTime,\n" +
-            "\tt.afterEndTime,\n" +
-            "\tt.reason,\n" +
-            "\tt.createTime\n" +
-            "FROM\n" +
-            "\t`task_change` AS t\n" +
-            "LEFT JOIN `user` AS u ON t.uid = u.id\n" +
-            "LEFT JOIN project_task AS pt ON t.taskId = pt.id\n" +
-            "LEFT JOIN project AS p ON pt.pid = p.id\n"+
-            "${ew.customSqlSegment}")
+    @Select("SELECT t.id, t.taskId, p.`name` AS projectName, pv.version AS projectVersion, pt.task, t.uid, u.userName, u.nickName, t.auditorId, t.auditorName, t.`status`, t.beforeStartTime, t.beforeEndTime, t.afterStartTime, t.afterEndTime, t.reason, t.createTime FROM `task_change` AS t LEFT JOIN `user` AS u ON t.uid = u.id LEFT JOIN project_task AS pt ON t.taskId = pt.id LEFT JOIN project AS p ON pt.pid = p.id LEFT JOIN project_version AS pv ON pv.id = pt.vid ${ew.customSqlSegment}")
     Page<TaskChangeListBo> selectPage(Page<TaskChangeListBo> taskChangeListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
 }
