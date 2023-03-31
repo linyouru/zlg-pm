@@ -19,6 +19,7 @@ import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.ProjectVersionPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
+import io.swagger.models.auth.In;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,14 @@ public class TaskService {
         }
         task.setCreatedUid(currentUser.getId().intValue());
         task.setCreatedUserNickname(currentUser.getNickName());
+        //设置任务序号
+        if (null == task.getSerialNumber()) {
+            QueryWrapper<Integer> wrapper = new QueryWrapper<>();
+            wrapper.eq("pid", task.getPid());
+            wrapper.eq("vid", task.getVid());
+            Integer maxSerialNumber = taskMapper.getMaxSerialNumber(wrapper);
+            task.setSerialNumber(maxSerialNumber + 1);
+        }
         taskMapper.insert(task);
         return task;
     }
@@ -186,15 +195,57 @@ public class TaskService {
         return taskMapper.selectTaskStatistics(wrapper);
     }
 
+    public void handleTaskSort(Integer taskId, Integer newSerialNumber) {
+        TaskPo taskPo = taskMapper.selectById(taskId);
+        int oldSerialNumber = taskPo.getSerialNumber();
+        taskPo.setSerialNumber(newSerialNumber);
+        taskMapper.updateById(taskPo);
+        this.handleSort(taskPo.getPid(), taskPo.getVid(), newSerialNumber, oldSerialNumber, taskId);
+    }
+
+    /**
+     * 拖拽排序任务
+     *
+     * @param pid             项目id
+     * @param vid             版本id
+     * @param newSerialNumber 新序号值
+     * @param oldSerialNumber 旧序号值
+     * @param taskId          移动的任务id
+     */
+    public void handleSort(Integer pid, Integer vid, Integer newSerialNumber, Integer oldSerialNumber, Integer taskId) {
+        QueryWrapper<Integer> wrapper = new QueryWrapper<>();
+        wrapper.eq("pid", pid);
+        wrapper.eq("vid", vid);
+        wrapper.ne("id", taskId);
+        if (null == oldSerialNumber) {
+            //插入任务
+            wrapper.ge("serialNumber", newSerialNumber);
+            taskMapper.frontedTask(wrapper);
+            return;
+        }
+        if (newSerialNumber < oldSerialNumber) {
+            //前移
+            wrapper.ge("serialNumber", newSerialNumber);
+            wrapper.le("serialNumber", oldSerialNumber);
+            taskMapper.frontedTask(wrapper);
+        } else {
+            //后移
+            wrapper.le("serialNumber", newSerialNumber);
+            wrapper.ge("serialNumber", oldSerialNumber);
+            taskMapper.retrusiveTask(wrapper);
+        }
+
+    }
+
     /**
      * 拼接邮件信息
      *
-     * @param projectName 项目名称
-     * @param projectVersion 项目版本
-     * @param projectUserName
-     * @param taskUsername
-     * @param task
-     * @return
+     * @param projectName     项目名称
+     * @param projectVersion  项目版本
+     * @param projectUserName 项目负责人
+     * @param taskUsername  任务负责人
+     * @param task  任务内容
+     * @return 邮件文本
      */
     private String assembleEmailMessage(String projectName, String projectVersion, String projectUserName, String taskUsername, String task) {
         return "申请时间：" + Utils.convertTimestamp2Date(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n" +

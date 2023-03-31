@@ -1046,6 +1046,35 @@ paths:
             $ref: "#/definitions/TaskLogAggregationListResponse"
         500:
           description: server error
+  /v1/task/handleSort:
+    put:
+      tags:
+        - task
+      summary: 拖拽任务排序
+      description: 拖拽任务排序
+      operationId: handleTaskSort
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: taskId
+          type: integer
+          required: true
+          description: 被移动的任务id
+        - in: query
+          name: newSerialNumber
+          type: integer
+          required: true
+          description: 移动后的新序号
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/operationLog/list:
     get:
       tags:
@@ -1532,6 +1561,9 @@ definitions:
       relevance:
         type: string
         description: 任务关联项目版本id,多个用英文逗号分隔
+      serialNumber:
+        type: integer
+        description: 任务序号(拖拽排序模式中,右键插入任务的情况下必填)
   UpdateTaskRequest:
     type: object
     required:

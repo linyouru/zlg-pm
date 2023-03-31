@@ -194,6 +194,7 @@ public class DataConvertHelper {
         task.setMid(taskRequest.getMid());
         task.setHaveDocument(taskRequest.getHaveDocument());
         task.setVid(taskRequest.getVid());
+        task.setSerialNumber(taskRequest.getSerialNumber());
         return task;
     }
 

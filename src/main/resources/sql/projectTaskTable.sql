@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `project_task`
     `vid`                 int(8)               DEFAULT NULL COMMENT '项目版本id',
     `haveDocument`        int(8)      NOT NULL DEFAULT '0' COMMENT '是否需要文档，0否；1是',
     `acceptanceTime`      varchar(64)          DEFAULT NULL COMMENT '验收时间',
+    `serialNumber`        int(8)               DEFAULT NULL COMMENT '任务序号',
     `updateTime`          datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     `createTime`          datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     PRIMARY KEY (`id`)

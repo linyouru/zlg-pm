@@ -51,6 +51,8 @@ public class TaskPo implements Serializable {
     @TableField
     private Integer haveDocument;
     @TableField
+    private Integer serialNumber;
+    @TableField
     private String updateTime;
     @TableField
     private String createTime;
@@ -76,6 +78,14 @@ public class TaskPo implements Serializable {
 
     public String getTask() {
         return task;
+    }
+
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public void setTask(String task) {
@@ -227,6 +237,7 @@ public class TaskPo implements Serializable {
                 ", status='" + status + '\'' +
                 ", uid=" + uid +
                 ", pid=" + pid +
+                ", vid=" + vid +
                 ", createdUid=" + createdUid +
                 ", createdUserNickname='" + createdUserNickname + '\'' +
                 ", playStartTime='" + playStartTime + '\'' +
@@ -239,6 +250,7 @@ public class TaskPo implements Serializable {
                 ", link='" + link + '\'' +
                 ", mid=" + mid +
                 ", haveDocument=" + haveDocument +
+                ", serialNumber=" + serialNumber +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';

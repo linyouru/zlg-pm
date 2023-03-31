@@ -36,10 +36,13 @@ public class TaskController implements TaskApi {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ApiBaseResp> createTask(ApiCreateTaskRequest body) {
         TaskPo task = taskService.createTask(body);
-
+        if (null != body.getSerialNumber()) {
+            //插入新增任务还得改其他任务的序号
+            taskService.handleSort(task.getPid(), task.getVid(), body.getSerialNumber(), null, task.getId());
+        }
         //建立关联项目关系
         String vidStr = body.getRelevance();
-        if(StringUtils.hasText(vidStr)){
+        if (StringUtils.hasText(vidStr)) {
             String[] split = vidStr.split(",");
             ArrayList<TaskRelevancePo> taskRelevancePos = new ArrayList<>();
             for (String vid : split) {
@@ -67,6 +70,12 @@ public class TaskController implements TaskApi {
     }
 
     @Override
+    public ResponseEntity<ApiBaseResp> handleTaskSort(Integer taskId, Integer newSerialNumber) {
+        taskService.handleTaskSort(taskId, newSerialNumber);
+        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    }
+
+    @Override
     public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid) {
         if (StringUtils.hasText(sortField) && null == isAsc) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
@@ -88,7 +97,7 @@ public class TaskController implements TaskApi {
         taskService.updateTask(id, body);
         //更新关联项目关系
         String vidStr = body.getRelevance();
-        if(StringUtils.hasText(vidStr)){
+        if (StringUtils.hasText(vidStr)) {
             taskRelevanceService.deleteTaskRelevanceByTid(id);
             String[] split = vidStr.split(",");
             ArrayList<TaskRelevancePo> taskRelevancePos = new ArrayList<>();
