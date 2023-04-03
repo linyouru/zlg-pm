@@ -10,6 +10,7 @@ public class TaskLogAggregationListBo {
     private String name;
     private String version;
     private String log;
+    private String workTime;
     private String feedback;
     private String createTime;
 
@@ -39,6 +40,7 @@ public class TaskLogAggregationListBo {
                 ", name='" + name + '\'' +
                 ", version='" + version + '\'' +
                 ", log='" + log + '\'' +
+                ", workTime='" + workTime + '\'' +
                 ", feedback='" + feedback + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
@@ -50,6 +52,14 @@ public class TaskLogAggregationListBo {
 
     public void setFeedback(String feedback) {
         this.feedback = feedback;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
     }
 
     public Integer getId() {

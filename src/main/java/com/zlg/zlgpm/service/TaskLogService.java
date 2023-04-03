@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class TaskLogService {
@@ -60,7 +62,7 @@ public class TaskLogService {
         return taskLogMapper.selectPage(page, queryWrapper);
     }
 
-    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, String startTime, String endTime) {
+    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, String sortField, Boolean isAsc, String startTime, String endTime) {
         QueryWrapper<TaskLogAggregationListBo> queryWrapper = new QueryWrapper<>();
         if (null != uid) {
             queryWrapper.eq("tl.uid", uid);
@@ -71,7 +73,14 @@ public class TaskLogService {
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
             queryWrapper.between("tl.createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
         }
-        queryWrapper.orderByDesc("tl.createTime");
+        if(null!= pid){
+            queryWrapper.eq("p.id",pid);
+        }
+        if (StringUtils.hasText(sortField)) {
+            String[] split = sortField.split(",");
+            List<String> sortList = Arrays.asList(split);
+            queryWrapper.orderBy(true, isAsc, sortList);
+        }
 
         Page<TaskLogAggregationListBo> page = new Page<>();
         page.setCurrent(currentPage);

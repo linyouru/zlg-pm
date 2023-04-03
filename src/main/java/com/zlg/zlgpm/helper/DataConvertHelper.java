@@ -427,6 +427,7 @@ public class DataConvertHelper {
         response.setLog(taskLogAggregationListBo.getLog());
         response.setFeedback(taskLogAggregationListBo.getFeedback());
         response.setCreateTime(taskLogAggregationListBo.getCreateTime());
+        response.setWorkTime(taskLogAggregationListBo.getWorkTime());
         return response;
     }
 

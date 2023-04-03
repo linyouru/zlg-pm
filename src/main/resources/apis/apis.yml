@@ -1031,6 +1031,17 @@ paths:
           type: string
           maxLength: 255
           description: 日志内容,支持模糊查询
+        - name: pid
+          in: query
+          type: integer
+        - in: query
+          name: sortField
+          type: string
+          description: 排序字段,多字段用英文逗号分隔
+        - in: query
+          name: isAsc
+          type: boolean
+          description: 是否为升序,当指定sortField时,isAsc也必须指定
         - in: query
           name: startTime
           type: string
@@ -1976,6 +1987,8 @@ definitions:
       version:
         type: string
       log:
+        type: string
+      workTime:
         type: string
       feedback:
         type: string
