@@ -62,7 +62,7 @@ public class ProjectController implements ProjectApi {
         //添加项目功能块
         ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), project.getId());
         projectModuleService.saveBatch(list);
-        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+        return ResponseEntity.ok(new ApiBaseResp().message(project.getId() + ""));
     }
 
     @Override
