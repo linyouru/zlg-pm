@@ -93,8 +93,8 @@ public class ProjectController implements ProjectApi {
                 }
             }
 //            if (updateList.size() > 0) {
-                projectModuleService.updateBatchById(updateList);
-                projectModuleService.deleteProjectModuleForUpdate(updateList, id);
+            projectModuleService.updateBatchById(updateList);
+            projectModuleService.deleteProjectModuleForUpdate(updateList, id);
 //            }
             if (createList.size() > 0) {
                 projectModuleService.saveBatch(createList);
@@ -127,8 +127,8 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<ApiProjectListResponse> projectList(String name, Integer currentPage, Integer pageSize) {
-        Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize);
+    public ResponseEntity<ApiProjectListResponse> projectList(String name, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
+        Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize, sortField, isAsc);
         ApiProjectListResponse apiProjectListResponse = dataConvertHelper.convert2ApiProjectListResponse(projectBoPage);
         return ResponseEntity.ok().body(apiProjectListResponse);
     }

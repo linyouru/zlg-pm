@@ -17,8 +17,10 @@ import com.zlg.zlgpm.helper.DataConvertHelper;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -77,10 +79,15 @@ public class ProjectService {
         return projectMapper.selectById(projectPo.getId());
     }
 
-    public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize) {
+    public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         QueryWrapper<ProjectBo> queryWrapper = new QueryWrapper<>();
         if (null != name) {
             queryWrapper.likeRight("name", name);
+        }
+        if (StringUtils.hasText(sortField)) {
+            String[] split = sortField.split(",");
+            List<String> sortList = Arrays.asList(split);
+            queryWrapper.orderBy(true, isAsc, sortList);
         }
         Page<ProjectBo> projectBoPage = new Page<>();
         projectBoPage.setCurrent(currentPage);

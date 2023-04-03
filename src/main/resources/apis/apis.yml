@@ -383,6 +383,14 @@ paths:
           in: query
           type: integer
           default: 10
+        - in: query
+          name: sortField
+          type: string
+          description: 排序字段,多字段用英文逗号分隔
+        - in: query
+          name: isAsc
+          type: boolean
+          description: 是否为升序,当指定sortField时,isAsc也必须指定
       responses:
         200:
           description: success
@@ -1341,6 +1349,9 @@ definitions:
       remark:
         type: string
         maxLength: 255
+      link:
+        type: string
+        description: 任务文档链接
       module:
         type: string
         description: 功能模块,json字符串
@@ -1371,6 +1382,9 @@ definitions:
       remark:
         type: string
         maxLength: 255
+      link:
+        type: string
+        description: 任务文档链接
       module:
         type: string
         description: 功能模块,json字符串
@@ -1392,6 +1406,9 @@ definitions:
         description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
+      link:
+        type: string
+        description: 任务文档链接
       updateTime:
         type: string
       createTime:
@@ -1416,6 +1433,9 @@ definitions:
         description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
+      link:
+        type: string
+        description: 任务文档链接
       updateTime:
         type: string
       createTime:

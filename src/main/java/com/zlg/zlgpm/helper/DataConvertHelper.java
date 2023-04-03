@@ -132,6 +132,7 @@ public class DataConvertHelper {
         ApiCreateProjectRequest.StatusEnum status = request.getStatus();
         projectPo.setStatus(status.toString());
         projectPo.setRemark(request.getRemark());
+        projectPo.setLink(request.getLink());
         return projectPo;
     }
 
@@ -145,6 +146,7 @@ public class DataConvertHelper {
             projectPo.setStatus(request.getStatus().toString());
         }
         projectPo.setRemark(request.getRemark());
+        projectPo.setLink(request.getLink());
         return projectPo;
     }
 
@@ -159,6 +161,7 @@ public class DataConvertHelper {
         apiProjectResponse.setUpdateTime(projectBo.getUpdateTime());
         apiProjectResponse.setCreateTime(projectBo.getCreateTime());
         apiProjectResponse.setUid(projectBo.getUid());
+        apiProjectResponse.setLink(projectBo.getLink());
         return apiProjectResponse;
     }
 
@@ -172,6 +175,7 @@ public class DataConvertHelper {
         response.setUpdateTime(projectBo.getUpdateTime());
         response.setCreateTime(projectBo.getCreateTime());
         response.setUid(projectBo.getUid());
+        response.setLink(projectBo.getLink());
         return response;
     }
 

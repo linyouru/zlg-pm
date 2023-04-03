@@ -23,6 +23,8 @@ public class ProjectPo implements Serializable {
     @TableField
     private String remark;
     @TableField
+    private String link;
+    @TableField
     private String updateTime;
     @TableField
     private String createTime;
@@ -32,12 +34,13 @@ public class ProjectPo implements Serializable {
 
     @Override
     public String toString() {
-        return "Project{" +
+        return "ProjectPo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", uid=" + uid +
-                ", status=" + status +
+                ", status='" + status + '\'' +
                 ", remark='" + remark + '\'' +
+                ", link='" + link + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
@@ -91,4 +94,11 @@ public class ProjectPo implements Serializable {
         return createTime;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 }
