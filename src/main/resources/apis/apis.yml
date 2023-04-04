@@ -1326,6 +1326,7 @@ definitions:
       - name
       - uid
       - status
+      - module
     properties:
       name:
         type: string
@@ -1354,7 +1355,7 @@ definitions:
         description: 任务文档链接
       module:
         type: string
-        description: 功能模块,json字符串
+        description: 功能模块,json字符串,没有时传空数组
   UpdateProjectRequest:
     type: object
     required:
@@ -1541,6 +1542,8 @@ definitions:
       - status
       - mid
       - haveDocument
+      - level
+      - accepterId
     properties:
       pid:
         type: integer
@@ -1559,6 +1562,10 @@ definitions:
           - 3
         description: 任务类型 1前端；2后端；3产品
       task:
+        type: string
+        description: 标题
+        maxLength: 100
+      detail:
         type: string
         description: 任务内容
         maxLength: 1023
@@ -1593,6 +1600,12 @@ definitions:
       serialNumber:
         type: integer
         description: 任务序号(拖拽排序模式中,右键插入任务的情况下必填)
+      accepterId:
+        type: integer
+        description: 验收人Id
+      level:
+        type: integer
+        description: 优先级，1低、2中、3高
   UpdateTaskRequest:
     type: object
     required:
@@ -1606,6 +1619,10 @@ definitions:
           - 3
         description: 任务类型 1前端；2后端；3产品
       task:
+        type: string
+        description: 标题
+        maxLength: 100
+      detail:
         type: string
         description: 任务内容
         maxLength: 1023
@@ -1661,6 +1678,12 @@ definitions:
       relevance:
         type: string
         description: 任务关联项目版本id,多个用英文逗号分隔
+      accepterId:
+        type: integer
+        description: 验收人Id
+      level:
+        type: integer
+        description: 优先级，1低、2中、3高
   TaskListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"

@@ -198,6 +198,9 @@ public class DataConvertHelper {
         task.setHaveDocument(taskRequest.getHaveDocument());
         task.setVid(taskRequest.getVid());
         task.setSerialNumber(taskRequest.getSerialNumber());
+        task.setDetail(taskRequest.getDetail());
+        task.setAccepterId(taskRequest.getAccepterId());
+        task.setLevel(taskRequest.getLevel());
         return task;
     }
 
@@ -220,6 +223,9 @@ public class DataConvertHelper {
         task.setAcceptanceTime(taskRequest.getAcceptanceTime());
         task.setPid(taskRequest.getPid());
         task.setVid(taskRequest.getVid());
+        task.setDetail(taskRequest.getDetail());
+        task.setLevel(taskRequest.getLevel());
+        task.setAccepterId(taskRequest.getAccepterId());
         return task;
     }
 

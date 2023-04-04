@@ -19,6 +19,8 @@ public class TaskPo implements Serializable {
     @TableField
     private String task;
     @TableField
+    private String detail;
+    @TableField
     private String status;
     @TableField
     private Integer uid;
@@ -30,6 +32,10 @@ public class TaskPo implements Serializable {
     private Integer createdUid;
     @TableField
     private String createdUserNickname;
+    @TableField
+    private Integer accepterId;
+    @TableField
+    private Integer level;
     @TableField
     private String playStartTime;
     @TableField
@@ -66,6 +72,30 @@ public class TaskPo implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public Integer getAccepterId() {
+        return accepterId;
+    }
+
+    public void setAccepterId(Integer accepterId) {
+        this.accepterId = accepterId;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public String getTaskType() {
