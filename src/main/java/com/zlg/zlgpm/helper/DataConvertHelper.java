@@ -154,7 +154,6 @@ public class DataConvertHelper {
         ApiProjectResponse apiProjectResponse = new ApiProjectResponse();
         apiProjectResponse.setId(projectBo.getId());
         apiProjectResponse.setName(projectBo.getName());
-        apiProjectResponse.setVersion(projectBo.getVersion());
         apiProjectResponse.setNickName(projectBo.getNickName());
         apiProjectResponse.setStatus(projectBo.getStatus());
         apiProjectResponse.setRemark(projectBo.getRemark());

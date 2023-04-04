@@ -1423,8 +1423,6 @@ definitions:
         description: 项目负责人Id
       name:
         type: string
-      version:
-        type: string
       nickName:
         type: string
         description: 项目负责人昵称
