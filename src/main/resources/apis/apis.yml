@@ -570,6 +570,11 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - in: query
+          name: sandEmail
+          type: boolean
+          required: true
+          description: 创建任务是否给任务开发者发邮件
         - in: body
           name: body
           required: true

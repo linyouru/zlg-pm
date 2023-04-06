@@ -56,7 +56,7 @@ public class TaskService {
     private static final String TASK_TIMEOUT = "2";
 
     @OperationLog(value = "创建任务", type = "Task")
-    public TaskPo createTask(ApiCreateTaskRequest body) {
+    public TaskPo createTask(Boolean sandEmail, ApiCreateTaskRequest body) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         //任务负责人暂时改为非必填
@@ -81,6 +81,13 @@ public class TaskService {
             task.setSerialNumber(maxSerialNumber + 1);
         }
         taskMapper.insert(task);
+        if (sandEmail) {
+            ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(task.getVid());
+            UserPo taskUser = userMapper.selectById(task.getUid());
+            String text = assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), task.getTask());
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务指派通知", text);
+            emailHelper.sendSimpleMailMessage(message);
+        }
         return task;
     }
 
@@ -248,17 +255,24 @@ public class TaskService {
      * @param projectName     项目名称
      * @param projectVersion  项目版本
      * @param projectUserName 项目负责人
-     * @param taskUsername  任务负责人
-     * @param task  任务内容
+     * @param taskUsername    任务负责人
+     * @param task            任务标题
      * @return 邮件文本
      */
     private String assembleEmailMessage(String projectName, String projectVersion, String projectUserName, String taskUsername, String task) {
-        return "申请时间：" + Utils.convertTimestamp2Date(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n" +
+        return "时间：" + Utils.convertTimestamp2Date(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n" +
                 "项目名称： " + projectName + "\n" +
                 "项目版本号： " + projectVersion + "\n" +
                 "项目负责人： " + projectUserName + "\n" +
                 "开发负责人： " + taskUsername + "\n" +
-                "任务内容： " + task;
+                "任务标题： " + task;
+    }
+
+    private String assembleEmailMessage(String projectName, String projectVersion, String task) {
+        return "时间：" + Utils.convertTimestamp2Date(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n" +
+                "项目名称： " + projectName + "\n" +
+                "项目版本号： " + projectVersion + "\n" +
+                "任务标题： " + task;
     }
 
 }

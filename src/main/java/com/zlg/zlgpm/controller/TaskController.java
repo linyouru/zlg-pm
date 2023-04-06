@@ -34,11 +34,11 @@ public class TaskController implements TaskApi {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<ApiBaseResp> createTask(ApiCreateTaskRequest body) {
+    public ResponseEntity<ApiBaseResp> createTask(Boolean sandEmail, ApiCreateTaskRequest body) {
         if (body.getUid().equals(body.getAccepterId())) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12003");
         }
-        TaskPo task = taskService.createTask(body);
+        TaskPo task = taskService.createTask(sandEmail, body);
         if (null != body.getSerialNumber()) {
             //插入新增任务还得改其他任务的序号
             taskService.handleSort(task.getPid(), task.getVid(), body.getSerialNumber(), null, task.getId());
