@@ -662,11 +662,13 @@ paths:
           type: string
           description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中; 多状态使用英文逗号分隔
         - in: query
-          name: projectName
-          type: string
+          name: pid
+          type: integer
+          description: 项目id
         - in: query
-          name: projectVersion
-          type: string
+          name: vid
+          type: integer
+          description: 版本id
         - in: query
           name: uid
           type: integer

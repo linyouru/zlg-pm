@@ -143,7 +143,7 @@ public class TaskService {
         return retTask;
     }
 
-    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion,
+    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid,
                                      String level) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
@@ -151,11 +151,11 @@ public class TaskService {
             String[] split = status.split(",");
             queryWrapper.in("t.status", split);
         }
-        if (StringUtils.hasText(projectName)) {
-            queryWrapper.eq("p.name", projectName);
+        if (null != pid) {
+            queryWrapper.eq("t.pid", pid);
         }
-        if (StringUtils.hasText(projectVersion)) {
-            queryWrapper.eq("pv.version", projectVersion);
+        if (null != vid) {
+            queryWrapper.eq("t.vid", vid);
         }
         if (null != uid) {
             queryWrapper.eq("t.uid", uid);
