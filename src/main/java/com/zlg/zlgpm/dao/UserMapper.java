@@ -11,6 +11,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 @Repository
 public interface UserMapper extends BaseMapper<UserPo> {
 
@@ -22,4 +25,6 @@ public interface UserMapper extends BaseMapper<UserPo> {
     @Select("SELECT DISTINCT u.* FROM project AS p LEFT JOIN `user` AS u ON p.uid = u.id ${ew.customSqlSegment}")
     Page<UserListBo> queryUserListByProjectName(Page<UserListBo> userListBoPage, @Param(Constants.WRAPPER) Wrapper<UserPo> ew);
 
+    @Select("SELECT id,email FROM `user` ${ew.customSqlSegment}")
+    ArrayList<Map<String,Object>> getUserInfo(@Param(Constants.WRAPPER) Wrapper<Map<String,Object>> ew);
 }

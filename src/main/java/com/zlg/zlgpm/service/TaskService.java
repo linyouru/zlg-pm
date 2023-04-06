@@ -50,7 +50,6 @@ public class TaskService {
     @Resource
     private EmailHelper emailHelper;
 
-    private static final String EMAIL_FORM = "noreply_developer@zlg.cn";
     private static final String TASK_CHECK = "3";
     private static final String TASK_END = "1";
     private static final String TASK_TIMEOUT = "2";
@@ -84,8 +83,8 @@ public class TaskService {
         if (sandEmail) {
             ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(task.getVid());
             UserPo taskUser = userMapper.selectById(task.getUid());
-            String text = assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), task.getTask());
-            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务指派通知", text);
+            String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), task.getTask());
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务指派通知", text);
             emailHelper.sendSimpleMailMessage(message);
         }
         return task;
@@ -129,15 +128,15 @@ public class TaskService {
         ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(retTask.getVid());
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
         UserPo taskUser = userMapper.selectById(retTask.getUid());
-        String text = assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
+        String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
         if (TASK_CHECK.equals(task.getStatus())) {
             //任务状态改为[待验收]需要给项目负责人发邮件
-            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
             emailHelper.sendSimpleMailMessage(message);
         }
         if (TASK_END.equals(task.getStatus())) {
             //任务状态改为[已完成]需要给任务负责人发邮件
-            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
             emailHelper.sendSimpleMailMessage(message);
         }
         return retTask;
@@ -249,30 +248,5 @@ public class TaskService {
 
     }
 
-    /**
-     * 拼接邮件信息
-     *
-     * @param projectName     项目名称
-     * @param projectVersion  项目版本
-     * @param projectUserName 项目负责人
-     * @param taskUsername    任务负责人
-     * @param task            任务标题
-     * @return 邮件文本
-     */
-    private String assembleEmailMessage(String projectName, String projectVersion, String projectUserName, String taskUsername, String task) {
-        return "时间：" + Utils.convertTimestamp2Date(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n" +
-                "项目名称： " + projectName + "\n" +
-                "项目版本号： " + projectVersion + "\n" +
-                "项目负责人： " + projectUserName + "\n" +
-                "开发负责人： " + taskUsername + "\n" +
-                "任务标题： " + task;
-    }
-
-    private String assembleEmailMessage(String projectName, String projectVersion, String task) {
-        return "时间：" + Utils.convertTimestamp2Date(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n" +
-                "项目名称： " + projectName + "\n" +
-                "项目版本号： " + projectVersion + "\n" +
-                "任务标题： " + task;
-    }
 
 }

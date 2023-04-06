@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -98,6 +99,14 @@ public class TaskLogService {
             throw new BizException(HttpStatus.NOT_FOUND, "taskLog.13001",taskId);
         }
         return lastTaskLog;
+    }
+
+    public ArrayList<Integer> getTodayTaskLogUid(){
+        long endTime = System.currentTimeMillis();
+        long startTime = endTime - 82800000;
+        QueryWrapper<Integer> wrapper = new QueryWrapper<>();
+        wrapper.between("createTime",Utils.convertTimestamp2Date(startTime, "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(endTime, "yyyy-MM-dd HH:mm:ss"));
+        return taskLogMapper.getTodayTaskLogUid(wrapper);
     }
 
 }

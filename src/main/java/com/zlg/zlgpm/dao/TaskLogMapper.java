@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 @Repository
 public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
 
@@ -54,4 +56,10 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
 
     @Select("SELECT * FROM `task_log` WHERE taskId = #{taskId} ORDER BY createTime DESC LIMIT 1;")
     TaskLogPo getLastTaskLog(Integer taskId);
+
+    /**
+     * 获取今天写了任务日志的uid
+     */
+    @Select("SELECT DISTINCT uid FROM `task_log` ${ew.customSqlSegment}")
+    ArrayList<Integer> getTodayTaskLogUid(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
 }

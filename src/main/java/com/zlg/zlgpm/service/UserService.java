@@ -29,6 +29,7 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService extends ServiceImpl<UserMapper, UserPo> {
@@ -126,7 +127,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     public ApiUserListByPidResponse userListByProjectName(String projectName, Integer currentPage, Integer pageSize) {
         QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
-        wrapper.eq("p.name",projectName);
+        wrapper.eq("p.name", projectName);
         Page<UserListBo> page = new Page<>();
         page.setSize(pageSize);
         page.setCurrent(currentPage);
@@ -160,5 +161,9 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         return dataConvertHelper.convert2ApiUserLoginResponse(userPo);
     }
 
-
+    public ArrayList<Map<String,Object>> getUserInfo() {
+        QueryWrapper<Map<String,Object>> wrapper = new QueryWrapper<>();
+        wrapper.notIn("userName", "叶玉琳", "root", "admin");
+        return userMapper.getUserInfo(wrapper);
+    }
 }
