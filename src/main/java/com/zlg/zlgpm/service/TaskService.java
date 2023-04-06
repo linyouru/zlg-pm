@@ -136,18 +136,18 @@ public class TaskService {
         return retTask;
     }
 
-    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion,
+    public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             String[] split = status.split(",");
             queryWrapper.in("t.status", split);
         }
-        if (StringUtils.hasText(projectName)) {
-            queryWrapper.eq("p.name", projectName);
+        if (null != pid) {
+            queryWrapper.eq("t.pid", pid);
         }
-        if (StringUtils.hasText(projectVersion)) {
-            queryWrapper.eq("pv.version", projectVersion);
+        if (null != vid) {
+            queryWrapper.eq("t.vid", vid);
         }
         if (null != uid) {
             queryWrapper.eq("t.uid", uid);
@@ -243,8 +243,8 @@ public class TaskService {
      * @param projectName     项目名称
      * @param projectVersion  项目版本
      * @param projectUserName 项目负责人
-     * @param taskUsername  任务负责人
-     * @param task  任务内容
+     * @param taskUsername    任务负责人
+     * @param task            任务内容
      * @return 邮件文本
      */
     private String assembleEmailMessage(String projectName, String projectVersion, String projectUserName, String taskUsername, String task) {

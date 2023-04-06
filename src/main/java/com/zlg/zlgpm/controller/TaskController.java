@@ -76,11 +76,11 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid) {
+    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid) {
         if (StringUtils.hasText(sortField) && null == isAsc) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
         }
-        Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, projectUid, status, projectName, projectVersion, uid, startTime, endTime, abnormal, sortField, isAsc, mid);
+        Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, projectUid, status, pid, vid, uid, startTime, endTime, abnormal, sortField, isAsc, mid);
         ApiTaskListResponse apiTaskListResponse = dataConvertHelper.convert2ApiTaskListResponse(taskListBoPage);
         return ResponseEntity.ok().body(apiTaskListResponse);
     }
