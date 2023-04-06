@@ -24,6 +24,9 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         p.uid AS projectUid,\n" +
             "         t.taskType,\n" +
             "         t.task,\n" +
+            "         t.detail,\n" +
+            "         t.level,\n" +
+            "         t.accepterId,\n" +
             "         t.pid,\n" +
             "         t.uid,\n" +
             "         t.`status`,\n" +

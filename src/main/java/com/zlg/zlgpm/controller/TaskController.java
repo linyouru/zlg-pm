@@ -35,8 +35,8 @@ public class TaskController implements TaskApi {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ApiBaseResp> createTask(ApiCreateTaskRequest body) {
-        if(body.getUid().equals(body.getAccepterId())){
-            throw new BizException(HttpStatus.BAD_REQUEST,"task.12003");
+        if (body.getUid().equals(body.getAccepterId())) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12003");
         }
         TaskPo task = taskService.createTask(body);
         if (null != body.getSerialNumber()) {
@@ -79,11 +79,15 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, String projectName, String projectVersion, Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid) {
+    public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status,
+                                                        String projectName, String projectVersion, Integer uid, String startTime,
+                                                        String endTime, String abnormal, String sortField, Boolean isAsc, String mid,
+                                                        String level) {
         if (StringUtils.hasText(sortField) && null == isAsc) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
         }
-        Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, projectUid, status, projectName, projectVersion, uid, startTime, endTime, abnormal, sortField, isAsc, mid);
+        Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, projectUid, status, projectName, projectVersion, uid,
+                startTime, endTime, abnormal, sortField, isAsc, mid, level);
         ApiTaskListResponse apiTaskListResponse = dataConvertHelper.convert2ApiTaskListResponse(taskListBoPage);
         return ResponseEntity.ok().body(apiTaskListResponse);
     }

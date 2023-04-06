@@ -24,7 +24,7 @@ public class TaskListBo {
     private String remark;
     private String link;
     private String module;
-    private Integer level;
+    private Integer moduleLevel;
     private String updateTime;
     private String createTime;
     private String overtime;
@@ -35,6 +35,9 @@ public class TaskListBo {
     private String acceptanceTime;
     private Integer createdUid;
     private String createdUserNickname;
+    private String detail;
+    private Integer accepterId;
+    private Integer level;
 
     public TaskListBo() {
     }
@@ -64,7 +67,7 @@ public class TaskListBo {
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
                 ", module='" + module + '\'' +
-                ", level=" + level +
+                ", moduleLevel=" + moduleLevel +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", overtime='" + overtime + '\'' +
@@ -75,7 +78,34 @@ public class TaskListBo {
                 ", acceptanceTime='" + acceptanceTime + '\'' +
                 ", createdUid=" + createdUid +
                 ", createdUserNickname='" + createdUserNickname + '\'' +
+                ", detail='" + detail + '\'' +
+                ", accepterId=" + accepterId +
+                ", level=" + level +
                 '}';
+    }
+
+    public Integer getModuleLevel() {
+        return moduleLevel;
+    }
+
+    public void setModuleLevel(Integer moduleLevel) {
+        this.moduleLevel = moduleLevel;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public Integer getAccepterId() {
+        return accepterId;
+    }
+
+    public void setAccepterId(Integer accepterId) {
+        this.accepterId = accepterId;
     }
 
     public void setProjectUid(Integer projectUid) {

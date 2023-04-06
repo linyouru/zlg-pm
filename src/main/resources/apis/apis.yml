@@ -693,6 +693,10 @@ paths:
           name: mid
           type: string
           description: 功能模块id,多模块用英文逗号分隔
+        - in: query
+          name: level
+          type: string
+          description: 优先级:1低,2中,3高;多优先级用英文逗号分隔
       responses:
         200:
           description: success
@@ -1771,6 +1775,15 @@ definitions:
       createdUserNickname:
         type: string
         description: 任务创建人昵称
+      level:
+        type: integer
+        description: 任务优先级
+      detail:
+        type: string
+        description: 任务详情
+      accepterId:
+        type: integer
+        description: 验收人id
   TaskStatisticsResponse:
     type: object
     properties:
