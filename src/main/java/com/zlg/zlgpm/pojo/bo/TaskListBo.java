@@ -24,7 +24,7 @@ public class TaskListBo {
     private String remark;
     private String link;
     private String module;
-    private Integer level;
+    private Integer moduleLevel;
     private String updateTime;
     private String createTime;
     private String overtime;
@@ -64,7 +64,7 @@ public class TaskListBo {
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
                 ", module='" + module + '\'' +
-                ", level=" + level +
+                ", moduleLevel=" + moduleLevel +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", overtime='" + overtime + '\'' +
@@ -90,12 +90,12 @@ public class TaskListBo {
         this.id = id;
     }
 
-    public Integer getLevel() {
-        return level;
+    public Integer getModuleLevel() {
+        return moduleLevel;
     }
 
-    public void setLevel(Integer level) {
-        this.level = level;
+    public void setModuleLevel(Integer moduleLevel) {
+        this.moduleLevel = moduleLevel;
     }
 
     public String getProjectName() {

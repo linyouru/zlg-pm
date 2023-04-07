@@ -243,7 +243,7 @@ public class DataConvertHelper {
         response.setRemark(task.getRemark());
         response.setLink(task.getLink());
         response.setModule(task.getModule());
-        response.setModuleLevel(task.getLevel());
+        response.setModuleLevel(task.getModuleLevel());
         response.setWarning(task.getWarning());
         response.setOvertime(task.getOvertime());
         response.setWorkTimeCount(task.getWorkTimeCount());
