@@ -26,6 +26,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         t.task,\n" +
             "         t.pid,\n" +
             "         t.uid,\n" +
+            "         t.vid,\n" +
             "         t.`status`,\n" +
             "         u.nickName,\n" +
             "         t.playStartTime,\n" +

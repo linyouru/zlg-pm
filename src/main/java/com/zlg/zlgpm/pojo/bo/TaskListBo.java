@@ -35,6 +35,7 @@ public class TaskListBo {
     private String acceptanceTime;
     private Integer createdUid;
     private String createdUserNickname;
+    private Integer vid;
 
     public TaskListBo() {
     }
@@ -76,6 +77,14 @@ public class TaskListBo {
                 ", createdUid=" + createdUid +
                 ", createdUserNickname='" + createdUserNickname + '\'' +
                 '}';
+    }
+
+    public Integer getVid() {
+        return vid;
+    }
+
+    public void setVid(Integer vid) {
+        this.vid = vid;
     }
 
     public void setProjectUid(Integer projectUid) {

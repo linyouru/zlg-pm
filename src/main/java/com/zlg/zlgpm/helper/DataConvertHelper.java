@@ -254,6 +254,7 @@ public class DataConvertHelper {
         response.setCreatedUid(task.getCreatedUid());
         response.setProjectUid(task.getProjectUid());
         response.setCreatedUserNickname(task.getCreatedUserNickname());
+        response.setVid(task.getVid());
         return response;
     }
 
