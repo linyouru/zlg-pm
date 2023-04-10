@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.pojo.bo.ProjectVersionBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
@@ -84,4 +85,7 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
 
     @Select("UPDATE `project_task` SET serialNumber = serialNumber-1 ${ew.customSqlSegment}")
     Integer retrusiveTask(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
+
+    @Select("SELECT v.id, v.version, v.pid, p.`name` FROM task_relevance AS r LEFT JOIN project_version AS v ON r.vid = v.id LEFT JOIN project AS p ON v.pid = p.id ${ew.customSqlSegment}")
+    List<ProjectVersionBo>getTaskRelevance(@Param(Constants.WRAPPER) Wrapper<String> ew);
 }

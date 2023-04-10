@@ -731,7 +731,7 @@ paths:
           description: parameter error
         500:
           description: server error
-  /v1/tasl/relevance/list:
+  /v1/task/relevance/list:
     get:
       tags:
         - task
@@ -750,6 +750,32 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/TaskListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /v1/task/relevance:
+    get:
+      tags:
+        - task
+      summary: 获取任务关联的外部项目版本信息
+      description: 获取任务关联的外部项目版本信息
+      operationId: getTaskRelevance
+      produces:
+        - "application/json"
+      parameters:
+        - name: tid
+          in: query
+          type: integer
+          required: true
+          description: 任务id
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ProjectVersionsAllResponse"
         400:
           description: parameter error
         500:
