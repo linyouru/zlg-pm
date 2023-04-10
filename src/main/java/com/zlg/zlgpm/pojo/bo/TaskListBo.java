@@ -38,6 +38,7 @@ public class TaskListBo {
     private String detail;
     private Integer accepterId;
     private Integer level;
+    private Integer vid;
 
     public TaskListBo() {
     }
@@ -82,6 +83,14 @@ public class TaskListBo {
                 ", accepterId=" + accepterId +
                 ", level=" + level +
                 '}';
+    }
+
+    public Integer getVid() {
+        return vid;
+    }
+
+    public void setVid(Integer vid) {
+        this.vid = vid;
     }
 
     public Integer getModuleLevel() {

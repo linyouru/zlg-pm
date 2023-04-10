@@ -1725,6 +1725,9 @@ definitions:
       uid:
         type: integer
         description: 开发负责人id
+      vid:
+        type: integer
+        description: 项目版本id
       status:
         type: string
         description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
