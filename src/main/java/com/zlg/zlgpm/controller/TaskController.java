@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import com.zlg.zlgpm.pojo.bo.ProjectVersionBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
@@ -63,6 +64,13 @@ public class TaskController implements TaskApi {
     }
 
     @Override
+    public ResponseEntity<List<ApiProjectVersionsAllResponse>> getTaskRelevance(Integer tid) {
+        List<ProjectVersionBo> taskRelevance = taskService.getTaskRelevance(tid);
+        List<ApiProjectVersionsAllResponse> responses = dataConvertHelper.convert2ApiProjectVersionsAllResponse(taskRelevance);
+        return ResponseEntity.ok().body(responses);
+    }
+
+    @Override
     public ResponseEntity<ApiTaskListResponse> getTaskRelevanceList(Integer vid) {
         Page<TaskListBo> taskRelevanceList = taskRelevanceService.getTaskRelevanceList(vid);
         ApiTaskListResponse apiTaskListResponse = dataConvertHelper.convert2ApiTaskListResponse(taskRelevanceList);
@@ -97,8 +105,8 @@ public class TaskController implements TaskApi {
         taskService.updateTask(id, body);
         //更新关联项目关系
         String vidStr = body.getRelevance();
+        taskRelevanceService.deleteTaskRelevanceByTid(id);
         if (StringUtils.hasText(vidStr)) {
-            taskRelevanceService.deleteTaskRelevanceByTid(id);
             String[] split = vidStr.split(",");
             ArrayList<TaskRelevancePo> taskRelevancePos = new ArrayList<>();
             for (String vid : split) {
