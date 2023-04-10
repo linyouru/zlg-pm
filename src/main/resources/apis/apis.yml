@@ -560,6 +560,24 @@ paths:
           description: parameter error
         500:
                 description: server error
+  /v1/project/versions/all:
+    get:
+      tags:
+        - project
+      summary: 获取全部项目版本
+      description: 获取全部项目版本
+      operationId: getProjectVersionsAll
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ProjectVersionsAllResponse"
+        500:
+          description: server error
   /v1/task:
     post:
       tags:
@@ -1512,6 +1530,21 @@ definitions:
       version:
         type: string
         description: 项目版本
+  ProjectVersionsAllResponse:
+    type: object
+    properties:
+      vid:
+        type: integer
+        description: 版本id
+      version:
+        type: string
+        description: 版本名
+      pid:
+        type: integer
+        description: 项目id
+      projectName:
+        type: string
+        description: 项目名
   UserListByPidResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"

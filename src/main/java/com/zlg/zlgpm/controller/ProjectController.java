@@ -7,6 +7,7 @@ import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
+import com.zlg.zlgpm.pojo.bo.ProjectVersionBo;
 import com.zlg.zlgpm.pojo.po.ProjectModulePo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.helper.DataConvertHelper;
@@ -144,6 +145,13 @@ public class ProjectController implements ProjectApi {
     public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(Integer pid) {
         List<ProjectVersionPo> projectVersions = projectVersionService.getProjectVersions(pid);
         List<ApiProjectVersionsResponse> responses = dataConvertHelper.convert2ApiProjectVersionsResponse(projectVersions);
+        return ResponseEntity.ok().body(responses);
+    }
+
+    @Override
+    public ResponseEntity<List<ApiProjectVersionsAllResponse>> getProjectVersionsAll() {
+        List<ProjectVersionBo> projectVersionsAll = projectVersionService.getProjectVersionsAll();
+        List<ApiProjectVersionsAllResponse> responses = dataConvertHelper.convert2ApiProjectVersionsAllResponse(projectVersionsAll);
         return ResponseEntity.ok().body(responses);
     }
 
