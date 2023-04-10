@@ -500,4 +500,17 @@ public class DataConvertHelper {
         return projectVersionPo;
     }
 
+    public List<ApiProjectVersionsAllResponse> convert2ApiProjectVersionsAllResponse(List<ProjectVersionBo> projectVersionsAll){
+        ArrayList<ApiProjectVersionsAllResponse> list = new ArrayList<>();
+        for (ProjectVersionBo projectVersionBo : projectVersionsAll) {
+            ApiProjectVersionsAllResponse response = new ApiProjectVersionsAllResponse();
+            response.setPid(projectVersionBo.getPid());
+            response.setProjectName(projectVersionBo.getName());
+            response.setVid(projectVersionBo.getId());
+            response.setVersion(projectVersionBo.getVersion());
+            list.add(response);
+        }
+        return list;
+    }
+
 }

@@ -7,6 +7,7 @@ import com.zlg.zlgpm.dao.ProjectVersionMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
+import com.zlg.zlgpm.pojo.bo.ProjectVersionBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.ProjectVersionPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
@@ -30,6 +31,10 @@ public class ProjectVersionService {
         QueryWrapper<ProjectVersionPo> wrapper = new QueryWrapper<>();
         wrapper.eq("pid", pid);
         return projectVersionMapper.selectList(wrapper);
+    }
+
+    public List<ProjectVersionBo> getProjectVersionsAll(){
+        return projectVersionMapper.getProjectVersionsAll();
     }
 
     public void createProjectVersion(ProjectVersionPo projectVersion) {
