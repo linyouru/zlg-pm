@@ -249,5 +249,10 @@ public class TaskService {
 
     }
 
+    public List<ProjectVersionBo> getTaskRelevance(Integer tid){
+        QueryWrapper<String> wrapper = new QueryWrapper<>();
+        wrapper.eq("r.tid", tid);
+        return taskMapper.getTaskRelevance(wrapper);
+    }
 
 }
