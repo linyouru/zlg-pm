@@ -37,7 +37,11 @@ public class TaskRelevanceService extends ServiceImpl<TaskRelevanceMapper, TaskR
             taskIdList.add(taskRelevancePo.getTid());
         }
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("t.id", taskIdList);
+        if(taskIdList.size() > 0) {
+            queryWrapper.in("t.id", taskIdList);
+        }else {
+            queryWrapper.eq("t.id",-1);
+        }
         Page<TaskListBo> page = new Page<>();
         page.setCurrent(1);
         page.setSize(500);
