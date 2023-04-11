@@ -77,7 +77,7 @@ public class TaskService {
             QueryWrapper<Integer> wrapper = new QueryWrapper<>();
             wrapper.eq("pid", task.getPid());
             wrapper.eq("vid", task.getVid());
-            Integer maxSerialNumber = taskMapper.getMaxSerialNumber(wrapper);
+            int maxSerialNumber = taskMapper.getMaxSerialNumber(wrapper) != null ? taskMapper.getMaxSerialNumber(wrapper) : 0;
             task.setSerialNumber(maxSerialNumber + 1);
         }
         taskMapper.insert(task);
@@ -249,7 +249,7 @@ public class TaskService {
 
     }
 
-    public List<ProjectVersionBo> getTaskRelevance(Integer tid){
+    public List<ProjectVersionBo> getTaskRelevance(Integer tid) {
         QueryWrapper<String> wrapper = new QueryWrapper<>();
         wrapper.eq("r.tid", tid);
         return taskMapper.getTaskRelevance(wrapper);
