@@ -78,7 +78,7 @@ public class TaskService {
             QueryWrapper<Integer> wrapper = new QueryWrapper<>();
             wrapper.eq("pid", task.getPid());
             wrapper.eq("vid", task.getVid());
-            Integer maxSerialNumber = taskMapper.getMaxSerialNumber(wrapper);
+            int maxSerialNumber = taskMapper.getMaxSerialNumber(wrapper) != null ? taskMapper.getMaxSerialNumber(wrapper) : 0;
             task.setSerialNumber(maxSerialNumber + 1);
         }
         taskMapper.insert(task);
