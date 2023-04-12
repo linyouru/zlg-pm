@@ -56,7 +56,7 @@ public class ProjectController implements ProjectApi {
         ProjectPo project = projectService.createProject(body);
         //添加项目和成员关系
         String memberUid = body.getMemberUid();
-        if (null != memberUid) {
+        if (StringUtils.hasText(memberUid)) {
             List<UserProjectPo> list = generateUserProjectPoList(memberUid, project.getUid(), project.getId());
             userProjectService.saveBatch(list);
         }
