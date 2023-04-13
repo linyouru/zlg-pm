@@ -1781,6 +1781,9 @@ definitions:
       createdUserNickname:
         type: string
         description: 任务创建人昵称
+      serialNumber:
+        type: integer
+        description: 任务序号
   TaskStatisticsResponse:
     type: object
     properties:

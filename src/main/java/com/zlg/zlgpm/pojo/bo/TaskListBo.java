@@ -37,6 +37,8 @@ public class TaskListBo {
     private String createdUserNickname;
     private Integer vid;
 
+    private Integer serialNumber;
+
     public TaskListBo() {
     }
 
@@ -76,7 +78,17 @@ public class TaskListBo {
                 ", acceptanceTime='" + acceptanceTime + '\'' +
                 ", createdUid=" + createdUid +
                 ", createdUserNickname='" + createdUserNickname + '\'' +
+                ", vid=" + vid +
+                ", serialNumber=" + serialNumber +
                 '}';
+    }
+
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Integer getVid() {
