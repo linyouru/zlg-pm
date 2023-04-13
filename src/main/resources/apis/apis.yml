@@ -1853,6 +1853,9 @@ definitions:
       accepterId:
         type: integer
         description: 验收人id
+      serialNumber:
+        type: integer
+        description: 任务序号
   TaskStatisticsResponse:
     type: object
     properties:

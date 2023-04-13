@@ -268,6 +268,7 @@ public class DataConvertHelper {
         response.setDetail(task.getDetail());
         response.setAccepterId(task.getAccepterId());
         response.setVid(task.getVid());
+        response.setSerialNumber(task.getSerialNumber());
         return response;
     }
 

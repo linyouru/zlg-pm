@@ -51,7 +51,8 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS overtime,\n" +
             "         IF(((t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS warning,\n"+
             "         task_1.workTimeCount,\n" +
-            "         task_1.progress\n"+
+            "         task_1.progress,\n"+
+            "         t.serialNumber\n"+
             "FROM `project_task` AS t\n" +
             "LEFT JOIN `project` AS p\n" +
             "    ON t.pid = p.id\n" +

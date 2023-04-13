@@ -40,6 +40,8 @@ public class TaskListBo {
     private Integer level;
     private Integer vid;
 
+    private Integer serialNumber;
+
     public TaskListBo() {
     }
 
@@ -82,7 +84,17 @@ public class TaskListBo {
                 ", detail='" + detail + '\'' +
                 ", accepterId=" + accepterId +
                 ", level=" + level +
+                ", vid=" + vid +
+                ", serialNumber=" + serialNumber +
                 '}';
+    }
+
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Integer getVid() {
