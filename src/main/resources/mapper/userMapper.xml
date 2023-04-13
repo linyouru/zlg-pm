@@ -16,8 +16,8 @@
                     uid,
                     COUNT(uid) AS taskTotal,
                     SUM(IF(`status` = "1", 1, 0)) AS taskFinishCount,
-                    SUM(IF(timely = "4", 1, 0)) AS taskTimelyCount,
-                    SUM(IF(timely = "3", 1, 0)) AS taskTimeoutCount
+                    SUM(IF(timely = "1", 1, 0)) AS taskTimelyCount,
+                    SUM(IF(timely = "2", 1, 0)) AS taskTimeoutCount
                 FROM
                     project_task
                 <if test="startTime !=null and endTime !=null">
