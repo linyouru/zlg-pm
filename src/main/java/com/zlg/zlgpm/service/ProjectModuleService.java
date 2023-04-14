@@ -44,6 +44,7 @@ public class ProjectModuleService extends ServiceImpl<ProjectModuleMapper, Proje
     public List<ProjectModulePo> queryProjectModule(int pid) {
         QueryWrapper<ProjectModulePo> wrapper = new QueryWrapper<>();
         wrapper.eq("pid", pid);
+        wrapper.orderByAsc("level");
         return projectModuleMapper.selectList(wrapper);
     }
 
