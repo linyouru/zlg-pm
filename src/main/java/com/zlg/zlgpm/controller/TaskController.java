@@ -81,8 +81,8 @@ public class TaskController implements TaskApi {
     }
 
     @Override
-    public ResponseEntity<ApiBaseResp> handleTaskSort(Integer taskId, Integer newSerialNumber) {
-        taskService.handleTaskSort(taskId, newSerialNumber);
+    public ResponseEntity<ApiBaseResp> handleTaskSort(String taskId, Integer newSerialNumber) {
+        taskService.handleTaskSort(taskId.split(","), newSerialNumber);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
     }
 

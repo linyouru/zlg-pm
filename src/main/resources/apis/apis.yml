@@ -1125,16 +1125,16 @@ paths:
       tags:
         - task
       summary: 拖拽任务排序
-      description: 拖拽任务排序
+      description: 若是按功能块移动,taskId必须按移动功能块中的任务SerialNumber顺序拼接为字符串
       operationId: handleTaskSort
       produces:
         - "application/json"
       parameters:
         - in: query
           name: taskId
-          type: integer
+          type: string
           required: true
-          description: 被移动的任务id
+          description: 被移动的任务id,多个用英文逗号分隔
         - in: query
           name: newSerialNumber
           type: integer
@@ -1678,8 +1678,6 @@ definitions:
         description: 优先级，1低、2中、3高
   UpdateTaskRequest:
     type: object
-    required:
-      - uid
     properties:
       taskType:
         type: string

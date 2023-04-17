@@ -27,10 +27,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -207,16 +210,37 @@ public class TaskService {
         return taskMapper.selectTaskStatistics(wrapper);
     }
 
-    public void handleTaskSort(Integer taskId, Integer newSerialNumber) {
-        TaskPo taskPo = taskMapper.selectById(taskId);
-        int oldSerialNumber = taskPo.getSerialNumber();
-        taskPo.setSerialNumber(newSerialNumber);
-        taskMapper.updateById(taskPo);
-        this.handleSort(taskPo.getPid(), taskPo.getVid(), newSerialNumber, oldSerialNumber, taskId);
+    /**
+     * 修改被拖拽排序任务的序号
+     *
+     * @param taskIds 任务ids
+     * @param newSerialNumber 新序号
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void handleTaskSort(String[] taskIds, Integer newSerialNumber) {
+        if (taskIds.length > 0) {
+            //按功能模块拖拽
+            Integer firstTaskId = Integer.parseInt(taskIds[0]);
+            TaskPo taskPo = taskMapper.selectById(firstTaskId);
+            Integer firstTaskOldSerialNumber = taskPo.getSerialNumber();
+            ArrayList<String> taskIdList = new ArrayList<>();
+            Collections.addAll(taskIdList, taskIds);
+            if (firstTaskOldSerialNumber > newSerialNumber) {
+                //前移,先移动序号大的再移动序号小的
+                Collections.reverse(taskIdList);
+            }
+            for (String taskId : taskIdList) {
+                TaskPo task = taskMapper.selectById(taskId);
+                Integer oldSerialNumber = task.getSerialNumber();
+                task.setSerialNumber(newSerialNumber);
+                taskMapper.updateById(task);
+                this.handleSort(task.getPid(), task.getVid(), newSerialNumber, oldSerialNumber, Integer.parseInt(taskId));
+            }
+        }
     }
 
     /**
-     * 拖拽排序任务
+     * 修改受拖拽排序影响的任务的序号
      *
      * @param pid             项目id
      * @param vid             版本id
