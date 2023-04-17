@@ -82,7 +82,7 @@ public class ProjectService {
     public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         QueryWrapper<ProjectBo> queryWrapper = new QueryWrapper<>();
         if (null != name) {
-            queryWrapper.likeRight("name", name);
+            queryWrapper.like("name", name);
         }
         if (StringUtils.hasText(sortField)) {
             String[] split = sortField.split(",");
