@@ -41,6 +41,7 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
             "         pv.version,\n" +
             "         tl.log,\n" +
             "         tl.feedback,\n" +
+            "         tl.workTime,\n" +
             "         tl.createTime\n" +
             "FROM `task_log` AS tl\n" +
             "LEFT JOIN `user` AS u\n" +
