@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `project_task`
     `uid`                 int(8)                                   DEFAULT NULL COMMENT '用户id',
     `pid`                 int(8)      NOT NULL COMMENT '项目id',
     `createdUid`          int(8)      NOT NULL COMMENT '任务发布者id',
-    `accepterId`          tinyint(4)                               DEFAULT NULL COMMENT '验收人id',
+    `accepterUid`          tinyint(4)                               DEFAULT NULL COMMENT '验收人id',
     `playStartTime`       varchar(64)                              DEFAULT NULL COMMENT '计划开始时间',
     `playEndTime`         varchar(64)                              DEFAULT NULL COMMENT '计划结束时间',
     `timely`              varchar(8)                               DEFAULT NULL COMMENT '及时性 1是；2否',
