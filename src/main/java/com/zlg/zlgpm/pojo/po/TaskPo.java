@@ -31,8 +31,6 @@ public class TaskPo implements Serializable {
     @TableField
     private Integer createdUid;
     @TableField
-    private String createdUserNickname;
-    @TableField
     private Integer accepterId;
     @TableField
     private Integer level;
@@ -242,14 +240,6 @@ public class TaskPo implements Serializable {
         this.acceptanceTime = acceptanceTime;
     }
 
-    public String getCreatedUserNickname() {
-        return createdUserNickname;
-    }
-
-    public void setCreatedUserNickname(String createdUserNickname) {
-        this.createdUserNickname = createdUserNickname;
-    }
-
     public Integer getVid() {
         return vid;
     }
@@ -269,7 +259,6 @@ public class TaskPo implements Serializable {
                 ", pid=" + pid +
                 ", vid=" + vid +
                 ", createdUid=" + createdUid +
-                ", createdUserNickname='" + createdUserNickname + '\'' +
                 ", playStartTime='" + playStartTime + '\'' +
                 ", playEndTime='" + playEndTime + '\'' +
                 ", acceptanceTime='" + acceptanceTime + '\'' +

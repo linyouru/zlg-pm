@@ -26,5 +26,8 @@ public interface UserMapper extends BaseMapper<UserPo> {
     Page<UserListBo> queryUserListByProjectName(Page<UserListBo> userListBoPage, @Param(Constants.WRAPPER) Wrapper<UserPo> ew);
 
     @Select("SELECT id,email FROM `user` ${ew.customSqlSegment}")
-    ArrayList<Map<String,Object>> getUserInfo(@Param(Constants.WRAPPER) Wrapper<Map<String,Object>> ew);
+    ArrayList<Map<String, Object>> getUserInfo(@Param(Constants.WRAPPER) Wrapper<Map<String, Object>> ew);
+
+    @Select("SELECT id,userName,nickName FROM `user`;")
+    ArrayList<UserPo> getAllUserInfo();
 }

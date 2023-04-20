@@ -74,7 +74,6 @@ public class TaskService {
             throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", task.getPid());
         }
         task.setCreatedUid(currentUser.getId().intValue());
-        task.setCreatedUserNickname(currentUser.getNickName());
         //设置任务序号
         if (null == task.getSerialNumber()) {
             QueryWrapper<Integer> wrapper = new QueryWrapper<>();
@@ -196,7 +195,23 @@ public class TaskService {
         Page<TaskListBo> taskListBoPage = new Page<>();
         taskListBoPage.setCurrent(currentPage);
         taskListBoPage.setSize(pageSize);
-        return taskMapper.selectPage(taskListBoPage, queryWrapper);
+        Page<TaskListBo> taskListBo = taskMapper.selectPage(taskListBoPage, queryWrapper);
+        ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
+        //填充各种人的昵称
+        for (TaskListBo task : taskListBo.getRecords()) {
+            for (UserPo user : allUserInfo) {
+                if (task.getUid() != null && Long.parseLong(task.getUid() + "") == user.getId()) {
+                    task.setNickName(user.getNickName());
+                }
+                if (task.getAccepterUid() != null && Long.parseLong(task.getAccepterUid() + "") == user.getId()) {
+                    task.setAccepterNickName(user.getNickName());
+                }
+                if (task.getCreatedUid() != null && Long.parseLong(task.getCreatedUid() + "") == user.getId()) {
+                    task.setCreatedUserNickname(user.getNickName());
+                }
+            }
+        }
+        return taskListBo;
     }
 
     public TaskStatisticsBo selectTaskStatistics(Integer pid, Integer uid) {
@@ -213,7 +228,7 @@ public class TaskService {
     /**
      * 修改被拖拽排序任务的序号
      *
-     * @param taskIds 任务ids
+     * @param taskIds         任务ids
      * @param newSerialNumber 新序号
      */
     @Transactional(rollbackFor = Exception.class)

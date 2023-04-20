@@ -36,7 +36,8 @@ public class TaskListBo {
     private Integer createdUid;
     private String createdUserNickname;
     private String detail;
-    private Integer accepterId;
+    private Integer accepterUid;
+    private String accepterNickName;
     private Integer level;
     private Integer vid;
 
@@ -82,11 +83,20 @@ public class TaskListBo {
                 ", createdUid=" + createdUid +
                 ", createdUserNickname='" + createdUserNickname + '\'' +
                 ", detail='" + detail + '\'' +
-                ", accepterId=" + accepterId +
+                ", accepterUid=" + accepterUid +
+                ", accepterNickName='" + accepterNickName + '\'' +
                 ", level=" + level +
                 ", vid=" + vid +
                 ", serialNumber=" + serialNumber +
                 '}';
+    }
+
+    public String getAccepterNickName() {
+        return accepterNickName;
+    }
+
+    public void setAccepterNickName(String accepterNickName) {
+        this.accepterNickName = accepterNickName;
     }
 
     public Integer getSerialNumber() {
@@ -121,12 +131,12 @@ public class TaskListBo {
         this.detail = detail;
     }
 
-    public Integer getAccepterId() {
-        return accepterId;
+    public Integer getAccepterUid() {
+        return accepterUid;
     }
 
-    public void setAccepterId(Integer accepterId) {
-        this.accepterId = accepterId;
+    public void setAccepterUid(Integer accepterUid) {
+        this.accepterUid = accepterUid;
     }
 
     public void setProjectUid(Integer projectUid) {

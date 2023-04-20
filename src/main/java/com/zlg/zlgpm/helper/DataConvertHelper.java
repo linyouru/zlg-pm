@@ -266,9 +266,10 @@ public class DataConvertHelper {
         response.setCreatedUserNickname(task.getCreatedUserNickname());
         response.setLevel(task.getLevel());
         response.setDetail(task.getDetail());
-        response.setAccepterId(task.getAccepterId());
+        response.setAccepterId(task.getAccepterUid());
         response.setVid(task.getVid());
         response.setSerialNumber(task.getSerialNumber());
+        response.setAccepterNickName(task.getAccepterNickName());
         return response;
     }
 
