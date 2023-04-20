@@ -36,7 +36,7 @@ public class TaskController implements TaskApi {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ApiBaseResp> createTask(Boolean sandEmail, ApiCreateTaskRequest body) {
-        if (body.getUid().equals(body.getAccepterId())) {
+        if (body.getUid().equals(body.getAccepterUid())) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12003");
         }
         TaskPo task = taskService.createTask(sandEmail, body);

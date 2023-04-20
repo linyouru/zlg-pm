@@ -1613,7 +1613,7 @@ definitions:
       - mid
       - haveDocument
       - level
-      - accepterId
+      - accepterUid
     properties:
       pid:
         type: integer
@@ -1670,7 +1670,7 @@ definitions:
       serialNumber:
         type: integer
         description: 任务序号(拖拽排序模式中,右键插入任务的情况下必填)
-      accepterId:
+      accepterUid:
         type: integer
         description: 验收人Id
       level:
@@ -1746,7 +1746,7 @@ definitions:
       relevance:
         type: string
         description: 任务关联项目版本id,多个用英文逗号分隔
-      accepterId:
+      accepterUid:
         type: integer
         description: 验收人Id
       level:
@@ -1848,7 +1848,7 @@ definitions:
       detail:
         type: string
         description: 任务详情
-      accepterId:
+      accepterUid:
         type: integer
         description: 验收人id
       accepterNickName:

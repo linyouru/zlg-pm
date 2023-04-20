@@ -31,7 +31,7 @@ public class TaskPo implements Serializable {
     @TableField
     private Integer createdUid;
     @TableField
-    private Integer accepterId;
+    private Integer accepterUid;
     @TableField
     private Integer level;
     @TableField
@@ -80,12 +80,12 @@ public class TaskPo implements Serializable {
         this.detail = detail;
     }
 
-    public Integer getAccepterId() {
-        return accepterId;
+    public Integer getAccepterUid() {
+        return accepterUid;
     }
 
-    public void setAccepterId(Integer accepterId) {
-        this.accepterId = accepterId;
+    public void setAccepterUid(Integer accepterUid) {
+        this.accepterUid = accepterUid;
     }
 
     public Integer getLevel() {

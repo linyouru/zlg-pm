@@ -199,7 +199,7 @@ public class DataConvertHelper {
         task.setVid(taskRequest.getVid());
         task.setSerialNumber(taskRequest.getSerialNumber());
         task.setDetail(taskRequest.getDetail());
-        task.setAccepterId(taskRequest.getAccepterId());
+        task.setAccepterUid(taskRequest.getAccepterUid());
         task.setLevel(taskRequest.getLevel());
         return task;
     }
@@ -225,7 +225,7 @@ public class DataConvertHelper {
         task.setVid(taskRequest.getVid());
         task.setDetail(taskRequest.getDetail());
         task.setLevel(taskRequest.getLevel());
-        task.setAccepterId(taskRequest.getAccepterId());
+        task.setAccepterUid(taskRequest.getAccepterUid());
         return task;
     }
 
@@ -266,7 +266,7 @@ public class DataConvertHelper {
         response.setCreatedUserNickname(task.getCreatedUserNickname());
         response.setLevel(task.getLevel());
         response.setDetail(task.getDetail());
-        response.setAccepterId(task.getAccepterUid());
+        response.setAccepterUid(task.getAccepterUid());
         response.setVid(task.getVid());
         response.setSerialNumber(task.getSerialNumber());
         response.setAccepterNickName(task.getAccepterNickName());
