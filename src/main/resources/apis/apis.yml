@@ -579,6 +579,29 @@ paths:
         500:
           description: server error
   /v1/task:
+    get:
+      tags:
+        - task
+      summary: 查询任务信息
+      description: 查询任务信息
+      operationId: queryTask
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: 任务id
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
     post:
       tags:
         - task

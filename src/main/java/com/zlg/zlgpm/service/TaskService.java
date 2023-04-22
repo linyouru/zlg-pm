@@ -145,6 +145,15 @@ public class TaskService {
         return retTask;
     }
 
+    public  TaskListBo queryTask(Integer id){
+        QueryWrapper<TaskListBo> wrapper = new QueryWrapper<>();
+        wrapper.eq("t.id",id);
+        TaskListBo taskListBo = taskMapper.queryTask(wrapper);
+        ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
+        fillNickName(taskListBo,allUserInfo);
+        return taskListBo;
+    }
+
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid,
                                      String level) {
@@ -287,19 +296,23 @@ public class TaskService {
     public Page<TaskListBo> taskListFillNickName(Page<TaskListBo> taskListBo){
         ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
         for (TaskListBo task : taskListBo.getRecords()) {
-            for (UserPo user : allUserInfo) {
-                if (task.getUid() != null && Long.parseLong(task.getUid() + "") == user.getId()) {
-                    task.setNickName(user.getNickName());
-                }
-                if (task.getAccepterUid() != null && Long.parseLong(task.getAccepterUid() + "") == user.getId()) {
-                    task.setAccepterNickName(user.getNickName());
-                }
-                if (task.getCreatedUid() != null && Long.parseLong(task.getCreatedUid() + "") == user.getId()) {
-                    task.setCreatedUserNickname(user.getNickName());
-                }
-            }
+            fillNickName(task,allUserInfo);
         }
         return taskListBo;
+    }
+
+    private void fillNickName(TaskListBo task,ArrayList<UserPo> allUserInfo){
+        for (UserPo user : allUserInfo) {
+            if (task.getUid() != null && Long.parseLong(task.getUid() + "") == user.getId()) {
+                task.setNickName(user.getNickName());
+            }
+            if (task.getAccepterUid() != null && Long.parseLong(task.getAccepterUid() + "") == user.getId()) {
+                task.setAccepterNickName(user.getNickName());
+            }
+            if (task.getCreatedUid() != null && Long.parseLong(task.getCreatedUid() + "") == user.getId()) {
+                task.setCreatedUserNickname(user.getNickName());
+            }
+        }
     }
 
 }

@@ -87,6 +87,16 @@ public class TaskController implements TaskApi {
     }
 
     @Override
+    public ResponseEntity<ApiTaskResponse> queryTask(Integer id) {
+        TaskListBo taskListBo = taskService.queryTask(id);
+        if(taskListBo==null){
+            throw new BizException(HttpStatus.BAD_REQUEST,"task.12001",id);
+        }
+        ApiTaskResponse response = dataConvertHelper.convert2ApiTaskResponse(taskListBo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Override
     public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status,
                                                         Integer pid, Integer vid, Integer uid, String startTime,
                                                         String endTime, String abnormal, String sortField, Boolean isAsc, String mid,

@@ -71,6 +71,58 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "${ew.customSqlSegment}\n")
     Page<TaskListBo> selectPage(Page<TaskListBo> taskListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
 
+    @Select("SELECT t.id,\n" +
+            "         p.`name` AS projectName,\n" +
+            "         pv.version AS projectVersion,\n" +
+            "         p.uid AS projectUid,\n" +
+            "         t.taskType,\n" +
+            "         t.task,\n" +
+            "         t.detail,\n" +
+            "         t.`level`,\n" +
+            "         t.pid,\n" +
+            "         t.uid,\n" +
+            "         t.vid,\n" +
+            "         t.`status`,\n" +
+            "         t.playStartTime,\n" +
+            "         t.playEndTime,\n" +
+            "         t.timely,\n" +
+            "         t.quality,\n" +
+            "         t.document,\n" +
+            "         t.remark,\n" +
+            "         t.link,\n" +
+            "         pm.module,\n" +
+            "         pm.`level` AS moduleLevel,\n" +
+            "         t.haveDocument,\n" +
+            "         t.updateTime,\n" +
+            "         t.createTime,\n" +
+            "         t.accepterUid,\n" +
+            "         t.acceptanceTime,\n" +
+            "         t.createdUid,\n" +
+            "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS overtime,\n" +
+            "         IF(((t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS warning,\n"+
+            "         task_1.workTimeCount,\n" +
+            "         task_1.progress,\n"+
+            "         t.serialNumber\n"+
+            "FROM `project_task` AS t\n" +
+            "LEFT JOIN `project` AS p\n" +
+            "    ON t.pid = p.id\n" +
+            "LEFT JOIN (\n" +
+            "\tSELECT tla.taskId,tla.progress,tlb.workTimeCount from (\n" +
+            "\t\tSELECT a.taskId,a.progress from task_log AS a WHERE createTime = (SELECT MAX(createTime) FROM task_log AS b WHERE taskId = a.taskId)\n" +
+            "\t) as tla LEFT JOIN (\n" +
+            "\t\tSELECT\n" +
+            "\t\ttaskId,\n" +
+            "\t\tSUM(workTime) AS workTimeCount\n" +
+            "\t\tFROM\n" +
+            "\t\t\t`task_log` \n" +
+            "\t\tGROUP BY taskId\n" +
+            "\t) as tlb ON tla.taskId = tlb.taskId\n" +
+            ") AS task_1 ON t.id = task_1.taskId\n"+
+            "LEFT JOIN project_modules AS pm ON t.mid = pm.id\n"+
+            "LEFT JOIN project_version AS pv ON t.vid = pv.id\n"+
+            "${ew.customSqlSegment}\n")
+    TaskListBo queryTask(@Param(Constants.WRAPPER) Wrapper<TaskListBo> ew);
+
     @Select("SELECT FORMAT( COUNT(IF(`status` = 1, 1, NULL)) / COUNT(*), 2) AS rateOfFinish, COUNT(IF(`status` = 1, 1, NULL)) AS finishTaskNum, COUNT(*) AS taskTotal, COUNT(IF(`status` = 4, 1, NULL)) AS progressTaskNum, COUNT( IF( ( playEndTime - UNIX_TIMESTAMP() * 1000 ) BETWEEN 0 AND 172800000 AND `status`!=1, 1, NULL ) ) AS warningTaskNum, COUNT( IF ( UNIX_TIMESTAMP() * 1000 - playEndTime > 0 AND `status`!=1, 1, NULL ) ) AS overtimeTaskNum FROM `project_task` ${ew.customSqlSegment}")
     TaskStatisticsBo selectTaskStatistics(@Param(Constants.WRAPPER) Wrapper<TaskStatisticsBo> ew);
 
