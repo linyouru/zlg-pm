@@ -196,22 +196,7 @@ public class TaskService {
         taskListBoPage.setCurrent(currentPage);
         taskListBoPage.setSize(pageSize);
         Page<TaskListBo> taskListBo = taskMapper.selectPage(taskListBoPage, queryWrapper);
-        ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
-        //填充各种人的昵称
-        for (TaskListBo task : taskListBo.getRecords()) {
-            for (UserPo user : allUserInfo) {
-                if (task.getUid() != null && Long.parseLong(task.getUid() + "") == user.getId()) {
-                    task.setNickName(user.getNickName());
-                }
-                if (task.getAccepterUid() != null && Long.parseLong(task.getAccepterUid() + "") == user.getId()) {
-                    task.setAccepterNickName(user.getNickName());
-                }
-                if (task.getCreatedUid() != null && Long.parseLong(task.getCreatedUid() + "") == user.getId()) {
-                    task.setCreatedUserNickname(user.getNickName());
-                }
-            }
-        }
-        return taskListBo;
+        return this.taskListFillNickName(taskListBo);
     }
 
     public TaskStatisticsBo selectTaskStatistics(Integer pid, Integer uid) {
@@ -292,6 +277,29 @@ public class TaskService {
         QueryWrapper<String> wrapper = new QueryWrapper<>();
         wrapper.eq("r.tid", tid);
         return taskMapper.getTaskRelevance(wrapper);
+    }
+
+    /**
+     * 填充各种人的昵称
+     * @param taskListBo
+     * @return
+     */
+    public Page<TaskListBo> taskListFillNickName(Page<TaskListBo> taskListBo){
+        ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
+        for (TaskListBo task : taskListBo.getRecords()) {
+            for (UserPo user : allUserInfo) {
+                if (task.getUid() != null && Long.parseLong(task.getUid() + "") == user.getId()) {
+                    task.setNickName(user.getNickName());
+                }
+                if (task.getAccepterUid() != null && Long.parseLong(task.getAccepterUid() + "") == user.getId()) {
+                    task.setAccepterNickName(user.getNickName());
+                }
+                if (task.getCreatedUid() != null && Long.parseLong(task.getCreatedUid() + "") == user.getId()) {
+                    task.setCreatedUserNickname(user.getNickName());
+                }
+            }
+        }
+        return taskListBo;
     }
 
 }

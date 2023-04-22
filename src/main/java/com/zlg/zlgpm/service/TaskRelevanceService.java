@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.TaskRelevanceMapper;
+import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.po.TaskRelevancePo;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +23,8 @@ public class TaskRelevanceService extends ServiceImpl<TaskRelevanceMapper, TaskR
     private TaskRelevanceMapper taskRelevanceMapper;
     @Resource
     private TaskMapper taskMapper;
+    @Resource
+    private TaskService taskService;
 
     public void deleteTaskRelevanceByTid(Integer tid) {
         QueryWrapper<TaskRelevancePo> wrapper = new QueryWrapper<>();
@@ -37,15 +41,16 @@ public class TaskRelevanceService extends ServiceImpl<TaskRelevanceMapper, TaskR
             taskIdList.add(taskRelevancePo.getTid());
         }
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
-        if(taskIdList.size() > 0) {
+        if (taskIdList.size() > 0) {
             queryWrapper.in("t.id", taskIdList);
-        }else {
-            queryWrapper.eq("t.id",-1);
+        } else {
+            queryWrapper.eq("t.id", -1);
         }
         Page<TaskListBo> page = new Page<>();
         page.setCurrent(1);
         page.setSize(500);
-        return taskMapper.selectPage(page, queryWrapper);
+        Page<TaskListBo> taskListBoPage = taskMapper.selectPage(page, queryWrapper);
+        return taskService.taskListFillNickName(taskListBoPage);
     }
 
 }
