@@ -13,20 +13,9 @@ public class TaskLogAggregationListBo {
     private String workTime;
     private String feedback;
     private String createTime;
+    private String task;
 
     public TaskLogAggregationListBo() {
-    }
-
-    public TaskLogAggregationListBo(Integer id, Integer uid, String userName, String nickName, Integer taskId, String name, String version, String log, String createTime) {
-        this.id = id;
-        this.uid = uid;
-        this.userName = userName;
-        this.nickName = nickName;
-        this.taskId = taskId;
-        this.name = name;
-        this.version = version;
-        this.log = log;
-        this.createTime = createTime;
     }
 
     @Override
@@ -43,7 +32,16 @@ public class TaskLogAggregationListBo {
                 ", workTime='" + workTime + '\'' +
                 ", feedback='" + feedback + '\'' +
                 ", createTime='" + createTime + '\'' +
+                ", task='" + task + '\'' +
                 '}';
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public void setTask(String task) {
+        this.task = task;
     }
 
     public String getFeedback() {

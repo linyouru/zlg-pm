@@ -443,6 +443,7 @@ public class DataConvertHelper {
         response.setFeedback(taskLogAggregationListBo.getFeedback());
         response.setCreateTime(taskLogAggregationListBo.getCreateTime());
         response.setWorkTime(taskLogAggregationListBo.getWorkTime());
+        response.setTask(taskLogAggregationListBo.getTask());
         return response;
     }
 

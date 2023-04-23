@@ -2144,6 +2144,8 @@ definitions:
         type: string
       createTime:
         type: string
+      task:
+        type: string
   CreateFeedbackRequest:
     type: object
     properties:
