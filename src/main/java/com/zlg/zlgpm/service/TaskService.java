@@ -146,12 +146,14 @@ public class TaskService {
         return retTask;
     }
 
-    public  TaskListBo queryTask(Integer id){
+    public TaskListBo queryTask(Integer id) {
         QueryWrapper<TaskListBo> wrapper = new QueryWrapper<>();
-        wrapper.eq("t.id",id);
+        wrapper.eq("t.id", id);
         TaskListBo taskListBo = taskMapper.queryTask(wrapper);
         ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
-        fillNickName(taskListBo,allUserInfo);
+        if (taskListBo != null) {
+            fillNickName(taskListBo, allUserInfo);
+        }
         return taskListBo;
     }
 
@@ -291,18 +293,21 @@ public class TaskService {
 
     /**
      * 填充各种人的昵称
+     *
      * @param taskListBo
      * @return
      */
-    public Page<TaskListBo> taskListFillNickName(Page<TaskListBo> taskListBo){
+    public Page<TaskListBo> taskListFillNickName(Page<TaskListBo> taskListBo) {
         ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
         for (TaskListBo task : taskListBo.getRecords()) {
-            fillNickName(task,allUserInfo);
+            if (task != null) {
+                fillNickName(task, allUserInfo);
+            }
         }
         return taskListBo;
     }
 
-    private void fillNickName(TaskListBo task,ArrayList<UserPo> allUserInfo){
+    private void fillNickName(TaskListBo task, ArrayList<UserPo> allUserInfo) {
         for (UserPo user : allUserInfo) {
             if (task.getUid() != null && Long.parseLong(task.getUid() + "") == user.getId()) {
                 task.setNickName(user.getNickName());
