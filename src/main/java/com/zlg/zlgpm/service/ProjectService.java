@@ -79,7 +79,7 @@ public class ProjectService {
         return projectMapper.selectById(projectPo.getId());
     }
 
-    public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
+    public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc, String status) {
         QueryWrapper<ProjectBo> queryWrapper = new QueryWrapper<>();
         if (null != name) {
             queryWrapper.like("name", name);
@@ -88,6 +88,9 @@ public class ProjectService {
             String[] split = sortField.split(",");
             List<String> sortList = Arrays.asList(split);
             queryWrapper.orderBy(true, isAsc, sortList);
+        }
+        if (StringUtils.hasText(status)) {
+            queryWrapper.eq("status", status);
         }
         Page<ProjectBo> projectBoPage = new Page<>();
         projectBoPage.setCurrent(currentPage);

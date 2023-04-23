@@ -128,8 +128,9 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<ApiProjectListResponse> projectList(String name, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
-        Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize, sortField, isAsc);
+    public ResponseEntity<ApiProjectListResponse> projectList(String name, Integer currentPage, Integer pageSize, String sortField,
+                                                              Boolean isAsc, String status) {
+        Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize, sortField, isAsc, status);
         ApiProjectListResponse apiProjectListResponse = dataConvertHelper.convert2ApiProjectListResponse(projectBoPage);
         return ResponseEntity.ok().body(apiProjectListResponse);
     }

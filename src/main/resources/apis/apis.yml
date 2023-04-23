@@ -391,6 +391,10 @@ paths:
           name: isAsc
           type: boolean
           description: 是否为升序,当指定sortField时,isAsc也必须指定
+        - in: query
+          type: string
+          name: status
+          description: 项目状态
       responses:
         200:
           description: success
