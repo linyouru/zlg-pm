@@ -38,6 +38,7 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
             "         u.nickName,\n" +
             "         tl.taskId,\n" +
             "         p.`name`,\n" +
+            "         t.task,\n" +
             "         pv.version,\n" +
             "         tl.log,\n" +
             "         tl.feedback,\n" +
