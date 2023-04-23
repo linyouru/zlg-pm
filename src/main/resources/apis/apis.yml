@@ -456,6 +456,7 @@ paths:
       summary: 聚合项目名称
       description: 聚合项目名称
       operationId: projectGroupName
+      deprecated: true
       produces:
         - "application/json"
       responses:

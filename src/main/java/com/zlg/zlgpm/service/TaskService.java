@@ -114,12 +114,13 @@ public class TaskService {
                 throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
             }
         }
-        //任务及时性判断
+        //任务状态修改为已完成时,判断任务及时性
         if (TASK_END.equals(task.getStatus())) {
             TaskPo taskPo = taskMapper.selectById(id);
             String playEndTime = taskPo.getPlayEndTime();
             long now = System.currentTimeMillis();
             task.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
+            task.setAcceptanceTime(now+"");
         }
         int i = taskMapper.updateById(task);
         if (i == 0) {

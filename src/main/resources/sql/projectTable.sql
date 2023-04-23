@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `project`
     `updateTime` datetime(3) NOT NULL                   DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     `createTime` datetime(3) NOT NULL                   DEFAULT CURRENT_TIMESTAMP(3),
     PRIMARY KEY (`id`),
-    KEY `index_n` (`name`) USING BTREE
+    UNIQUE KEY `index_n` (`name`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
