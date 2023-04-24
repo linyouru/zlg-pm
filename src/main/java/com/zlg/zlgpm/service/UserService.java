@@ -11,6 +11,7 @@ import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserRoleMapper;
 import com.zlg.zlgpm.pojo.bo.UserListBo;
+import com.zlg.zlgpm.pojo.bo.UserMessageBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
@@ -161,9 +162,15 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         return dataConvertHelper.convert2ApiUserLoginResponse(userPo);
     }
 
-    public ArrayList<Map<String,Object>> getUserInfo() {
-        QueryWrapper<Map<String,Object>> wrapper = new QueryWrapper<>();
+    public ArrayList<Map<String, Object>> getUserInfo() {
+        QueryWrapper<Map<String, Object>> wrapper = new QueryWrapper<>();
         wrapper.notIn("userName", "叶玉琳", "root", "admin");
         return userMapper.getUserInfo(wrapper);
+    }
+
+    public List<ApiUserMessageResponse> getUserMessage() {
+        List<UserMessageBo> userMessage = userMapper.getUserMessage();
+        List<ApiUserMessageResponse> responses = dataConvertHelper.convert2ApiUserMessageResponse(userMessage);
+        return responses;
     }
 }

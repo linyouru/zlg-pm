@@ -139,7 +139,7 @@ public class DataConvertHelper {
     public ProjectPo convert2ProjectPo(ApiUpdateProjectRequest request) {
         ProjectPo projectPo = new ProjectPo();
         projectPo.setName(request.getName());
-        if(null != request.getUid()){
+        if (null != request.getUid()) {
             projectPo.setUid(request.getUid());
         }
         if (null != request.getStatus()) {
@@ -495,7 +495,7 @@ public class DataConvertHelper {
         return response;
     }
 
-    public List<ApiProjectModuleResponse> convert2ApiProjectModuleResponse(List<ProjectModulePo> projectModulePos){
+    public List<ApiProjectModuleResponse> convert2ApiProjectModuleResponse(List<ProjectModulePo> projectModulePos) {
         ArrayList<ApiProjectModuleResponse> list = new ArrayList<>();
         for (ProjectModulePo projectModulePo : projectModulePos) {
             ApiProjectModuleResponse projectModuleResponse = new ApiProjectModuleResponse();
@@ -509,7 +509,7 @@ public class DataConvertHelper {
         return list;
     }
 
-    public ProjectVersionPo convert2ProjectVersionPo(ApiCreateProjectVersionRequest body){
+    public ProjectVersionPo convert2ProjectVersionPo(ApiCreateProjectVersionRequest body) {
         ProjectVersionPo projectVersionPo = new ProjectVersionPo();
         projectVersionPo.setVersion(body.getVersion());
         projectVersionPo.setPid(body.getPid());
@@ -517,7 +517,7 @@ public class DataConvertHelper {
         return projectVersionPo;
     }
 
-    public List<ApiProjectVersionsAllResponse> convert2ApiProjectVersionsAllResponse(List<ProjectVersionBo> projectVersionsAll){
+    public List<ApiProjectVersionsAllResponse> convert2ApiProjectVersionsAllResponse(List<ProjectVersionBo> projectVersionsAll) {
         ArrayList<ApiProjectVersionsAllResponse> list = new ArrayList<>();
         for (ProjectVersionBo projectVersionBo : projectVersionsAll) {
             ApiProjectVersionsAllResponse response = new ApiProjectVersionsAllResponse();
@@ -525,6 +525,20 @@ public class DataConvertHelper {
             response.setProjectName(projectVersionBo.getName());
             response.setVid(projectVersionBo.getId());
             response.setVersion(projectVersionBo.getVersion());
+            list.add(response);
+        }
+        return list;
+    }
+
+    public List<ApiUserMessageResponse> convert2ApiUserMessageResponse(List<UserMessageBo> userMessageList) {
+        ArrayList<ApiUserMessageResponse> list = new ArrayList<>();
+        for (UserMessageBo userMessageBo : userMessageList) {
+            ApiUserMessageResponse response = new ApiUserMessageResponse();
+            response.setId(userMessageBo.getId());
+            response.setUserName(userMessageBo.getUserName());
+            response.setNickName(userMessageBo.getNickname());
+            response.setAcceptNum(userMessageBo.getAcceptNum());
+            response.setAuditNum(userMessageBo.getAuditNum());
             list.add(response);
         }
         return list;

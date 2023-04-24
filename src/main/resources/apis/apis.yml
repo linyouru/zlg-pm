@@ -267,6 +267,26 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/user/message:
+    get:
+      tags:
+        - user
+      summary: 获取全部用户通知信息
+      description: 获取全部用户通知信息
+      operationId: getUserMessage
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/UserMessageResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/project:
     get:
       tags:
@@ -2206,3 +2226,19 @@ definitions:
         type: string
       createTime:
         type: string
+  UserMessageResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: 用户id
+      userName:
+        type: string
+      nickName:
+        type: string
+      acceptNum:
+        type: integer
+        description: 待验收任务数（包含待验收和问题反馈任务）
+      auditNum:
+        type: integer
+        description: 待审核任务数

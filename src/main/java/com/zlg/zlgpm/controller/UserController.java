@@ -3,6 +3,7 @@ package com.zlg.zlgpm.controller;
 
 import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.exception.BizException;
+import com.zlg.zlgpm.pojo.bo.UserMessageBo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.UserService;
 import io.swagger.annotations.Api;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Api(tags = "user", description = "用户相关接口")
@@ -37,6 +39,12 @@ public class UserController implements UserApi {
     public ResponseEntity<ApiBaseResp> deleteUser(Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(new ApiBaseResp().message("success"));
+    }
+
+    @Override
+    public ResponseEntity<List<ApiUserMessageResponse>> getUserMessage() {
+        List<ApiUserMessageResponse> userMessage = userService.getUserMessage();
+        return ResponseEntity.ok().body(userMessage);
     }
 
     @Override
