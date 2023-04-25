@@ -1737,7 +1737,7 @@ definitions:
       task:
         type: string
         description: 标题
-        maxLength: 100
+        maxLength: 1023
       detail:
         type: string
         description: 任务内容
