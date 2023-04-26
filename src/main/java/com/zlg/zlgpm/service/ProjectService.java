@@ -90,7 +90,7 @@ public class ProjectService {
             queryWrapper.orderBy(true, isAsc, sortList);
         }
         if (StringUtils.hasText(status)) {
-            queryWrapper.eq("status", status);
+            queryWrapper.eq("p.status", status);
         }
         Page<ProjectBo> projectBoPage = new Page<>();
         projectBoPage.setCurrent(currentPage);

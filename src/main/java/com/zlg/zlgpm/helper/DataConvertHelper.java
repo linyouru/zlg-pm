@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 /**
  * 类型转换工具
  * 功能：入参校验、Restful包装类和pojo的转换
+ *
  * @author linyouru
  */
 @Component
@@ -36,7 +37,7 @@ public class DataConvertHelper {
     public UserPo convert2UserPo(ApiCreateUserRequest apiCreateUserRequest) {
         UserPo userPo = dataConvertMapping.convertToUserPo(apiCreateUserRequest);
         userPo.setPassword(DigestUtils.md5DigestAsHex(apiCreateUserRequest.getPassword().getBytes()));
-        return  userPo;
+        return userPo;
     }
 
     public UserPo convert2UserPo(ApiUpdateUserRequest apiUpdateUserRequest) {
@@ -113,8 +114,8 @@ public class DataConvertHelper {
 
     public TaskPo convert2TaskPo(ApiUpdateTaskRequest taskRequest) {
         TaskPo taskPo = dataConvertMapping.convertToTaskPo(taskRequest);
-        taskPo.setTaskType(taskRequest.getTaskType().toString());
-        taskPo.setStatus(taskRequest.getStatus().toString());
+        taskPo.setTaskType(taskRequest.getTaskType() != null ? taskRequest.getTaskType().toString() : null);
+        taskPo.setStatus(taskRequest.getStatus() != null ? taskRequest.getStatus().toString() : null);
         return taskPo;
     }
 
@@ -175,7 +176,7 @@ public class DataConvertHelper {
     }
 
     public TaskChangePo convert2TaskChangePo(ApiCreateTaskChangeRequest taskChangeRequest) {
-         return dataConvertMapping.convertToTaskChangePo(taskChangeRequest);
+        return dataConvertMapping.convertToTaskChangePo(taskChangeRequest);
     }
 
     public ApiTaskChangeListResponse convert2ApiTaskChangeListResponse(Page<TaskChangeListBo> taskChangeListBoPage) {
