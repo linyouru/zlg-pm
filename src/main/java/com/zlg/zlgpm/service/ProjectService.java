@@ -14,6 +14,7 @@ import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -43,11 +44,7 @@ public class ProjectService {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
         }
         ProjectPo projectPo = dataConvertHelper.convert2ProjectPo(request);
-        try {
-            int insert = projectMapper.insert(projectPo);
-        } catch (DuplicateKeyException e) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "project.11001");
-        }
+        projectMapper.insert(projectPo);
         return projectPo;
     }
 
@@ -68,13 +65,14 @@ public class ProjectService {
 
     @OperationLog(value = "修改项目", type = "Project")
     public ProjectPo updateProject(ProjectPo projectPo) {
-        try {
-            int i = projectMapper.updateById(projectPo);
-            if (i == 0) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", projectPo.getId());
-            }
-        } catch (DuplicateKeyException e) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "project.11001");
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        ProjectPo beforeProjectPo = projectMapper.selectById(projectPo.getId());
+        if (Long.parseLong(beforeProjectPo.getUid() + "") != currentUser.getId()) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "auth.11001");
+        }
+        int i = projectMapper.updateById(projectPo);
+        if (i == 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", projectPo.getId());
         }
         return projectMapper.selectById(projectPo.getId());
     }

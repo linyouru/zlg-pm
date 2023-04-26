@@ -8,16 +8,14 @@ import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
 import com.zlg.zlgpm.pojo.bo.ProjectVersionBo;
-import com.zlg.zlgpm.pojo.po.ProjectModulePo;
-import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.po.*;
 import com.zlg.zlgpm.helper.DataConvertHelper;
-import com.zlg.zlgpm.pojo.po.ProjectVersionPo;
-import com.zlg.zlgpm.pojo.po.UserProjectPo;
 import com.zlg.zlgpm.service.ProjectModuleService;
 import com.zlg.zlgpm.service.ProjectService;
 import com.zlg.zlgpm.service.ProjectVersionService;
 import com.zlg.zlgpm.service.UserProjectService;
 import io.swagger.annotations.Api;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,10 +91,8 @@ public class ProjectController implements ProjectApi {
                     updateList.add(projectModulePo);
                 }
             }
-//            if (updateList.size() > 0) {
             projectModuleService.updateBatchById(updateList);
             projectModuleService.deleteProjectModuleForUpdate(updateList, id);
-//            }
             if (createList.size() > 0) {
                 projectModuleService.saveBatch(createList);
             }
