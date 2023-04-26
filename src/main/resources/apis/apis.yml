@@ -2165,6 +2165,9 @@ definitions:
         type: string
       workTime:
         type: string
+      progress:
+        type: string
+        description: 进度
       feedback:
         type: string
       createTime:

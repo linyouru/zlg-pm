@@ -11,6 +11,7 @@ public class TaskLogAggregationListBo {
     private String version;
     private String log;
     private String workTime;
+    private String progress;
     private String feedback;
     private String createTime;
     private String task;
@@ -30,10 +31,19 @@ public class TaskLogAggregationListBo {
                 ", version='" + version + '\'' +
                 ", log='" + log + '\'' +
                 ", workTime='" + workTime + '\'' +
+                ", progress='" + progress + '\'' +
                 ", feedback='" + feedback + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", task='" + task + '\'' +
                 '}';
+    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
     }
 
     public String getTask() {
