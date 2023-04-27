@@ -110,4 +110,11 @@ public class TaskChangeService {
         taskChangeMapper.updateById(taskChangePo);
     }
 
+    public void deleteTaskChange(Integer taskId){
+        QueryWrapper<TaskChangePo> wrapper = new QueryWrapper<>();
+        wrapper.eq("taskId",taskId);
+        wrapper.eq("status",1);
+        taskChangeMapper.delete(wrapper);
+    }
+
 }

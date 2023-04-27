@@ -9,6 +9,7 @@ import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.TaskRelevancePo;
+import com.zlg.zlgpm.service.TaskChangeService;
 import com.zlg.zlgpm.service.TaskRelevanceService;
 import com.zlg.zlgpm.service.TaskService;
 import io.swagger.annotations.Api;
@@ -32,6 +33,8 @@ public class TaskController implements TaskApi {
     private DataConvertHelper dataConvertHelper;
     @Resource
     private TaskRelevanceService taskRelevanceService;
+    @Resource
+    private TaskChangeService taskChangeService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -63,6 +66,10 @@ public class TaskController implements TaskApi {
     @Override
     public ResponseEntity<Void> deleteTask(Integer id) {
         taskService.deleteTask(id);
+        //删除任务关联关系
+        taskRelevanceService.deleteTaskRelevanceByTid(id);
+        //删除任务变更申请
+        taskChangeService.deleteTaskChange(id);
         return ResponseEntity.ok(null);
     }
 
