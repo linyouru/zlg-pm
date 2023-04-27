@@ -159,7 +159,7 @@ public class TaskService {
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid,
-                                     String level) {
+                                     String level, String task, String detail) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             String[] split = status.split(",");
@@ -202,6 +202,12 @@ public class TaskService {
         if (StringUtils.hasText(level)) {
             String[] split = level.split(",");
             queryWrapper.in("t.level", split);
+        }
+        if(StringUtils.hasText(task)){
+            queryWrapper.like("t.task",task);
+        }
+        if(StringUtils.hasText(detail)){
+            queryWrapper.like("t.detail",detail);
         }
 
         Page<TaskListBo> taskListBoPage = new Page<>();

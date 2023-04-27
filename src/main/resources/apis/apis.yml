@@ -770,6 +770,14 @@ paths:
           name: level
           type: string
           description: 优先级:1低,2中,3高;多优先级用英文逗号分隔
+        - in: query
+          name: task
+          type: string
+          description: 任务标题
+        - in: query
+          name: detail
+          type: string
+          description: 任务内容
       responses:
         200:
           description: success
