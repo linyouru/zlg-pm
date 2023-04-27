@@ -102,7 +102,7 @@ public class TaskChangeService {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         TaskChangePo taskChange = taskChangeMapper.selectById(id);
         if (!currentUser.getId().equals(Long.parseLong(taskChange.getAuditorId() + ""))) {
-            throw new BizException(HttpStatus.FORBIDDEN, "taskChange.15002");
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
         TaskChangePo taskChangePo = new TaskChangePo();
         taskChangePo.setStatus(body.getStatus());

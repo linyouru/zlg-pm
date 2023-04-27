@@ -6,20 +6,14 @@ import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
-import com.zlg.zlgpm.dao.ProjectMapper;
-import com.zlg.zlgpm.dao.ProjectVersionMapper;
-import com.zlg.zlgpm.dao.TaskMapper;
-import com.zlg.zlgpm.dao.UserMapper;
+import com.zlg.zlgpm.dao.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.helper.EmailHelper;
 import com.zlg.zlgpm.pojo.bo.ProjectVersionBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
-import com.zlg.zlgpm.pojo.po.ProjectPo;
-import com.zlg.zlgpm.pojo.po.ProjectVersionPo;
-import com.zlg.zlgpm.pojo.po.TaskPo;
-import com.zlg.zlgpm.pojo.po.UserPo;
+import com.zlg.zlgpm.pojo.po.*;
 import io.swagger.models.auth.In;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -50,6 +44,8 @@ public class TaskService {
     private DataConvertHelper dataConvertHelper;
     @Resource
     private ProjectVersionMapper projectVersionMapper;
+    @Resource
+    private TaskChangeMapper taskChangeMapper;
 
     @Resource
     private EmailHelper emailHelper;
@@ -57,6 +53,7 @@ public class TaskService {
     private static final String TASK_CHECK = "3";
     private static final String TASK_END = "1";
     private static final String TASK_TIMEOUT = "2";
+    private static final String[] CANNOTCHANGETASKTIME = {"1", "2", "3", "5"};
 
     @OperationLog(value = "创建任务", type = "Task")
     public TaskPo createTask(Boolean sandEmail, ApiCreateTaskRequest body) {
@@ -95,9 +92,14 @@ public class TaskService {
 
     @OperationLog(value = "删除任务", type = "Task")
     public TaskPo deleteTask(Integer id) {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         TaskPo taskPo = taskMapper.selectById(id);
         if (null == taskPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
+        }
+        ProjectPo projectPo = projectMapper.selectById(taskPo.getPid());
+        if (Integer.parseInt(currentUser.getId() + "") != taskPo.getUid() && Integer.parseInt(currentUser.getId() + "") != projectPo.getUid()) {
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
         taskMapper.deleteById(id);
         return taskPo;
@@ -106,7 +108,23 @@ public class TaskService {
     @OperationLog(value = "修改任务", type = "Task")
     public TaskPo updateTask(Integer id, ApiUpdateTaskRequest body) {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
-        task.setId(id);
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        TaskPo beforeTask = taskMapper.selectById(id);
+        ProjectPo beforeProject = projectMapper.selectById(task.getPid());
+        //只有项目负责人和开发人能修改任务
+        if (Integer.parseInt(currentUser.getId() + "") != beforeTask.getUid() && Integer.parseInt(currentUser.getId() + "") != beforeProject.getUid()) {
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
+        }
+
+        QueryWrapper<TaskChangePo> wrapper = new QueryWrapper<>();
+        wrapper.eq("taskId", beforeTask.getId());
+        wrapper.eq("status", 1);
+        Long taskChangeCount = taskChangeMapper.selectCount(wrapper);
+        //任务状态为暂停、待验收、问题反馈、已完成或任务存在待审核变更时不能修改任务时间
+        if (Arrays.asList(CANNOTCHANGETASKTIME).contains(beforeTask.getStatus()) || taskChangeCount > 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12004");
+        }
+
         Integer uid = task.getUid();
         if (null != uid) {
             UserPo userPo = userMapper.selectById(uid);
@@ -114,14 +132,7 @@ public class TaskService {
                 throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
             }
         }
-        //任务状态修改为已完成时,判断任务及时性
-        if (TASK_END.equals(task.getStatus())) {
-            TaskPo taskPo = taskMapper.selectById(id);
-            String playEndTime = taskPo.getPlayEndTime();
-            long now = System.currentTimeMillis();
-            task.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
-            task.setAcceptanceTime(now+"");
-        }
+        task.setId(id);
         int i = taskMapper.updateById(task);
         if (i == 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
@@ -138,11 +149,7 @@ public class TaskService {
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
             emailHelper.sendSimpleMailMessage(message);
         }
-        if (TASK_END.equals(task.getStatus())) {
-            //任务状态改为[已完成]需要给任务负责人发邮件
-            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
-            emailHelper.sendSimpleMailMessage(message);
-        }
+
         return retTask;
     }
 
@@ -203,11 +210,11 @@ public class TaskService {
             String[] split = level.split(",");
             queryWrapper.in("t.level", split);
         }
-        if(StringUtils.hasText(task)){
-            queryWrapper.like("t.task",task);
+        if (StringUtils.hasText(task)) {
+            queryWrapper.like("t.task", task);
         }
-        if(StringUtils.hasText(detail)){
-            queryWrapper.like("t.detail",detail);
+        if (StringUtils.hasText(detail)) {
+            queryWrapper.like("t.detail", detail);
         }
 
         Page<TaskListBo> taskListBoPage = new Page<>();
@@ -311,6 +318,31 @@ public class TaskService {
             }
         }
         return taskListBo;
+    }
+
+    @OperationLog(value = "验收任务", type = "TaskAccept")
+    public TaskPo taskAccept(TaskPo taskPo) {
+        //任务状态修改为已完成时,判断任务及时性
+        TaskPo beforeTask = taskMapper.selectById(taskPo.getId());
+        if (TASK_END.equals(taskPo.getStatus())) {
+            String playEndTime = beforeTask.getPlayEndTime();
+            long now = System.currentTimeMillis();
+            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
+            taskPo.setAcceptanceTime(now + "");
+        }
+        taskMapper.updateById(taskPo);
+
+        ProjectPo projectPo = projectMapper.selectById(beforeTask.getPid());
+        ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(beforeTask.getVid());
+        UserPo projectUser = userMapper.selectById(projectPo.getUid());
+        UserPo taskUser = userMapper.selectById(beforeTask.getUid());
+        String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), beforeTask.getTask());
+        if (TASK_END.equals(taskPo.getStatus())) {
+            //任务状态改为[已完成]需要给任务负责人发邮件
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
+            emailHelper.sendSimpleMailMessage(message);
+        }
+        return beforeTask;
     }
 
     private void fillNickName(TaskListBo task, ArrayList<UserPo> allUserInfo) {

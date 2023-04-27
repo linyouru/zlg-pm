@@ -787,6 +787,33 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/task/accept:
+    put:
+      tags:
+        - task
+      summary: 验收任务
+      description: 仅任务验收人可验收
+      operationId: taskAccept
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+          description: 任务id
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/AcceptTaskRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/task/relevance/list:
     get:
       tags:
@@ -1052,6 +1079,7 @@ paths:
       summary: 修改问题反馈
       description: 修改问题反馈
       operationId: updateFeedback
+      deprecated: true
       produces:
         - "application/json"
       parameters:
@@ -1078,6 +1106,7 @@ paths:
       summary: 删除任务问题反馈
       description: 删除任务问题反馈
       operationId: deleteFeedback
+      deprecated: true
       produces:
         - "application/json"
       parameters:
@@ -1698,13 +1727,9 @@ definitions:
       status:
         type: string
         enum:
-          - 1
-          - 2
-          - 3
           - 4
-          - 5
           - 6
-        description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
+        description: 任务状态 4开发中；6排队中
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
@@ -1753,28 +1778,16 @@ definitions:
       status:
         type: string
         enum:
-          - 1
-          - 2
           - 3
           - 4
           - 5
-          - 6
-        description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
+        description: 任务状态 3待验收；4开发中；5暂停
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
       playEndTime:
         type: string
         description: 计划结束时间,时间戳(ms)
-      acceptanceTime:
-        type: string
-        description: 验收时间,时间戳(ms)
-      quality:
-        type: string
-        description: 质量分
-      document:
-        type: string
-        description: 文档分
       remark:
         type: string
         description: 备注
@@ -1808,6 +1821,24 @@ definitions:
       level:
         type: integer
         description: 优先级，1低、2中、3高
+  AcceptTaskRequest:
+    type: object
+    properties:
+      status:
+        type: string
+        enum:
+          - 1
+          - 2
+        description: 任务状态 1已完成；2反馈;
+      quality:
+        type: string
+        description: 质量分
+      document:
+        type: string
+        description: 文档分
+      remark:
+        type: string
+        description: 备注
   TaskListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"

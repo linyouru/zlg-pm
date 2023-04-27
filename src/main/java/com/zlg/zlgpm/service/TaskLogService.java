@@ -37,18 +37,21 @@ public class TaskLogService {
 
     public void createTaskLog(ApiCreateTaskLogRequest body) {
         TaskLogPo taskLogPo = dataConvertHelper.convert2TaskLogPo(body);
+        TaskPo taskPo = taskMapper.selectById(taskLogPo.getTaskId());
+        if (null == taskPo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskLogPo.getTaskId());
+        }
+        if(!taskPo.getUid().equals(taskLogPo.getUid())){
+            //仅任务开发人可以创建任务日志
+            throw new BizException(HttpStatus.FORBIDDEN,"auth.11001");
+        }
         if (taskLogPo.getUid() != null) {
             UserPo userPo = userMapper.selectById(taskLogPo.getUid());
             if (null == userPo) {
                 throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
             }
         }
-        if (taskLogPo.getTaskId() != null) {
-            TaskPo taskPo = taskMapper.selectById(taskLogPo.getTaskId());
-            if (null == taskPo) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskLogPo.getTaskId());
-            }
-        }
+
         taskLogMapper.insert(taskLogPo);
     }
 

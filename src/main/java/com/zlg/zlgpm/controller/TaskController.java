@@ -9,10 +9,12 @@ import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.bo.TaskStatisticsBo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.TaskRelevancePo;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.TaskChangeService;
 import com.zlg.zlgpm.service.TaskRelevanceService;
 import com.zlg.zlgpm.service.TaskService;
 import io.swagger.annotations.Api;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +67,8 @@ public class TaskController implements TaskApi {
 
     @Override
     public ResponseEntity<Void> deleteTask(Integer id) {
+
+
         taskService.deleteTask(id);
         //删除任务关联关系
         taskRelevanceService.deleteTaskRelevanceByTid(id);
@@ -112,7 +116,7 @@ public class TaskController implements TaskApi {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
         }
         Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, projectUid, status, pid, vid, uid,
-                startTime, endTime, abnormal, sortField, isAsc, mid, level,task,detail);
+                startTime, endTime, abnormal, sortField, isAsc, mid, level, task, detail);
         ApiTaskListResponse apiTaskListResponse = dataConvertHelper.convert2ApiTaskListResponse(taskListBoPage);
         return ResponseEntity.ok().body(apiTaskListResponse);
     }
@@ -125,6 +129,7 @@ public class TaskController implements TaskApi {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<Void> updateTask(Integer id, ApiUpdateTaskRequest body) {
         taskService.updateTask(id, body);
         //更新关联项目关系
@@ -142,5 +147,22 @@ public class TaskController implements TaskApi {
             taskRelevanceService.saveBatch(taskRelevancePos);
         }
         return ResponseEntity.ok(null);
+    }
+
+    @Override
+    public ResponseEntity<Void> taskAccept(Integer id, ApiAcceptTaskRequest body) {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        TaskPo taskPo = dataConvertHelper.convert2TaskPo(body);
+        //仅任务验收人能调该接口
+        if (Integer.parseInt(currentUser.getId() + "") != taskPo.getAccepterUid()) {
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
+        }
+        TaskListBo taskListBo = taskService.queryTask(id);
+        if (null == taskListBo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
+        }
+        taskPo.setId(id);
+        taskService.taskAccept(taskPo);
+        return null;
     }
 }

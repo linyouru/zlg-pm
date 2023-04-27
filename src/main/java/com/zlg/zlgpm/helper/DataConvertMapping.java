@@ -37,4 +37,5 @@ public interface DataConvertMapping {
     ApiProjectModuleResponse convertToApiProjectModuleResponse(ProjectModulePo projectModulePo);
     ApiProjectVersionsAllResponse convertToApiProjectVersionsAllResponse(ProjectVersionBo projectVersionBo);
     ApiUserMessageResponse convertToApiUserMessageResponse(UserMessageBo userMessageBo);
+    TaskPo convertToTaskPo(ApiAcceptTaskRequest body);
 }

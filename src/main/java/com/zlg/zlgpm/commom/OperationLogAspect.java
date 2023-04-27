@@ -55,13 +55,8 @@ public class OperationLogAspect {
                     sb.append(": ").append(projectPo.getName());
                     break;
                 case "Task":
+                case "TaskAccept":
                     TaskPo taskPo = (TaskPo) returnValue;
-                    //判断任务状态,若为已完成则定制化日志描述
-                    String status = taskPo.getStatus();
-                    if (TASK_END.equals(status)) {
-                        sb.delete(0, sb.length());
-                        sb.append("验收任务");
-                    }
                     sb.append(": ").append(taskPo.getTask());
                     break;
                 case "Feedback":

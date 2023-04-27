@@ -119,6 +119,12 @@ public class DataConvertHelper {
         return taskPo;
     }
 
+    public TaskPo convert2TaskPo(ApiAcceptTaskRequest taskRequest) {
+        TaskPo taskPo = dataConvertMapping.convertToTaskPo(taskRequest);
+        taskPo.setStatus(taskRequest.getStatus() != null ? taskRequest.getStatus().toString() : null);
+        return taskPo;
+    }
+
     public ApiTaskListResponse convert2ApiTaskListResponse(Page<TaskListBo> taskListBoPage) {
         ApiTaskListResponse response = new ApiTaskListResponse();
         fillApiPage(response, taskListBoPage);
