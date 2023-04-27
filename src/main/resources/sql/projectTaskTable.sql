@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS `project_task`
     `acceptanceTime`      varchar(64)                              DEFAULT NULL COMMENT '验收时间',
     `serialNumber`        int(8)                                   DEFAULT NULL COMMENT '任务序号',
     `level`               tinyint(4)                               DEFAULT NULL COMMENT '优先级，1低、2中、3高',
-    `updateTime`          datetime(3) NOT NULL                     DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    `createTime`          datetime(3) NOT NULL                     DEFAULT CURRENT_TIMESTAMP(3),
+    `updateTime`          datetime(3) NOT NULL                     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `createTime`          datetime(3) NOT NULL                     DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS `role`
     `id`         int(8)      NOT NULL AUTO_INCREMENT,
     `name`       varchar(32) NOT NULL COMMENT '角色名',
     `remark`     varchar(255) DEFAULT NULL,
-    `updateTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    `createTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `createTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `index_name_unique` (`name`) USING BTREE
 ) ENGINE = InnoDB
