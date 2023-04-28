@@ -153,11 +153,11 @@ public class TaskController implements TaskApi {
     public ResponseEntity<Void> taskAccept(Integer id, ApiAcceptTaskRequest body) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         TaskPo taskPo = dataConvertHelper.convert2TaskPo(body);
+        TaskListBo taskListBo = taskService.queryTask(id);
         //仅任务验收人能调该接口
-        if (Integer.parseInt(currentUser.getId() + "") != taskPo.getAccepterUid()) {
+        if (Integer.parseInt(currentUser.getId() + "") != taskListBo.getAccepterUid()) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
-        TaskListBo taskListBo = taskService.queryTask(id);
         if (null == taskListBo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
