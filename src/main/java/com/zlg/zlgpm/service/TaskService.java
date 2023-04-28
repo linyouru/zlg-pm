@@ -121,7 +121,7 @@ public class TaskService {
         wrapper.eq("status", 1);
         Long taskChangeCount = taskChangeMapper.selectCount(wrapper);
         //任务状态为暂停、待验收、问题反馈、已完成或任务存在待审核变更时不能修改任务时间
-        if (Arrays.asList(CANNOTCHANGETASKTIME).contains(beforeTask.getStatus()) || taskChangeCount > 0) {
+        if ((Arrays.asList(CANNOTCHANGETASKTIME).contains(beforeTask.getStatus()) || taskChangeCount > 0) && (StringUtils.hasText(task.getPlayStartTime()) || StringUtils.hasText(task.getPlayEndTime()))) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12004");
         }
 
