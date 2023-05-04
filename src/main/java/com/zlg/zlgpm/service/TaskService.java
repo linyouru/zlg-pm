@@ -110,7 +110,7 @@ public class TaskService {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         TaskPo beforeTask = taskMapper.selectById(id);
-        ProjectPo beforeProject = projectMapper.selectById(task.getPid());
+        ProjectPo beforeProject = projectMapper.selectById(beforeTask.getPid());
         //只有项目负责人和开发人能修改任务
         if (Integer.parseInt(currentUser.getId() + "") != beforeTask.getUid() && Integer.parseInt(currentUser.getId() + "") != beforeProject.getUid()) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
