@@ -724,6 +724,10 @@ paths:
           type: integer
           description: 项目负责人id
         - in: query
+          name: createdUid
+          type: integer
+          description: 创建人id
+        - in: query
           name: status
           type: string
           description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中; 多状态使用英文逗号分隔

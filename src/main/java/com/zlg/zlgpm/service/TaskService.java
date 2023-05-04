@@ -166,7 +166,7 @@ public class TaskService {
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid,
-                                     String level, String task, String detail) {
+                                     String level, String task, String detail,Integer createdUid) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             String[] split = status.split(",");
@@ -183,6 +183,9 @@ public class TaskService {
         }
         if (null != projectUid) {
             queryWrapper.eq("p.uid", projectUid);
+        }
+        if (null != createdUid) {
+            queryWrapper.eq("t.createdUid", createdUid);
         }
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
             queryWrapper.ge("t.playStartTime", Long.parseLong(startTime));
