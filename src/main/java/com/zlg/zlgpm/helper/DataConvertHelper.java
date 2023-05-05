@@ -273,6 +273,8 @@ public class DataConvertHelper {
         ArrayList<ApiProjectVersionsAllResponse> list = new ArrayList<>();
         for (ProjectVersionBo projectVersionBo : projectVersionsAll) {
             ApiProjectVersionsAllResponse apiProjectVersionsAllResponse = dataConvertMapping.convertToApiProjectVersionsAllResponse(projectVersionBo);
+            apiProjectVersionsAllResponse.setVid(projectVersionBo.getId());
+            apiProjectVersionsAllResponse.setProjectName(projectVersionBo.getName());
             list.add(apiProjectVersionsAllResponse);
         }
         return list;
