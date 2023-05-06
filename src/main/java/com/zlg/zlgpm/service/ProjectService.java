@@ -68,7 +68,7 @@ public class ProjectService {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         ProjectPo beforeProjectPo = projectMapper.selectById(projectPo.getId());
         if (Long.parseLong(beforeProjectPo.getUid() + "") != currentUser.getId()) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "auth.11001");
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
         int i = projectMapper.updateById(projectPo);
         if (i == 0) {
