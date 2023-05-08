@@ -15,12 +15,12 @@ import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -66,8 +66,10 @@ public class ProjectService {
     @OperationLog(value = "修改项目", type = "Project")
     public ProjectPo updateProject(ProjectPo projectPo) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
         ProjectPo beforeProjectPo = projectMapper.selectById(projectPo.getId());
-        if (Long.parseLong(beforeProjectPo.getUid() + "") != currentUser.getId()) {
+        if (Long.parseLong(beforeProjectPo.getUid() + "") != currentUser.getId() && !(isRoot || isAdmin)) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
         int i = projectMapper.updateById(projectPo);

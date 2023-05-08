@@ -93,12 +93,16 @@ public class TaskService {
     @OperationLog(value = "删除任务", type = "Task")
     public TaskPo deleteTask(Integer id) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
         TaskPo taskPo = taskMapper.selectById(id);
         if (null == taskPo) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
         ProjectPo projectPo = projectMapper.selectById(taskPo.getPid());
-        if (Integer.parseInt(currentUser.getId() + "") != taskPo.getUid() && Integer.parseInt(currentUser.getId() + "") != projectPo.getUid()) {
+        if (Integer.parseInt(currentUser.getId() + "") != taskPo.getUid()
+                && Integer.parseInt(currentUser.getId() + "") != projectPo.getUid()
+                && !(isRoot || isAdmin)) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
         taskMapper.deleteById(id);
@@ -109,10 +113,14 @@ public class TaskService {
     public TaskPo updateTask(Integer id, ApiUpdateTaskRequest body) {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
         TaskPo beforeTask = taskMapper.selectById(id);
         ProjectPo beforeProject = projectMapper.selectById(beforeTask.getPid());
         //只有项目负责人和开发人能修改任务
-        if (Integer.parseInt(currentUser.getId() + "") != beforeTask.getUid() && Integer.parseInt(currentUser.getId() + "") != beforeProject.getUid()) {
+        if (Integer.parseInt(currentUser.getId() + "") != beforeTask.getUid()
+                && Integer.parseInt(currentUser.getId() + "") != beforeProject.getUid()
+                && !(isRoot || isAdmin)) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
 
