@@ -46,8 +46,8 @@ public interface TaskMapper extends BaseMapper<TaskPo> {
             "         t.accepterUid,\n" +
             "         t.acceptanceTime,\n" +
             "         t.createdUid,\n" +
-            "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS overtime,\n" +
-            "         IF(((t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (\"1\",\"5\",\"6\"))),1,0 ) AS warning,\n"+
+            "         IF(((UNIX_TIMESTAMP() * 1000 - t.playEndTime > 0 ) AND( t.`status`NOT IN (\"1\",\"5\",\"6\",\"3\"))),1,0 ) AS overtime,\n" +
+            "         IF(((t.playEndTime - UNIX_TIMESTAMP() * 1000 BETWEEN 0 AND 172800000) AND( t.`status`NOT IN (\"1\",\"5\",\"6\",\"3\"))),1,0 ) AS warning,\n"+
             "         task_1.workTimeCount,\n" +
             "         task_1.progress,\n"+
             "         t.serialNumber\n"+

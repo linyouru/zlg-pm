@@ -140,6 +140,10 @@ public class TaskService {
                 throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
             }
         }
+        if ("3".equals(task.getStatus()) && beforeTask.getTimely() == null) {
+            String playEndTime = beforeTask.getPlayEndTime();
+            task.setTimely(System.currentTimeMillis() < Long.parseLong(playEndTime) ? "1" : "2");
+        }
         task.setId(id);
         int i = taskMapper.updateById(task);
         if (i == 0) {
@@ -339,9 +343,9 @@ public class TaskService {
         //任务状态修改为已完成时,判断任务及时性
         TaskPo beforeTask = taskMapper.selectById(taskPo.getId());
         if (TASK_END.equals(taskPo.getStatus())) {
-            String playEndTime = beforeTask.getPlayEndTime();
+//            String playEndTime = beforeTask.getPlayEndTime();
             long now = System.currentTimeMillis();
-            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
+//            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
             taskPo.setAcceptanceTime(now + "");
         }
         taskMapper.updateById(taskPo);
