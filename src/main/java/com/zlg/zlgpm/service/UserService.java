@@ -170,7 +170,6 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     public List<ApiUserMessageResponse> getUserMessage() {
         List<UserMessageBo> userMessage = userMapper.getUserMessage();
-        List<ApiUserMessageResponse> responses = dataConvertHelper.convert2ApiUserMessageResponse(userMessage);
-        return responses;
+        return dataConvertHelper.convert2ApiUserMessageResponse(userMessage);
     }
 }

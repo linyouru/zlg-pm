@@ -13,6 +13,10 @@ public class UserMessageBo {
      * 待审核数
      */
     private Integer auditNum;
+    /**
+     * 问题反馈任务数
+     */
+    private Integer feedbackNum;
 
     public Integer getId() {
         return id;
@@ -54,6 +58,14 @@ public class UserMessageBo {
         this.auditNum = auditNum;
     }
 
+    public Integer getFeedbackNum() {
+        return feedbackNum;
+    }
+
+    public void setFeedbackNum(Integer feedbackNum) {
+        this.feedbackNum = feedbackNum;
+    }
+
     @Override
     public String toString() {
         return "UserMessageBo{" +
@@ -62,6 +74,7 @@ public class UserMessageBo {
                 ", nickname='" + nickname + '\'' +
                 ", acceptNum=" + acceptNum +
                 ", auditNum=" + auditNum +
+                ", feedbackNum=" + feedbackNum +
                 '}';
     }
 }

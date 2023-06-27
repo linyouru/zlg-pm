@@ -2292,3 +2292,6 @@ definitions:
       auditNum:
         type: integer
         description: 待审核任务数
+      feedbackNum:
+        type: integer
+        description: 问题反馈任务数
