@@ -33,6 +33,6 @@ public interface UserMapper extends BaseMapper<UserPo> {
     @Select("SELECT id,userName,nickName FROM `user`;")
     ArrayList<UserPo> getAllUserInfo();
 
-    @Select("SELECT id, userName, nickName, a.acceptNum, b.auditNum FROM `user` AS u LEFT JOIN( SELECT accepterUid, SUM( IF ( `status` = \"2\" OR `status` = \"3\", 1, 0) ) AS acceptNum FROM project_task GROUP BY accepterUid ) AS a ON a.accepterUid = u.id LEFT JOIN ( SELECT auditorId, SUM(IF(`status` = \"1\", 1, 0)) AS auditNum FROM task_change GROUP BY auditorId ) AS b ON b.auditorId = u.id")
+    @Select("SELECT id, userName, nickName, a.acceptNum, b.auditNum, c.feedbackNum FROM `user` AS u LEFT JOIN(SELECT accepterUid, SUM(IF(`status` = \"3\", 1, 0)) AS acceptNum FROM project_task GROUP BY accepterUid ) AS a ON a.accepterUid = u.id LEFT JOIN (SELECT auditorId, SUM(IF(`status` = \"1\", 1, 0)) AS auditNum FROM task_change GROUP BY auditorId ) AS b ON b.auditorId = u.id LEFT JOIN ( SELECT uid,SUM(IF(`status` = \"2\", 1, 0) ) AS feedbackNum FROM project_task GROUP BY uid ) AS c ON c.uid = u.id")
     List<UserMessageBo> getUserMessage();
 }
