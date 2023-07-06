@@ -19,15 +19,21 @@ public class TaskPo implements Serializable {
     @TableField
     private String task;
     @TableField
+    private String detail;
+    @TableField
     private String status;
     @TableField
     private Integer uid;
     @TableField
     private Integer pid;
     @TableField
+    private Integer vid;
+    @TableField
     private Integer createdUid;
     @TableField
-    private String createdUserNickname;
+    private Integer accepterUid;
+    @TableField
+    private Integer level;
     @TableField
     private String playStartTime;
     @TableField
@@ -49,6 +55,8 @@ public class TaskPo implements Serializable {
     @TableField
     private Integer haveDocument;
     @TableField
+    private Integer serialNumber;
+    @TableField
     private String updateTime;
     @TableField
     private String createTime;
@@ -64,6 +72,30 @@ public class TaskPo implements Serializable {
         this.id = id;
     }
 
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public Integer getAccepterUid() {
+        return accepterUid;
+    }
+
+    public void setAccepterUid(Integer accepterUid) {
+        this.accepterUid = accepterUid;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
     public String getTaskType() {
         return taskType;
     }
@@ -74,6 +106,14 @@ public class TaskPo implements Serializable {
 
     public String getTask() {
         return task;
+    }
+
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public void setTask(String task) {
@@ -200,12 +240,12 @@ public class TaskPo implements Serializable {
         this.acceptanceTime = acceptanceTime;
     }
 
-    public String getCreatedUserNickname() {
-        return createdUserNickname;
+    public Integer getVid() {
+        return vid;
     }
 
-    public void setCreatedUserNickname(String createdUserNickname) {
-        this.createdUserNickname = createdUserNickname;
+    public void setVid(Integer vid) {
+        this.vid = vid;
     }
 
     @Override
@@ -217,8 +257,8 @@ public class TaskPo implements Serializable {
                 ", status='" + status + '\'' +
                 ", uid=" + uid +
                 ", pid=" + pid +
+                ", vid=" + vid +
                 ", createdUid=" + createdUid +
-                ", createdUserNickname='" + createdUserNickname + '\'' +
                 ", playStartTime='" + playStartTime + '\'' +
                 ", playEndTime='" + playEndTime + '\'' +
                 ", acceptanceTime='" + acceptanceTime + '\'' +
@@ -229,6 +269,7 @@ public class TaskPo implements Serializable {
                 ", link='" + link + '\'' +
                 ", mid=" + mid +
                 ", haveDocument=" + haveDocument +
+                ", serialNumber=" + serialNumber +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';

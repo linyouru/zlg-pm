@@ -2,7 +2,6 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.controller.model.ApiCreateProjectRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
@@ -15,11 +14,14 @@ import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
-import org.springframework.dao.DuplicateKeyException;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +44,7 @@ public class ProjectService {
             throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
         }
         ProjectPo projectPo = dataConvertHelper.convert2ProjectPo(request);
-        try {
-            int insert = projectMapper.insert(projectPo);
-        } catch (DuplicateKeyException e) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "project.11001");
-        }
+        projectMapper.insert(projectPo);
         return projectPo;
     }
 
@@ -67,21 +65,32 @@ public class ProjectService {
 
     @OperationLog(value = "修改项目", type = "Project")
     public ProjectPo updateProject(ProjectPo projectPo) {
-        try {
-            int i = projectMapper.updateById(projectPo);
-            if (i == 0) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", projectPo.getId());
-            }
-        } catch (DuplicateKeyException e) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "project.11001");
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        ProjectPo beforeProjectPo = projectMapper.selectById(projectPo.getId());
+        if (Long.parseLong(beforeProjectPo.getUid() + "") != currentUser.getId() && !(isRoot || isAdmin)) {
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
+        }
+        int i = projectMapper.updateById(projectPo);
+        if (i == 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", projectPo.getId());
         }
         return projectMapper.selectById(projectPo.getId());
     }
 
-    public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize) {
+    public Page<ProjectBo> projectList(String name, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc, String status) {
         QueryWrapper<ProjectBo> queryWrapper = new QueryWrapper<>();
         if (null != name) {
-            queryWrapper.likeRight("name", name);
+            queryWrapper.like("name", name);
+        }
+        if (StringUtils.hasText(sortField)) {
+            String[] split = sortField.split(",");
+            List<String> sortList = Arrays.asList(split);
+            queryWrapper.orderBy(true, isAsc, sortList);
+        }
+        if (StringUtils.hasText(status)) {
+            queryWrapper.eq("p.status", status);
         }
         Page<ProjectBo> projectBoPage = new Page<>();
         projectBoPage.setCurrent(currentPage);
@@ -102,19 +111,14 @@ public class ProjectService {
         return projectMapper.selectProjectStatistics(projectStatisticsBo);
     }
 
-    public List<ProjectBo> getProjectVersions(String projectName) {
-        QueryWrapper<List<Map<String, String>>> queryWrapper = new QueryWrapper<>();
-        queryWrapper.groupBy("name");
-        queryWrapper.groupBy("version");
-        queryWrapper.having("name = {0}", projectName);
-        queryWrapper.orderByDesc("createTime");
-        return projectMapper.aggregatedProjectVersions(queryWrapper);
-    }
-
-    public ProjectBo getProjectById(Integer id){
+    public ProjectBo getProjectById(Integer id) {
         QueryWrapper<ProjectBo> wrapper = new QueryWrapper<>();
-        wrapper.eq("p.id",id);
-        return projectMapper.selectProjectById(wrapper);
+        wrapper.eq("p.id", id);
+        ProjectBo projectBo = projectMapper.selectProjectById(wrapper);
+        if (null == projectBo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "project.11002", id);
+        }
+        return projectBo;
     }
 
 }

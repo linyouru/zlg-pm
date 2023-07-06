@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS `permission`
     `url`        varchar(255) NOT NULL COMMENT '资源链接',
     `name`       varchar(64)  NOT NULL COMMENT '资源名',
     `remark`     varchar(255) DEFAULT NULL COMMENT '备注',
-    `updateTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    `createTime` datetime(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateTime` datetime  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `createTime` datetime  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

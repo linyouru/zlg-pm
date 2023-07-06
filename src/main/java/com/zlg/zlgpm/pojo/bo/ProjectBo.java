@@ -9,6 +9,7 @@ public class ProjectBo {
     private String nickName;
     private String status;
     private String remark;
+    private String link;
     private String updateTime;
     private String createTime;
 
@@ -27,7 +28,7 @@ public class ProjectBo {
 
     @Override
     public String toString() {
-        return "ProjectVo{" +
+        return "ProjectBo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", version='" + version + '\'' +
@@ -35,6 +36,7 @@ public class ProjectBo {
                 ", nickName='" + nickName + '\'' +
                 ", status='" + status + '\'' +
                 ", remark='" + remark + '\'' +
+                ", link='" + link + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
@@ -46,6 +48,14 @@ public class ProjectBo {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getName() {

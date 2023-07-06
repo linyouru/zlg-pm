@@ -17,13 +17,13 @@ public class ProjectPo implements Serializable {
     @TableField
     private String name;
     @TableField
-    private String version;
-    @TableField
     private Integer uid;
     @TableField
     private String status;
     @TableField
     private String remark;
+    @TableField
+    private String link;
     @TableField
     private String updateTime;
     @TableField
@@ -34,13 +34,13 @@ public class ProjectPo implements Serializable {
 
     @Override
     public String toString() {
-        return "Project{" +
+        return "ProjectPo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", version='" + version + '\'' +
                 ", uid=" + uid +
-                ", status=" + status +
+                ", status='" + status + '\'' +
                 ", remark='" + remark + '\'' +
+                ", link='" + link + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
@@ -60,14 +60,6 @@ public class ProjectPo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 
     public Integer getUid() {
@@ -102,4 +94,11 @@ public class ProjectPo implements Serializable {
         return createTime;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 }

@@ -41,12 +41,6 @@ public class OperationLogService {
         return operationLogMapper.selectPage(page, wrapper);
     }
 
-//    private String convertTimestamp2Date(Long timestamp, String pattern) {
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-//        //设定时区
-//        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
-//        return simpleDateFormat.format(new Date(timestamp));
-//    }
 
 
 }

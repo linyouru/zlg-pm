@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 @Repository
 public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
 
@@ -22,12 +24,13 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
             "        t.workTime,\n" +
             "        t.progress,\n" +
             "        t.log,\n" +
+            "        t.feedback,\n" +
             "        t.createTime\n" +
             "FROM `task_log` AS t\n" +
             "LEFT JOIN `user` AS u\n" +
             "    ON t.uid = u.id\n" +
             "${ew.customSqlSegment}")
-    Page<TaskLogListBo> selectPage(Page<TaskLogListBo> taskLogListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
+    Page<TaskLogListBo> selectPage(Page<TaskLogListBo> taskLogListBoPage, @Param(Constants.WRAPPER) Wrapper<TaskLogListBo> ew);
 
     @Select("SELECT tl.id,\n" +
             "         tl.uid,\n" +
@@ -35,8 +38,12 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
             "         u.nickName,\n" +
             "         tl.taskId,\n" +
             "         p.`name`,\n" +
-            "         p.version,\n" +
+            "         t.task,\n" +
+            "         pv.version,\n" +
             "         tl.log,\n" +
+            "         tl.feedback,\n" +
+            "         tl.workTime,\n" +
+            "         tl.progress,\n" +
             "         tl.createTime\n" +
             "FROM `task_log` AS tl\n" +
             "LEFT JOIN `user` AS u\n" +
@@ -45,10 +52,17 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
             "    ON tl.taskId = t.id\n" +
             "LEFT JOIN project AS p\n" +
             "    ON t.pid = p.id\n" +
+            "LEFT JOIN project_version AS pv ON t.vid = pv.id\n" +
             "${ew.customSqlSegment}")
-    Page<TaskLogAggregationListBo> getTaskLogAggregation(Page<TaskLogAggregationListBo> taskLogAggregationListBoPage, @Param(Constants.WRAPPER) Wrapper ew);
+    Page<TaskLogAggregationListBo> getTaskLogAggregation(Page<TaskLogAggregationListBo> taskLogAggregationListBoPage, @Param(Constants.WRAPPER) Wrapper<TaskLogAggregationListBo> ew);
 
 
     @Select("SELECT * FROM `task_log` WHERE taskId = #{taskId} ORDER BY createTime DESC LIMIT 1;")
     TaskLogPo getLastTaskLog(Integer taskId);
+
+    /**
+     * 获取今天写了任务日志的uid
+     */
+    @Select("SELECT DISTINCT uid FROM `task_log` ${ew.customSqlSegment}")
+    ArrayList<Integer> getTodayTaskLogUid(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
 }

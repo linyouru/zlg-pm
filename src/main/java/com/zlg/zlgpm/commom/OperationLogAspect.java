@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 @Component
 public class OperationLogAspect {
 
+    private static final String TASK_END = "1";
     @Resource
     private OperationLogService logService;
 
@@ -32,7 +33,7 @@ public class OperationLogAspect {
         if (null == currentUser) {
             return;
         }
-        operationLogPo.setUserName(currentUser.getUserName());
+        operationLogPo.setUserName(currentUser.getNickName());
         operationLogPo.setUid(Math.toIntExact(currentUser.getId()));
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -54,13 +55,8 @@ public class OperationLogAspect {
                     sb.append(": ").append(projectPo.getName());
                     break;
                 case "Task":
+                case "TaskAccept":
                     TaskPo taskPo = (TaskPo) returnValue;
-                    //判断任务状态,若为已完成则定制化日志描述
-                    String status = taskPo.getStatus();
-                    if ("1".equals(status)) {
-                        sb.delete(0, sb.length());
-                        sb.append("验收任务");
-                    }
                     sb.append(": ").append(taskPo.getTask());
                     break;
                 case "Feedback":

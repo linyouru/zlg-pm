@@ -11,6 +11,7 @@ import com.zlg.zlgpm.dao.ProjectMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserRoleMapper;
 import com.zlg.zlgpm.pojo.bo.UserListBo;
+import com.zlg.zlgpm.pojo.bo.UserMessageBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
@@ -29,6 +30,7 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService extends ServiceImpl<UserMapper, UserPo> {
@@ -126,7 +128,7 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
 
     public ApiUserListByPidResponse userListByProjectName(String projectName, Integer currentPage, Integer pageSize) {
         QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
-        wrapper.eq("p.name",projectName);
+        wrapper.eq("p.name", projectName);
         Page<UserListBo> page = new Page<>();
         page.setSize(pageSize);
         page.setCurrent(currentPage);
@@ -160,5 +162,14 @@ public class UserService extends ServiceImpl<UserMapper, UserPo> {
         return dataConvertHelper.convert2ApiUserLoginResponse(userPo);
     }
 
+    public ArrayList<Map<String, Object>> getUserInfo() {
+        QueryWrapper<Map<String, Object>> wrapper = new QueryWrapper<>();
+        wrapper.notIn("userName", "叶玉琳", "root", "admin");
+        return userMapper.getUserInfo(wrapper);
+    }
 
+    public List<ApiUserMessageResponse> getUserMessage() {
+        List<UserMessageBo> userMessage = userMapper.getUserMessage();
+        return dataConvertHelper.convert2ApiUserMessageResponse(userMessage);
+    }
 }

@@ -16,6 +16,7 @@ import com.zlg.zlgpm.pojo.po.ProjectPo;
 import com.zlg.zlgpm.pojo.po.TaskChangePo;
 import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -58,10 +59,20 @@ public class TaskChangeService {
         }
         Integer pid = taskPo.getPid();
         ProjectPo projectPo = projectMapper.selectById(pid);
-        int auditorId = projectPo.getUid();
-        UserPo auditor = userMapper.selectById(auditorId);
-        taskChangePo.setAuditorId(auditorId);
-        taskChangePo.setAuditorName(auditor.getNickName());
+        if (projectPo.getUid().equals(taskChangePo.getUid())) {
+            //项目负责人的任务变更需要admin审核
+            QueryWrapper<UserPo> wrapper1 = new QueryWrapper<>();
+            wrapper1.eq("userName", "admin");
+            UserPo admin = userMapper.selectOne(wrapper1);
+            taskChangePo.setAuditorId(Integer.parseInt(admin.getId() + ""));
+            taskChangePo.setAuditorName(admin.getNickName());
+        } else {
+            //其他人的任务变更由项目负责人审核
+            int auditorId = projectPo.getUid();
+            UserPo auditor = userMapper.selectById(auditorId);
+            taskChangePo.setAuditorId(auditorId);
+            taskChangePo.setAuditorName(auditor.getNickName());
+        }
         taskChangeMapper.insert(taskChangePo);
     }
 
@@ -88,10 +99,22 @@ public class TaskChangeService {
     }
 
     public void updateTaskChange(ApiUpdateTaskChangeRequest body, Integer id) {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        TaskChangePo taskChange = taskChangeMapper.selectById(id);
+        if (!currentUser.getId().equals(Long.parseLong(taskChange.getAuditorId() + ""))) {
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
+        }
         TaskChangePo taskChangePo = new TaskChangePo();
         taskChangePo.setStatus(body.getStatus());
         taskChangePo.setId(id);
         taskChangeMapper.updateById(taskChangePo);
+    }
+
+    public void deleteTaskChange(Integer taskId){
+        QueryWrapper<TaskChangePo> wrapper = new QueryWrapper<>();
+        wrapper.eq("taskId",taskId);
+        wrapper.eq("status",1);
+        taskChangeMapper.delete(wrapper);
     }
 
 }

@@ -24,7 +24,7 @@ public class TaskListBo {
     private String remark;
     private String link;
     private String module;
-    private Integer level;
+    private Integer moduleLevel;
     private String updateTime;
     private String createTime;
     private String overtime;
@@ -35,6 +35,13 @@ public class TaskListBo {
     private String acceptanceTime;
     private Integer createdUid;
     private String createdUserNickname;
+    private String detail;
+    private Integer accepterUid;
+    private String accepterNickName;
+    private Integer level;
+    private Integer vid;
+
+    private Integer serialNumber;
 
     public TaskListBo() {
     }
@@ -64,7 +71,7 @@ public class TaskListBo {
                 ", remark='" + remark + '\'' +
                 ", link='" + link + '\'' +
                 ", module='" + module + '\'' +
-                ", level=" + level +
+                ", moduleLevel=" + moduleLevel +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", overtime='" + overtime + '\'' +
@@ -75,7 +82,61 @@ public class TaskListBo {
                 ", acceptanceTime='" + acceptanceTime + '\'' +
                 ", createdUid=" + createdUid +
                 ", createdUserNickname='" + createdUserNickname + '\'' +
+                ", detail='" + detail + '\'' +
+                ", accepterUid=" + accepterUid +
+                ", accepterNickName='" + accepterNickName + '\'' +
+                ", level=" + level +
+                ", vid=" + vid +
+                ", serialNumber=" + serialNumber +
                 '}';
+    }
+
+    public String getAccepterNickName() {
+        return accepterNickName;
+    }
+
+    public void setAccepterNickName(String accepterNickName) {
+        this.accepterNickName = accepterNickName;
+    }
+
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public Integer getVid() {
+        return vid;
+    }
+
+    public void setVid(Integer vid) {
+        this.vid = vid;
+    }
+
+    public Integer getModuleLevel() {
+        return moduleLevel;
+    }
+
+    public void setModuleLevel(Integer moduleLevel) {
+        this.moduleLevel = moduleLevel;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public Integer getAccepterUid() {
+        return accepterUid;
+    }
+
+    public void setAccepterUid(Integer accepterUid) {
+        this.accepterUid = accepterUid;
     }
 
     public void setProjectUid(Integer projectUid) {

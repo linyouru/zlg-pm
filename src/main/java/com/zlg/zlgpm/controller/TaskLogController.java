@@ -5,13 +5,16 @@ import com.zlg.zlgpm.controller.model.ApiCreateTaskLogRequest;
 import com.zlg.zlgpm.controller.model.ApiLastTaskLogResponse;
 import com.zlg.zlgpm.controller.model.ApiTaskLogAggregationListResponse;
 import com.zlg.zlgpm.controller.model.ApiTaskLogListResponse;
+import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskLogAggregationListBo;
 import com.zlg.zlgpm.pojo.bo.TaskLogListBo;
 import com.zlg.zlgpm.pojo.po.TaskLogPo;
 import com.zlg.zlgpm.service.TaskLogService;
 import io.swagger.annotations.Api;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -46,8 +49,11 @@ public class TaskLogController implements TaskLogApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskLogAggregationListResponse> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, String startTime, String endTime) {
-        Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, startTime, endTime);
+    public ResponseEntity<ApiTaskLogAggregationListResponse> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, String sortField, Boolean isAsc, String startTime, String endTime) {
+        if(StringUtils.hasText(sortField)&&isAsc ==null){
+            throw new BizException(HttpStatus.BAD_REQUEST,"task.12002");
+        }
+        Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, pid, sortField, isAsc, startTime, endTime);
         ApiTaskLogAggregationListResponse response = dataConvertHelper.convertToAggregationListResponse(taskLogAggregation);
         return ResponseEntity.ok().body(response);
     }

@@ -37,6 +37,8 @@ public class ShiroConfig {
         // 允许匿名访问
         filterChainDefinitionMap.put("/v1/login", "anon");
         filterChainDefinitionMap.put("/v1/user/password", "anon");
+        //开放WebSocket
+        filterChainDefinitionMap.put("/websocket", "anon");
 
         // 允许匿名访问swagger2页面
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");

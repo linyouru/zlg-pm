@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS `task_feedback`
     `uid`        int(8)               DEFAULT NULL COMMENT '反馈人id',
     `tid`        int(8)      NOT NULL COMMENT '任务id',
     `remark`     varchar(255)         DEFAULT NULL COMMENT '备注',
-    `updateTime` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-    `createTime` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

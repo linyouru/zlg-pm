@@ -25,22 +25,13 @@ public class TaskLogPo implements Serializable {
     @TableField
     private String log;
     @TableField
+    private String feedback;
+    @TableField
     private String updateTime;
     @TableField
     private String createTime;
 
     public TaskLogPo() {
-    }
-
-    public TaskLogPo(Integer id, Integer taskId, Integer uid, String workTime, String progress, String log, String updateTime, String createTime) {
-        this.id = id;
-        this.taskId = taskId;
-        this.uid = uid;
-        this.workTime = workTime;
-        this.progress = progress;
-        this.log = log;
-        this.updateTime = updateTime;
-        this.createTime = createTime;
     }
 
     public Integer getId() {
@@ -107,6 +98,14 @@ public class TaskLogPo implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
     @Override
     public String toString() {
         return "TaskLogPo{" +
@@ -116,6 +115,7 @@ public class TaskLogPo implements Serializable {
                 ", workTime='" + workTime + '\'' +
                 ", progress='" + progress + '\'' +
                 ", log='" + log + '\'' +
+                ", feedback='" + feedback + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';

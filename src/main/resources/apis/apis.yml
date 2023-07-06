@@ -267,6 +267,26 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/user/message:
+    get:
+      tags:
+        - user
+      summary: 获取全部用户通知信息
+      description: 获取全部用户通知信息
+      operationId: getUserMessage
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/UserMessageResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/project:
     get:
       tags:
@@ -284,7 +304,7 @@ paths:
         200:
           description: success
           schema:
-            $ref: "#/definitions/ProjectResponse"
+            $ref: "#/definitions/GetProjectByIdResponse"
         400:
           description: parameter error;
         500:
@@ -316,7 +336,7 @@ paths:
       tags:
         - project
       summary: 修改项目信息
-      description: 修改项目信息(仅root),name+version要唯一
+      description: 修改项目信息
       operationId: updateProject
       produces:
         - "application/json"
@@ -383,6 +403,18 @@ paths:
           in: query
           type: integer
           default: 10
+        - in: query
+          name: sortField
+          type: string
+          description: 排序字段,多字段用英文逗号分隔
+        - in: query
+          name: isAsc
+          type: boolean
+          description: 是否为升序,当指定sortField时,isAsc也必须指定
+        - in: query
+          type: string
+          name: status
+          description: 项目状态
       responses:
         200:
           description: success
@@ -448,6 +480,7 @@ paths:
       summary: 聚合项目名称
       description: 聚合项目名称
       operationId: projectGroupName
+      deprecated: true
       produces:
         - "application/json"
       responses:
@@ -494,9 +527,9 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - name: projectName
+        - name: pid
           in: query
-          type: string
+          type: integer
           required: true
       responses:
         200:
@@ -507,7 +540,93 @@ paths:
               $ref: "#/definitions/ProjectVersionsResponse"
         500:
           description: server error
+    post:
+      tags:
+        - project
+      summary: 创建项目版本
+      description: 创建项目版本
+      operationId: createProjectVersion
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateProjectVersionRequest"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error;
+        500:
+          description: server error;
+    delete:
+      tags:
+        - project
+      summary: 删除项目版本
+      description: 删除项目版本,版本下有任务无法删除
+      operationId: deleteProjectVersion
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          type: integer
+          name: id
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
+        500:
+                description: server error
+  /v1/project/versions/all:
+    get:
+      tags:
+        - project
+      summary: 获取全部项目版本
+      description: 获取全部项目版本
+      operationId: getProjectVersionsAll
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ProjectVersionsAllResponse"
+        500:
+          description: server error
   /v1/task:
+    get:
+      tags:
+        - task
+      summary: 查询任务信息
+      description: 查询任务信息
+      operationId: queryTask
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: 任务id
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
     post:
       tags:
         - task
@@ -517,6 +636,11 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - in: query
+          name: sandEmail
+          type: boolean
+          required: true
+          description: 创建任务是否给任务开发者发邮件
         - in: body
           name: body
           required: true
@@ -525,6 +649,8 @@ paths:
       responses:
         200:
           description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
         400:
           description: parameter error
         500:
@@ -598,15 +724,25 @@ paths:
           type: integer
           description: 项目负责人id
         - in: query
+          name: createdUid
+          type: integer
+          description: 创建人id
+        - in: query
+          name: accepterUid
+          type: integer
+          description: 验收人id
+        - in: query
           name: status
           type: string
           description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中; 多状态使用英文逗号分隔
         - in: query
-          name: projectName
-          type: string
+          name: pid
+          type: integer
+          description: 项目id
         - in: query
-          name: projectVersion
-          type: string
+          name: vid
+          type: integer
+          description: 版本id
         - in: query
           name: uid
           type: integer
@@ -636,13 +772,101 @@ paths:
           description: 是否为升序,当指定sortField时,isAsc也必须指定
         - in: query
           name: mid
-          type: integer
-          description: 功能模块id
+          type: string
+          description: 功能模块id,多模块用英文逗号分隔
+        - in: query
+          name: level
+          type: string
+          description: 优先级:1低,2中,3高;多优先级用英文逗号分隔
+        - in: query
+          name: task
+          type: string
+          description: 任务标题
+        - in: query
+          name: detail
+          type: string
+          description: 任务内容
       responses:
         200:
           description: success
           schema:
             $ref: "#/definitions/TaskListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /v1/task/accept:
+    put:
+      tags:
+        - task
+      summary: 验收任务
+      description: 仅任务验收人可验收
+      operationId: taskAccept
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+          description: 任务id
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/AcceptTaskRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /v1/task/relevance/list:
+    get:
+      tags:
+        - task
+      summary: 查询项目关联的外部任务
+      description: 查询项目关联的外部任务
+      operationId: getTaskRelevanceList
+      produces:
+        - "application/json"
+      parameters:
+        - name: vid
+          in: query
+          type: integer
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
+  /v1/task/relevance:
+    get:
+      tags:
+        - task
+      summary: 获取任务关联的外部项目版本信息
+      description: 获取任务关联的外部项目版本信息
+      operationId: getTaskRelevance
+      produces:
+        - "application/json"
+      parameters:
+        - name: tid
+          in: query
+          type: integer
+          required: true
+          description: 任务id
+      responses:
+        200:
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ProjectVersionsAllResponse"
         400:
           description: parameter error
         500:
@@ -863,6 +1087,7 @@ paths:
       summary: 修改问题反馈
       description: 修改问题反馈
       operationId: updateFeedback
+      deprecated: true
       produces:
         - "application/json"
       parameters:
@@ -889,6 +1114,7 @@ paths:
       summary: 删除任务问题反馈
       description: 删除任务问题反馈
       operationId: deleteFeedback
+      deprecated: true
       produces:
         - "application/json"
       parameters:
@@ -961,6 +1187,17 @@ paths:
           type: string
           maxLength: 255
           description: 日志内容,支持模糊查询
+        - name: pid
+          in: query
+          type: integer
+        - in: query
+          name: sortField
+          type: string
+          description: 排序字段,多字段用英文逗号分隔
+        - in: query
+          name: isAsc
+          type: boolean
+          description: 是否为升序,当指定sortField时,isAsc也必须指定
         - in: query
           name: startTime
           type: string
@@ -974,6 +1211,35 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/TaskLogAggregationListResponse"
+        500:
+          description: server error
+  /v1/task/handleSort:
+    put:
+      tags:
+        - task
+      summary: 拖拽任务排序
+      description: 若是按功能块移动,taskId必须按移动功能块中的任务SerialNumber顺序拼接为字符串
+      operationId: handleTaskSort
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: taskId
+          type: string
+          required: true
+          description: 被移动的任务id,多个用英文逗号分隔
+        - in: query
+          name: newSerialNumber
+          type: integer
+          required: true
+          description: 移动后的新序号
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/BaseResp"
+        400:
+          description: parameter error
         500:
           description: server error
   /v1/operationLog/list:
@@ -1190,24 +1456,31 @@ definitions:
         type: string
       custom:
         type: string
+  CreateProjectVersionRequest:
+    type: object
+    required:
+      - version
+      - pid
+    properties:
+      version:
+        type: string
+      pid:
+        type: integer
+      remark:
+        type: string
   CreateProjectRequest:
     type: object
     required:
       - name
-      - version
       - uid
       - status
+      - module
     properties:
       name:
         type: string
         minLength: 2
         maxLength: 32
         description: 项目名
-      version:
-        type: string
-        minLength: 2
-        maxLength: 8
-        description: 项目版本号
       uid:
         type: integer
         minLength: 1
@@ -1221,13 +1494,16 @@ definitions:
         enum:
           - "1"
           - "2"
-        description: "项目状态,1:开发中;2:已完成"
+        description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
         maxLength: 255
+      link:
+        type: string
+        description: 任务文档链接
       module:
         type: string
-        description: 功能模块,json字符串
+        description: 功能模块,json字符串,没有时传空数组
   UpdateProjectRequest:
     type: object
     required:
@@ -1238,11 +1514,6 @@ definitions:
         minLength: 2
         maxLength: 32
         description: 项目名称
-      version:
-        type: string
-        minLength: 2
-        maxLength: 8
-        description: 项目版本号
       uid:
         type: integer
         minLength: 1
@@ -1256,13 +1527,41 @@ definitions:
         enum:
           - "1"
           - "2"
-        description: "项目状态,1:开发中;2:已完成"
+        description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
         maxLength: 255
+      link:
+        type: string
+        description: 任务文档链接
       module:
         type: string
         description: 功能模块,json字符串
+  GetProjectByIdResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      uid:
+        type: integer
+        description: 项目负责人Id
+      name:
+        type: string
+      nickName:
+        type: string
+        description: 项目负责人昵称
+      status:
+        type: string
+        description: "项目状态,1:活跃;2:非活跃"
+      remark:
+        type: string
+      link:
+        type: string
+        description: 任务文档链接
+      updateTime:
+        type: string
+      createTime:
+        type: string
   ProjectResponse:
     type: object
     properties:
@@ -1273,16 +1572,17 @@ definitions:
         description: 项目负责人Id
       name:
         type: string
-      version:
-        type: string
       nickName:
         type: string
         description: 项目负责人昵称
       status:
         type: string
-        description: "项目状态,1:开发中;2:已完成"
+        description: "项目状态,1:活跃;2:非活跃"
       remark:
         type: string
+      link:
+        type: string
+        description: 任务文档链接
       updateTime:
         type: string
       createTime:
@@ -1345,13 +1645,25 @@ definitions:
     properties:
       id:
         type: integer
-        description: 项目id
-      name:
-        type: string
-        description: 项目名
+        description: 项目版本id
       version:
         type: string
         description: 项目版本
+  ProjectVersionsAllResponse:
+    type: object
+    properties:
+      vid:
+        type: integer
+        description: 版本id
+      version:
+        type: string
+        description: 版本名
+      pid:
+        type: integer
+        description: 项目id
+      projectName:
+        type: string
+        description: 项目名
   UserListByPidResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -1386,18 +1698,25 @@ definitions:
     type: object
     required:
       - pid
+      - uid
+      - vid
+      - task
       - taskType
       - status
       - mid
       - haveDocument
-      - createdUid
+      - level
+      - accepterUid
     properties:
       pid:
         type: integer
         description: 项目id
       uid:
         type: integer
-        description: 负责人用户id
+        description: 任务负责人用户id
+      vid:
+        type: integer
+        description: 项目版本id
       taskType:
         type: string
         enum:
@@ -1407,44 +1726,24 @@ definitions:
         description: 任务类型 1前端；2后端；3产品
       task:
         type: string
+        description: 标题
+        maxLength: 100
+      detail:
+        type: string
         description: 任务内容
         maxLength: 1023
       status:
         type: string
         enum:
-          - 1
-          - 2
-          - 3
           - 4
-          - 5
           - 6
-        description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
+        description: 任务状态 4开发中；6排队中
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
       playEndTime:
         type: string
         description: 计划结束时间,时间戳(ms)
-      timely:
-        type: string
-        enum:
-          - 1
-          - 2
-        description: 及时性,1是;2否
-      quality:
-        type: string
-        description: 质量分
-      document:
-        type: string
-        description: 文档分
-      remark:
-        type: string
-        description: 备注
-        maxLength: 255
-      link:
-        type: string
-        description: 文档备注
-        maxLength: 255
       mid:
         type: integer
         description: 功能模块id
@@ -1454,6 +1753,18 @@ definitions:
           - 0
           - 1
         description: 是否需要文档，0否；1是
+      relevance:
+        type: string
+        description: 任务关联项目版本id,多个用英文逗号分隔
+      serialNumber:
+        type: integer
+        description: 任务序号(拖拽排序模式中,右键插入任务的情况下必填)
+      accepterUid:
+        type: integer
+        description: 验收人Id
+      level:
+        type: integer
+        description: 优先级，1低、2中、3高
   UpdateTaskRequest:
     type: object
     properties:
@@ -1466,39 +1777,25 @@ definitions:
         description: 任务类型 1前端；2后端；3产品
       task:
         type: string
+        description: 标题
+        maxLength: 1023
+      detail:
+        type: string
         description: 任务内容
         maxLength: 1023
       status:
         type: string
         enum:
-          - 1
-          - 2
           - 3
           - 4
           - 5
-          - 6
-        description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
+        description: 任务状态 3待验收；4开发中；5暂停
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
       playEndTime:
         type: string
         description: 计划结束时间,时间戳(ms)
-      acceptanceTime:
-        type: string
-        description: 验收时间,时间戳(ms)
-      timely:
-        type: string
-        enum:
-          - 1
-          - 2
-        description: 及时性,1是;2否
-      quality:
-        type: string
-        description: 质量分
-      document:
-        type: string
-        description: 文档分
       remark:
         type: string
         description: 备注
@@ -1514,12 +1811,42 @@ definitions:
       mid:
         type: integer
         description: 功能模块id
+      vid:
+        type: integer
+        default: 项目版本id
       haveDocument:
         type: integer
         enum:
           - 0
           - 1
         description: 是否需要文档，0否；1是
+      relevance:
+        type: string
+        description: 任务关联项目版本id,多个用英文逗号分隔
+      accepterUid:
+        type: integer
+        description: 验收人Id
+      level:
+        type: integer
+        description: 优先级，1低、2中、3高
+  AcceptTaskRequest:
+    type: object
+    properties:
+      status:
+        type: string
+        enum:
+          - 1
+          - 2
+        description: 任务状态 1已完成；2反馈;
+      quality:
+        type: string
+        description: 质量分
+      document:
+        type: string
+        description: 文档分
+      remark:
+        type: string
+        description: 备注
   TaskListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -1550,6 +1877,9 @@ definitions:
       uid:
         type: integer
         description: 开发负责人id
+      vid:
+        type: integer
+        description: 项目版本id
       status:
         type: string
         description: 任务状态 1已完成；2反馈; 3待验收；4开发中；5暂停; 6排队中
@@ -1607,6 +1937,21 @@ definitions:
       createdUserNickname:
         type: string
         description: 任务创建人昵称
+      level:
+        type: integer
+        description: 任务优先级
+      detail:
+        type: string
+        description: 任务详情
+      accepterUid:
+        type: integer
+        description: 验收人id
+      accepterNickName:
+        type: string
+        description: 验收人昵称
+      serialNumber:
+        type: integer
+        description: 任务序号
   TaskStatisticsResponse:
     type: object
     properties:
@@ -1782,6 +2127,10 @@ definitions:
         type: string
         maxLength: 1023
         description: 日志内容
+      feedback:
+        type: string
+        maxLength: 1023
+        description: 问题反馈
   TaskLogListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -1810,6 +2159,8 @@ definitions:
         type: string
       log:
         type: string
+      feedback:
+        type: string
       createTime:
         type: string
   LastTaskLogResponse:
@@ -1826,6 +2177,8 @@ definitions:
       progress:
         type: string
       log:
+        type: string
+      feedback:
         type: string
       createTime:
         type: string
@@ -1857,7 +2210,16 @@ definitions:
         type: string
       log:
         type: string
+      workTime:
+        type: string
+      progress:
+        type: string
+        description: 进度
+      feedback:
+        type: string
       createTime:
+        type: string
+      task:
         type: string
   CreateFeedbackRequest:
     type: object
@@ -1914,3 +2276,22 @@ definitions:
         type: string
       createTime:
         type: string
+  UserMessageResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: 用户id
+      userName:
+        type: string
+      nickName:
+        type: string
+      acceptNum:
+        type: integer
+        description: 待验收任务数（包含待验收和问题反馈任务）
+      auditNum:
+        type: integer
+        description: 待审核任务数
+      feedbackNum:
+        type: integer
+        description: 问题反馈任务数

@@ -12,6 +12,7 @@ public class TaskLogListBo {
     private String workTime;
     private String progress;
     private String log;
+    private String feedback;
     private String createTime;
 
     public TaskLogListBo() {
@@ -27,6 +28,14 @@ public class TaskLogListBo {
         this.progress = progress;
         this.log = log;
         this.createTime = createTime;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
     public Integer getId() {
@@ -112,6 +121,7 @@ public class TaskLogListBo {
                 ", workTime='" + workTime + '\'' +
                 ", progress='" + progress + '\'' +
                 ", log='" + log + '\'' +
+                ", feedback='" + feedback + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
     }

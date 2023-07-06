@@ -7,14 +7,15 @@ import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.pojo.bo.ProjectBo;
 import com.zlg.zlgpm.pojo.bo.ProjectStatisticsBo;
-import com.zlg.zlgpm.pojo.po.ProjectModulePo;
-import com.zlg.zlgpm.pojo.po.ProjectPo;
+import com.zlg.zlgpm.pojo.bo.ProjectVersionBo;
+import com.zlg.zlgpm.pojo.po.*;
 import com.zlg.zlgpm.helper.DataConvertHelper;
-import com.zlg.zlgpm.pojo.po.UserProjectPo;
 import com.zlg.zlgpm.service.ProjectModuleService;
 import com.zlg.zlgpm.service.ProjectService;
+import com.zlg.zlgpm.service.ProjectVersionService;
 import com.zlg.zlgpm.service.UserProjectService;
 import io.swagger.annotations.Api;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,8 @@ public class ProjectController implements ProjectApi {
     private UserProjectService userProjectService;
     @Resource
     private ProjectModuleService projectModuleService;
+    @Resource
+    private ProjectVersionService projectVersionService;
 
     @Override
 //    @RequiresRoles(value = "root")
@@ -51,14 +54,14 @@ public class ProjectController implements ProjectApi {
         ProjectPo project = projectService.createProject(body);
         //添加项目和成员关系
         String memberUid = body.getMemberUid();
-        if (null != memberUid) {
+        if (StringUtils.hasText(memberUid)) {
             List<UserProjectPo> list = generateUserProjectPoList(memberUid, project.getUid(), project.getId());
             userProjectService.saveBatch(list);
         }
         //添加项目功能块
         ArrayList<ProjectModulePo> list = batchProjectModule(body.getModule(), project.getId());
         projectModuleService.saveBatch(list);
-        return ResponseEntity.ok(new ApiBaseResp().message("success"));
+        return ResponseEntity.ok(new ApiBaseResp().message(project.getId() + ""));
     }
 
     @Override
@@ -88,10 +91,8 @@ public class ProjectController implements ProjectApi {
                     updateList.add(projectModulePo);
                 }
             }
-//            if (updateList.size() > 0) {
-                projectModuleService.updateBatchById(updateList);
-                projectModuleService.deleteProjectModuleForUpdate(updateList, id);
-//            }
+            projectModuleService.updateBatchById(updateList);
+            projectModuleService.deleteProjectModuleForUpdate(updateList, id);
             if (createList.size() > 0) {
                 projectModuleService.saveBatch(createList);
             }
@@ -109,17 +110,10 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<ApiProjectResponse> getProjectById(Integer id) {
+    public ResponseEntity<ApiGetProjectByIdResponse> getProjectById(Integer id) {
         ProjectBo projectById = projectService.getProjectById(id);
-        ApiProjectResponse response = dataConvertHelper.convert2ApiProjectResponse(projectById);
+        ApiGetProjectByIdResponse response = dataConvertHelper.convert2ApiGetProjectByIdResponse(projectById);
         return ResponseEntity.ok().body(response);
-    }
-
-    @Override
-    public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(String projectName) {
-        List<ProjectBo> projectVersions = projectService.getProjectVersions(projectName);
-        List<ApiProjectVersionsResponse> responses = dataConvertHelper.convert2ApiProjectVersionsResponse(projectVersions);
-        return ResponseEntity.ok().body(responses);
     }
 
     @Override
@@ -130,8 +124,9 @@ public class ProjectController implements ProjectApi {
     }
 
     @Override
-    public ResponseEntity<ApiProjectListResponse> projectList(String name, Integer currentPage, Integer pageSize) {
-        Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize);
+    public ResponseEntity<ApiProjectListResponse> projectList(String name, Integer currentPage, Integer pageSize, String sortField,
+                                                              Boolean isAsc, String status) {
+        Page<ProjectBo> projectBoPage = projectService.projectList(name, currentPage, pageSize, sortField, isAsc, status);
         ApiProjectListResponse apiProjectListResponse = dataConvertHelper.convert2ApiProjectListResponse(projectBoPage);
         return ResponseEntity.ok().body(apiProjectListResponse);
     }
@@ -141,6 +136,33 @@ public class ProjectController implements ProjectApi {
         Page<ProjectStatisticsBo> projectStatisticsBoPage = projectService.selectProjectStatistics(currentPage, pageSize);
         ApiProjectStatisticsListResponse apiProjectStatisticsListResponse = dataConvertHelper.convert2ApiProjectStatisticsListResponse(projectStatisticsBoPage);
         return ResponseEntity.ok().body(apiProjectStatisticsListResponse);
+    }
+
+    @Override
+    public ResponseEntity<List<ApiProjectVersionsResponse>> getProjectVersions(Integer pid) {
+        List<ProjectVersionPo> projectVersions = projectVersionService.getProjectVersions(pid);
+        List<ApiProjectVersionsResponse> responses = dataConvertHelper.convert2ApiProjectVersionsResponse(projectVersions);
+        return ResponseEntity.ok().body(responses);
+    }
+
+    @Override
+    public ResponseEntity<List<ApiProjectVersionsAllResponse>> getProjectVersionsAll() {
+        List<ProjectVersionBo> projectVersionsAll = projectVersionService.getProjectVersionsAll();
+        List<ApiProjectVersionsAllResponse> responses = dataConvertHelper.convert2ApiProjectVersionsAllResponse(projectVersionsAll);
+        return ResponseEntity.ok().body(responses);
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> createProjectVersion(ApiCreateProjectVersionRequest body) {
+        ProjectVersionPo projectVersionPo = dataConvertHelper.convert2ProjectVersionPo(body);
+        projectVersionService.createProjectVersion(projectVersionPo);
+        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
+    }
+
+    @Override
+    public ResponseEntity<ApiBaseResp> deleteProjectVersion(Integer id) {
+        projectVersionService.deleteProjectVersion(id);
+        return ResponseEntity.ok().body(new ApiBaseResp().message("success"));
     }
 
     @Override

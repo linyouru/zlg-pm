@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class TaskLogService {
@@ -34,18 +37,21 @@ public class TaskLogService {
 
     public void createTaskLog(ApiCreateTaskLogRequest body) {
         TaskLogPo taskLogPo = dataConvertHelper.convert2TaskLogPo(body);
+        TaskPo taskPo = taskMapper.selectById(taskLogPo.getTaskId());
+        if (null == taskPo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskLogPo.getTaskId());
+        }
+        if(!taskPo.getUid().equals(taskLogPo.getUid())){
+            //仅任务开发人可以创建任务日志
+            throw new BizException(HttpStatus.FORBIDDEN,"auth.11001");
+        }
         if (taskLogPo.getUid() != null) {
             UserPo userPo = userMapper.selectById(taskLogPo.getUid());
             if (null == userPo) {
                 throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
             }
         }
-        if (taskLogPo.getTaskId() != null) {
-            TaskPo taskPo = taskMapper.selectById(taskLogPo.getTaskId());
-            if (null == taskPo) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskLogPo.getTaskId());
-            }
-        }
+
         taskLogMapper.insert(taskLogPo);
     }
 
@@ -60,7 +66,7 @@ public class TaskLogService {
         return taskLogMapper.selectPage(page, queryWrapper);
     }
 
-    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, String startTime, String endTime) {
+    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, String sortField, Boolean isAsc, String startTime, String endTime) {
         QueryWrapper<TaskLogAggregationListBo> queryWrapper = new QueryWrapper<>();
         if (null != uid) {
             queryWrapper.eq("tl.uid", uid);
@@ -71,7 +77,14 @@ public class TaskLogService {
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
             queryWrapper.between("tl.createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
         }
-        queryWrapper.orderByDesc("tl.createTime");
+        if(null!= pid){
+            queryWrapper.eq("p.id",pid);
+        }
+        if (StringUtils.hasText(sortField)) {
+            String[] split = sortField.split(",");
+            List<String> sortList = Arrays.asList(split);
+            queryWrapper.orderBy(true, isAsc, sortList);
+        }
 
         Page<TaskLogAggregationListBo> page = new Page<>();
         page.setCurrent(currentPage);
@@ -89,6 +102,14 @@ public class TaskLogService {
             throw new BizException(HttpStatus.NOT_FOUND, "taskLog.13001",taskId);
         }
         return lastTaskLog;
+    }
+
+    public ArrayList<Integer> getTodayTaskLogUid(){
+        long endTime = System.currentTimeMillis();
+        long startTime = endTime - 82800000;
+        QueryWrapper<Integer> wrapper = new QueryWrapper<>();
+        wrapper.between("createTime",Utils.convertTimestamp2Date(startTime, "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(endTime, "yyyy-MM-dd HH:mm:ss"));
+        return taskLogMapper.getTodayTaskLogUid(wrapper);
     }
 
 }

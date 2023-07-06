@@ -10,21 +10,64 @@ public class TaskLogAggregationListBo {
     private String name;
     private String version;
     private String log;
+    private String workTime;
+    private String progress;
+    private String feedback;
     private String createTime;
+    private String task;
 
     public TaskLogAggregationListBo() {
     }
 
-    public TaskLogAggregationListBo(Integer id, Integer uid, String userName, String nickName, Integer taskId, String name, String version, String log, String createTime) {
-        this.id = id;
-        this.uid = uid;
-        this.userName = userName;
-        this.nickName = nickName;
-        this.taskId = taskId;
-        this.name = name;
-        this.version = version;
-        this.log = log;
-        this.createTime = createTime;
+    @Override
+    public String toString() {
+        return "TaskLogAggregationListBo{" +
+                "id=" + id +
+                ", uid=" + uid +
+                ", userName='" + userName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", taskId=" + taskId +
+                ", name='" + name + '\'' +
+                ", version='" + version + '\'' +
+                ", log='" + log + '\'' +
+                ", workTime='" + workTime + '\'' +
+                ", progress='" + progress + '\'' +
+                ", feedback='" + feedback + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", task='" + task + '\'' +
+                '}';
+    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public void setTask(String task) {
+        this.task = task;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
     }
 
     public Integer getId() {
@@ -99,18 +142,4 @@ public class TaskLogAggregationListBo {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "TaskLogAggregationListBo{" +
-                "id=" + id +
-                ", uid=" + uid +
-                ", userName='" + userName + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", taskId=" + taskId +
-                ", name='" + name + '\'' +
-                ", version='" + version + '\'' +
-                ", log='" + log + '\'' +
-                ", createTime='" + createTime + '\'' +
-                '}';
-    }
 }
