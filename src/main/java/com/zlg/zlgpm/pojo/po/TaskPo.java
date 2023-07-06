@@ -62,8 +62,18 @@ public class TaskPo implements Serializable {
     private String createTime;
     @TableField
     private Integer sendEmail2Creator;
+    @TableField
+    private Integer planWorkTime;
 
     public TaskPo() {
+    }
+
+    public Integer getPlanWorkTime() {
+        return planWorkTime;
+    }
+
+    public void setPlanWorkTime(Integer planWorkTime) {
+        this.planWorkTime = planWorkTime;
     }
 
     public Integer getSendEmail2Creator() {
