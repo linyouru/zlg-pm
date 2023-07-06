@@ -343,9 +343,9 @@ public class TaskService {
         //任务状态修改为已完成时,判断任务及时性
         TaskPo beforeTask = taskMapper.selectById(taskPo.getId());
         if (TASK_END.equals(taskPo.getStatus())) {
-//            String playEndTime = beforeTask.getPlayEndTime();
+            String playEndTime = beforeTask.getPlayEndTime();
             long now = System.currentTimeMillis();
-//            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
+            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
             taskPo.setAcceptanceTime(now + "");
         }
         taskMapper.updateById(taskPo);
