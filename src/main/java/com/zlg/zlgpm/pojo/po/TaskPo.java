@@ -60,8 +60,18 @@ public class TaskPo implements Serializable {
     private String updateTime;
     @TableField
     private String createTime;
+    @TableField
+    private Integer sendEmail2Creator;
 
     public TaskPo() {
+    }
+
+    public Integer getSendEmail2Creator() {
+        return sendEmail2Creator;
+    }
+
+    public void setSendEmail2Creator(Integer sendEmail2Creator) {
+        this.sendEmail2Creator = sendEmail2Creator;
     }
 
     public Integer getId() {
@@ -94,6 +104,37 @@ public class TaskPo implements Serializable {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskPo{" +
+                "id=" + id +
+                ", taskType='" + taskType + '\'' +
+                ", task='" + task + '\'' +
+                ", detail='" + detail + '\'' +
+                ", status='" + status + '\'' +
+                ", uid=" + uid +
+                ", pid=" + pid +
+                ", vid=" + vid +
+                ", createdUid=" + createdUid +
+                ", accepterUid=" + accepterUid +
+                ", level=" + level +
+                ", playStartTime='" + playStartTime + '\'' +
+                ", playEndTime='" + playEndTime + '\'' +
+                ", acceptanceTime='" + acceptanceTime + '\'' +
+                ", timely='" + timely + '\'' +
+                ", quality='" + quality + '\'' +
+                ", document='" + document + '\'' +
+                ", remark='" + remark + '\'' +
+                ", link='" + link + '\'' +
+                ", mid=" + mid +
+                ", haveDocument=" + haveDocument +
+                ", serialNumber=" + serialNumber +
+                ", updateTime='" + updateTime + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", sendEmail2Creator=" + sendEmail2Creator +
+                '}';
     }
 
     public String getTaskType() {
@@ -248,30 +289,4 @@ public class TaskPo implements Serializable {
         this.vid = vid;
     }
 
-    @Override
-    public String toString() {
-        return "TaskPo{" +
-                "id=" + id +
-                ", taskType='" + taskType + '\'' +
-                ", task='" + task + '\'' +
-                ", status='" + status + '\'' +
-                ", uid=" + uid +
-                ", pid=" + pid +
-                ", vid=" + vid +
-                ", createdUid=" + createdUid +
-                ", playStartTime='" + playStartTime + '\'' +
-                ", playEndTime='" + playEndTime + '\'' +
-                ", acceptanceTime='" + acceptanceTime + '\'' +
-                ", timely='" + timely + '\'' +
-                ", quality='" + quality + '\'' +
-                ", document='" + document + '\'' +
-                ", remark='" + remark + '\'' +
-                ", link='" + link + '\'' +
-                ", mid=" + mid +
-                ", haveDocument=" + haveDocument +
-                ", serialNumber=" + serialNumber +
-                ", updateTime='" + updateTime + '\'' +
-                ", createTime='" + createTime + '\'' +
-                '}';
-    }
 }

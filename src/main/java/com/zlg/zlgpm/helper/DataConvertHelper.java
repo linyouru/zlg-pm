@@ -109,6 +109,7 @@ public class DataConvertHelper {
         TaskPo taskPo = dataConvertMapping.convertToTaskPo(taskRequest);
         taskPo.setStatus(taskRequest.getStatus().toString());
         taskPo.setTaskType(taskRequest.getTaskType().toString());
+        taskPo.setSendEmail2Creator(taskRequest.getSendEmail2Creator() != null ? taskPo.getSendEmail2Creator() : 0);
         return taskPo;
     }
 

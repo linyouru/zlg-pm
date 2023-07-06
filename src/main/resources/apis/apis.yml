@@ -1765,6 +1765,10 @@ definitions:
       level:
         type: integer
         description: 优先级，1低、2中、3高
+      sendEmail2Creator:
+        type: integer
+        description: 任务完成时是否发送邮件给创建人,0否；1是
+        default: 0
   UpdateTaskRequest:
     type: object
     properties:

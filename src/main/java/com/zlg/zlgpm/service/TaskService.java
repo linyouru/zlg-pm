@@ -354,11 +354,15 @@ public class TaskService {
         ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(beforeTask.getVid());
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
         UserPo taskUser = userMapper.selectById(beforeTask.getUid());
+        UserPo taskCreator = userMapper.selectById(beforeTask.getCreatedUid());
         String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), beforeTask.getTask());
         if (TASK_END.equals(taskPo.getStatus())) {
             //任务状态改为[已完成]需要给任务负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
             emailHelper.sendSimpleMailMessage(message);
+            if (beforeTask.getSendEmail2Creator() == 1) {
+                emailHelper.sendSimpleMailMessage(emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskCreator.getEmail(), "[项目管理系统]任务验收通过", text));
+            }
         }
         return beforeTask;
     }
