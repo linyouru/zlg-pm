@@ -128,6 +128,14 @@ public class TaskController implements TaskApi {
         return ResponseEntity.ok(response);
     }
 
+
+
+    @Override
+    public ResponseEntity<Void> updataTaskStatus(Integer id, ApiUpdateTaskStatusRequest body) {
+        taskService.updateTaskStatus(id,body);
+        return ResponseEntity.ok(null);
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<Void> updateTask(Integer id, ApiUpdateTaskRequest body) {

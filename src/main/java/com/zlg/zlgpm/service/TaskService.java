@@ -6,6 +6,7 @@ import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
+import com.zlg.zlgpm.controller.model.ApiUpdateTaskStatusRequest;
 import com.zlg.zlgpm.dao.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
@@ -110,17 +111,37 @@ public class TaskService {
     }
 
     @OperationLog(value = "修改任务", type = "Task")
+    public TaskPo updateTaskStatus(Integer id, ApiUpdateTaskStatusRequest body) {
+        TaskPo task = dataConvertHelper.convert2TaskPo(body);
+        TaskPo beforeTask = taskMapper.selectById(id);
+        if (taskAuthentication(beforeTask)) {
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
+        }
+        int i = taskMapper.updateById(task);
+        if (i == 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
+        }
+        TaskPo retTask = taskMapper.selectById(id);
+
+        ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
+        ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(retTask.getVid());
+        UserPo projectUser = userMapper.selectById(projectPo.getUid());
+        UserPo taskUser = userMapper.selectById(retTask.getUid());
+        String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
+        if (TASK_CHECK.equals(task.getStatus())) {
+            //任务状态改为[待验收]需要给项目负责人发邮件
+            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
+            emailHelper.sendSimpleMailMessage(message);
+        }
+        return retTask;
+    }
+
+
+    @OperationLog(value = "修改任务", type = "Task")
     public TaskPo updateTask(Integer id, ApiUpdateTaskRequest body) {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
-        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
-        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
-        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
         TaskPo beforeTask = taskMapper.selectById(id);
-        ProjectPo beforeProject = projectMapper.selectById(beforeTask.getPid());
-        //只有项目负责人和开发人能修改任务
-        if (Integer.parseInt(currentUser.getId() + "") != beforeTask.getUid()
-                && Integer.parseInt(currentUser.getId() + "") != beforeProject.getUid()
-                && !(isRoot || isAdmin)) {
+        if (taskAuthentication(beforeTask)) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
 
@@ -149,20 +170,18 @@ public class TaskService {
         if (i == 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
         }
-        TaskPo retTask = taskMapper.selectById(id);
+        return taskMapper.selectById(id);
+    }
 
-        ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
-        ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(retTask.getVid());
-        UserPo projectUser = userMapper.selectById(projectPo.getUid());
-        UserPo taskUser = userMapper.selectById(retTask.getUid());
-        String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
-        if (TASK_CHECK.equals(task.getStatus())) {
-            //任务状态改为[待验收]需要给项目负责人发邮件
-            SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
-            emailHelper.sendSimpleMailMessage(message);
-        }
-
-        return retTask;
+    private Boolean taskAuthentication(TaskPo beforeTask) {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        boolean isRoot = SecurityUtils.getSubject().hasRole("root");
+        boolean isAdmin = SecurityUtils.getSubject().hasRole("admin");
+        ProjectPo beforeProject = projectMapper.selectById(beforeTask.getPid());
+        //只有项目负责人和开发人能修改任务
+        return Integer.parseInt(currentUser.getId() + "") != beforeTask.getUid()
+                && Integer.parseInt(currentUser.getId() + "") != beforeProject.getUid()
+                && !(isRoot || isAdmin);
     }
 
     public TaskListBo queryTask(Integer id) {

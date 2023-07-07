@@ -603,6 +603,33 @@ paths:
               $ref: "#/definitions/ProjectVersionsAllResponse"
         500:
           description: server error
+  /v1/task/status:
+    put:
+      tags:
+        - task
+      summary: 更新任务状态
+      description: 更新任务状态
+      operationId: updataTaskStatus
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          required: true
+          description: 任务id
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTaskStatusRequest"
+      responses:
+        200:
+          description: success
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/task:
     get:
       tags:
@@ -1790,13 +1817,6 @@ definitions:
         type: string
         description: 任务内容
         maxLength: 1023
-      status:
-        type: string
-        enum:
-          - 3
-          - 4
-          - 5
-        description: 任务状态 3待验收；4开发中；5暂停
       playStartTime:
         type: string
         description: 计划开始时间,时间戳(ms)
@@ -1839,6 +1859,16 @@ definitions:
       planWorkTime:
         type: integer
         description: 计划工时
+  UpdateTaskStatusRequest:
+    type: object
+    properties:
+      status:
+        type: string
+        enum:
+          - 3
+          - 4
+          - 5
+        description: 任务状态 3待验收；4开发中；5暂停
   AcceptTaskRequest:
     type: object
     properties:

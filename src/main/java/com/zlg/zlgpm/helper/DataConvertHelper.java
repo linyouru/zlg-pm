@@ -116,6 +116,12 @@ public class DataConvertHelper {
     public TaskPo convert2TaskPo(ApiUpdateTaskRequest taskRequest) {
         TaskPo taskPo = dataConvertMapping.convertToTaskPo(taskRequest);
         taskPo.setTaskType(taskRequest.getTaskType() != null ? taskRequest.getTaskType().toString() : null);
+//        taskPo.setStatus(taskRequest.getStatus() != null ? taskRequest.getStatus().toString() : null);
+        return taskPo;
+    }
+
+    public TaskPo convert2TaskPo(ApiUpdateTaskStatusRequest taskRequest){
+        TaskPo taskPo = new TaskPo();
         taskPo.setStatus(taskRequest.getStatus() != null ? taskRequest.getStatus().toString() : null);
         return taskPo;
     }
