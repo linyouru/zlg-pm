@@ -51,11 +51,11 @@ public class TaskLogController implements TaskLogApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskLogAggregationListResponse> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, String sortField, Boolean isAsc, String startTime, String endTime) {
-        if(StringUtils.hasText(sortField)&&isAsc ==null){
-            throw new BizException(HttpStatus.BAD_REQUEST,"task.12002");
+    public ResponseEntity<ApiTaskLogAggregationListResponse> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, Integer vid, String sortField, Boolean isAsc, String startTime, String endTime) {
+        if (StringUtils.hasText(sortField) && isAsc == null) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
         }
-        Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, pid, sortField, isAsc, startTime, endTime);
+        Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, pid, vid, sortField, isAsc, startTime, endTime);
         ApiTaskLogAggregationListResponse response = dataConvertHelper.convertToAggregationListResponse(taskLogAggregation);
         return ResponseEntity.ok().body(response);
     }

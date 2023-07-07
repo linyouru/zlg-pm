@@ -39,11 +39,11 @@ public class TaskLogService {
         TaskLogPo taskLogPo = dataConvertHelper.convert2TaskLogPo(body);
         TaskPo taskPo = taskMapper.selectById(taskLogPo.getTaskId());
         if (null == taskPo) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskLogPo.getTaskId());
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", taskLogPo.getTaskId());
         }
-        if(!taskPo.getUid().equals(taskLogPo.getUid())){
+        if (!taskPo.getUid().equals(taskLogPo.getUid())) {
             //仅任务开发人可以创建任务日志
-            throw new BizException(HttpStatus.FORBIDDEN,"auth.11001");
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
         if (taskLogPo.getUid() != null) {
             UserPo userPo = userMapper.selectById(taskLogPo.getUid());
@@ -66,7 +66,7 @@ public class TaskLogService {
         return taskLogMapper.selectPage(page, queryWrapper);
     }
 
-    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, String sortField, Boolean isAsc, String startTime, String endTime) {
+    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, Integer vid, String sortField, Boolean isAsc, String startTime, String endTime) {
         QueryWrapper<TaskLogAggregationListBo> queryWrapper = new QueryWrapper<>();
         if (null != uid) {
             queryWrapper.eq("tl.uid", uid);
@@ -77,8 +77,11 @@ public class TaskLogService {
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
             queryWrapper.between("tl.createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
         }
-        if(null!= pid){
-            queryWrapper.eq("p.id",pid);
+        if (null != pid) {
+            queryWrapper.eq("p.id", pid);
+        }
+        if(null!= vid){
+            queryWrapper.eq("pv.id",vid);
         }
         if (StringUtils.hasText(sortField)) {
             String[] split = sortField.split(",");
@@ -94,33 +97,33 @@ public class TaskLogService {
 
     public TaskLogPo getLastTaskLog(Integer taskId) {
         TaskPo taskPo = taskMapper.selectById(taskId);
-        if(null == taskPo){
-            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001",taskId);
+        if (null == taskPo) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", taskId);
         }
         TaskLogPo lastTaskLog = taskLogMapper.getLastTaskLog(taskId);
-        if(null == lastTaskLog){
-            throw new BizException(HttpStatus.NOT_FOUND, "taskLog.13001",taskId);
+        if (null == lastTaskLog) {
+            throw new BizException(HttpStatus.NOT_FOUND, "taskLog.13001", taskId);
         }
         return lastTaskLog;
     }
 
-    public ArrayList<Integer> getTodayTaskLogUid(){
+    public ArrayList<Integer> getTodayTaskLogUid() {
         long endTime = System.currentTimeMillis();
         long startTime = endTime - 82800000;
         QueryWrapper<Integer> wrapper = new QueryWrapper<>();
-        wrapper.between("createTime",Utils.convertTimestamp2Date(startTime, "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(endTime, "yyyy-MM-dd HH:mm:ss"));
+        wrapper.between("createTime", Utils.convertTimestamp2Date(startTime, "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(endTime, "yyyy-MM-dd HH:mm:ss"));
         return taskLogMapper.getTodayTaskLogUid(wrapper);
     }
 
-    public Integer getTodayWorkTime(Long uid){
+    public Integer getTodayWorkTime(Long uid) {
         long now = System.currentTimeMillis();
         String nowString = Utils.convertTimestamp2Date(now, "yyyy-MM-dd HH:mm:ss");
         String today = nowString.split(" ")[0];
-        String todayStart =today+" "+ "00:00:00";
-        String todayEnd =today+" "+ "23:59:59";
+        String todayStart = today + " " + "00:00:00";
+        String todayEnd = today + " " + "23:59:59";
         QueryWrapper<Integer> wrapper = new QueryWrapper<>();
-        wrapper.between("createTime",todayStart,todayEnd);
-        wrapper.eq("uid",uid);
+        wrapper.between("createTime", todayStart, todayEnd);
+        wrapper.eq("uid", uid);
         return taskLogMapper.getTodayWorkTime(wrapper);
     }
 

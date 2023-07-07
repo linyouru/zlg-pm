@@ -1233,6 +1233,11 @@ paths:
         - name: pid
           in: query
           type: integer
+          description: 项目id
+        - name: vid
+          in: query
+          type: integer
+          description: 版本id
         - in: query
           name: sortField
           type: string
