@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskLogRequest;
+import com.zlg.zlgpm.controller.model.ApiUpdateTaskLogRequest;
 import com.zlg.zlgpm.dao.TaskLogMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TaskLogService {
@@ -125,6 +127,17 @@ public class TaskLogService {
         wrapper.between("createTime", todayStart, todayEnd);
         wrapper.eq("uid", uid);
         return taskLogMapper.getTodayWorkTime(wrapper);
+    }
+
+    public TaskLogPo updateTaskLog(Long currentUid,Integer id, ApiUpdateTaskLogRequest body){
+        TaskLogPo beforeTaskLogPo = taskLogMapper.selectById(id);
+        if(!Objects.equals(currentUid, Long.valueOf(beforeTaskLogPo.getUid()))){
+            throw new BizException(HttpStatus.FORBIDDEN,"auth.11001");
+        }
+        TaskLogPo taskLogPo = dataConvertHelper.convert2TaskLogPo(body);
+        taskLogPo.setId(id);
+        taskLogMapper.updateById(taskLogPo);
+        return taskLogMapper.selectById(id);
     }
 
 }

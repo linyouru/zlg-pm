@@ -584,7 +584,7 @@ paths:
         400:
           description: parameter error
         500:
-                description: server error
+          description: server error
   /v1/project/versions/all:
     get:
       tags:
@@ -1060,6 +1060,33 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/TaskLogListResponse"
+        500:
+          description: server error
+    put:
+      tags:
+        - taskLog
+      summary: 更新任务日志
+      description: 更新任务日志
+      operationId: updateTaskLog
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          type: integer
+          name: id
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTaskLogRequest"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TaskLogResponse"
+        400:
+          description: parameter error
         500:
           description: server error
   /v1/task/log/last:
@@ -2224,6 +2251,14 @@ definitions:
         type: string
       createTime:
         type: string
+  UpdateTaskLogRequest:
+    type: object
+    properties:
+      workTime:
+        type: string
+      log:
+        type: string
+        maxLength: 1023
   LastTaskLogResponse:
     type: object
     properties:

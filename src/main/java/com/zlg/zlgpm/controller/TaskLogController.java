@@ -1,10 +1,7 @@
 package com.zlg.zlgpm.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zlg.zlgpm.controller.model.ApiCreateTaskLogRequest;
-import com.zlg.zlgpm.controller.model.ApiLastTaskLogResponse;
-import com.zlg.zlgpm.controller.model.ApiTaskLogAggregationListResponse;
-import com.zlg.zlgpm.controller.model.ApiTaskLogListResponse;
+import com.zlg.zlgpm.controller.model.*;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskLogAggregationListBo;
@@ -20,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 @RestController
 @Api(tags = "taskLog")
@@ -65,6 +63,14 @@ public class TaskLogController implements TaskLogApi {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         Integer todayWorkTime = taskLogService.getTodayWorkTime(currentUser.getId());
         return ResponseEntity.ok(todayWorkTime);
+    }
+
+    @Override
+    public ResponseEntity<ApiTaskLogResponse> updateTaskLog(Integer id, ApiUpdateTaskLogRequest body) {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        TaskLogPo taskLogPo = taskLogService.updateTaskLog(currentUser.getId(),id, body);
+        ApiTaskLogResponse apiTaskLogResponse = dataConvertHelper.convert2ApiTaskLogResponse(taskLogPo);
+        return ResponseEntity.ok(apiTaskLogResponse);
     }
 
 

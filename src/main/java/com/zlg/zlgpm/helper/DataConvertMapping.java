@@ -22,8 +22,10 @@ public interface DataConvertMapping {
     TaskChangePo convertToTaskChangePo(ApiCreateTaskChangeRequest taskChangeRequest);
     ApiTaskChangeResponse convertToApiTaskChangeResponse(TaskChangeListBo taskChangeListBo);
     TaskLogPo convertToTaskLogPo(ApiCreateTaskLogRequest body);
+    TaskLogPo convertToTaskLogPo(ApiUpdateTaskLogRequest body);
     ApiLastTaskLogResponse convertToApiLastTaskLogResponse(TaskLogPo taskLogPo);
     ApiTaskLogResponse convertToApiTaskLogResponse(TaskLogListBo taskLogListBo);
+    ApiTaskLogResponse convertToApiTaskLogResponse(TaskLogPo taskLogPo);
     ApiTaskLogAggregationResponse convertToApiTaskLogAggregationResponse(TaskLogAggregationListBo taskLogAggregationListBo);
     TaskFeedbackPo convertToTaskFeedbackPo(ApiCreateFeedbackRequest data);
     TaskFeedbackPo convertToTaskFeedbackPo(ApiUpdateFeedbackRequest data);

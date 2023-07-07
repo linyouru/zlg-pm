@@ -207,6 +207,10 @@ public class DataConvertHelper {
         return dataConvertMapping.convertToTaskLogPo(body);
     }
 
+    public TaskLogPo convert2TaskLogPo(ApiUpdateTaskLogRequest body) {
+        return dataConvertMapping.convertToTaskLogPo(body);
+    }
+
     public ApiTaskLogListResponse convert2ApiTaskLogListResponse(Page<TaskLogListBo> taskLogListBoPage) {
         ApiTaskLogListResponse response = new ApiTaskLogListResponse();
         fillApiPage(response, taskLogListBoPage);
@@ -220,6 +224,10 @@ public class DataConvertHelper {
 
     public ApiTaskLogResponse convert2ApiTaskLogResponse(TaskLogListBo taskLogListBo) {
         return dataConvertMapping.convertToApiTaskLogResponse(taskLogListBo);
+    }
+
+    public ApiTaskLogResponse convert2ApiTaskLogResponse(TaskLogPo taskLogPo) {
+        return dataConvertMapping.convertToApiTaskLogResponse(taskLogPo);
     }
 
     public ApiTaskLogAggregationListResponse convertToAggregationListResponse(Page<TaskLogAggregationListBo> page) {
