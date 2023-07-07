@@ -10,8 +10,10 @@ import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.TaskLogAggregationListBo;
 import com.zlg.zlgpm.pojo.bo.TaskLogListBo;
 import com.zlg.zlgpm.pojo.po.TaskLogPo;
+import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.TaskLogService;
 import io.swagger.annotations.Api;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -56,6 +58,13 @@ public class TaskLogController implements TaskLogApi {
         Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, pid, sortField, isAsc, startTime, endTime);
         ApiTaskLogAggregationListResponse response = dataConvertHelper.convertToAggregationListResponse(taskLogAggregation);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Override
+    public ResponseEntity<Integer> getTodayWorkTime() {
+        UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        Integer todayWorkTime = taskLogService.getTodayWorkTime(currentUser.getId());
+        return ResponseEntity.ok(todayWorkTime);
     }
 
 

@@ -1086,6 +1086,22 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/tast/worktime:
+    get:
+      tags:
+        - taskLog
+      summary: 获取当前用户今日累计任务日志工时
+      description: 获取当前用户今日累计任务日志工时
+      operationId: getTodayWorkTime
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/TodayWorkTimeResponse"
+        500:
+          description: server error
   /v1/task/feedback:
     post:
       tags:
@@ -2335,3 +2351,5 @@ definitions:
       feedbackNum:
         type: integer
         description: 问题反馈任务数
+  TodayWorkTimeResponse:
+    type: integer

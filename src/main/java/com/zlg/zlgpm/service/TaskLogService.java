@@ -112,4 +112,16 @@ public class TaskLogService {
         return taskLogMapper.getTodayTaskLogUid(wrapper);
     }
 
+    public Integer getTodayWorkTime(Long uid){
+        long now = System.currentTimeMillis();
+        String nowString = Utils.convertTimestamp2Date(now, "yyyy-MM-dd HH:mm:ss");
+        String today = nowString.split(" ")[0];
+        String todayStart =today+" "+ "00:00:00";
+        String todayEnd =today+" "+ "23:59:59";
+        QueryWrapper<Integer> wrapper = new QueryWrapper<>();
+        wrapper.between("createTime",todayStart,todayEnd);
+        wrapper.eq("uid",uid);
+        return taskLogMapper.getTodayWorkTime(wrapper);
+    }
+
 }

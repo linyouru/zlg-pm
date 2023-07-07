@@ -65,4 +65,8 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
      */
     @Select("SELECT DISTINCT uid FROM `task_log` ${ew.customSqlSegment}")
     ArrayList<Integer> getTodayTaskLogUid(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
+
+    @Select("SELECT SUM(workTime) AS workTime FROM task_log ${ew.customSqlSegment}")
+    Integer getTodayWorkTime(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
+
 }
