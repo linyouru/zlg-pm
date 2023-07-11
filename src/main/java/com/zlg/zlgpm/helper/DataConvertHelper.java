@@ -304,7 +304,7 @@ public class DataConvertHelper {
         return list;
     }
 
-    public ApiStatisticTaskResponseList convert2ApiStatisticTaskResponse(Page<StatisticTaskBo> statisticTaskBoPage){
+    public ApiStatisticTaskResponseList convert2ApiStatisticTaskResponseList(Page<StatisticTaskBo> statisticTaskBoPage){
         ApiStatisticTaskResponseList response = new ApiStatisticTaskResponseList();
         fillApiPage(response, statisticTaskBoPage);
         response.setList(statisticTaskBoPage.getRecords().stream().map(this::convert2ApiStatisticTaskResponse).collect(Collectors.toList()));
@@ -313,6 +313,17 @@ public class DataConvertHelper {
 
     public ApiStatisticTaskResponse convert2ApiStatisticTaskResponse(StatisticTaskBo statisticTask){
         return dataConvertMapping.convertToApiStatisticTaskResponse(statisticTask);
+    }
+
+    public ApiStatisticLogResponseList convert2ApiStatisticLogResponseList(Page<StatisticLogBo> statisticLogBoPage){
+        ApiStatisticLogResponseList response = new ApiStatisticLogResponseList();
+        fillApiPage(response,statisticLogBoPage);
+        response.setList(statisticLogBoPage.getRecords().stream().map(this::convert2ApiStatisticLogResponse).collect(Collectors.toList()));
+        return response;
+    }
+
+    public ApiStatisticLogResponse convert2ApiStatisticLogResponse(StatisticLogBo statisticLog){
+        return dataConvertMapping.convertToApiStatisticLogResponse(statisticLog);
     }
 
 }

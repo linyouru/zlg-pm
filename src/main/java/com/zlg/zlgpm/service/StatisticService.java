@@ -2,8 +2,11 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.commom.Utils;
+import com.zlg.zlgpm.commom.WorkDayUtils;
 import com.zlg.zlgpm.dao.StatisticTaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
+import com.zlg.zlgpm.pojo.bo.StatisticLogBo;
 import com.zlg.zlgpm.pojo.bo.StatisticTaskBo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,8 @@ public class StatisticService {
     private StatisticTaskMapper statisticTaskMapper;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private WorkDayUtils workDayUtils;
 
     public Page<StatisticTaskBo> statisticTask(Integer uid, Integer pid, Integer vid, String startTime, String endTime, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         QueryWrapper<StatisticTaskBo> wrapper = new QueryWrapper<>();
@@ -66,5 +71,31 @@ public class StatisticService {
         return statisticTaskBoPage;
     }
 
+    public  Page<StatisticLogBo> statisticLog(Integer uid, String startTime, String endTime, Integer currentPage, Integer pageSize){
+        QueryWrapper<StatisticLogBo> wrapper = new QueryWrapper<>();
+        if(uid != null){
+            wrapper.eq("uid",uid);
+        }
+        wrapper.between("createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
+
+        Page<StatisticLogBo> page = new Page<>();
+        page.setCurrent(currentPage);
+        page.setSize(pageSize);
+
+        Page<StatisticLogBo> statisticLogBoPage = statisticTaskMapper.statisticLog(page, wrapper);
+        List<StatisticLogBo> logBoList = statisticLogBoPage.getRecords();
+        double days = workDayUtils.getWorkdayTimeInMillisExcWeekend(Long.parseLong(startTime), Long.parseLong(endTime));
+        ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
+        logBoList.forEach(log->{
+            allUserInfo.forEach(user->{
+                if(user.getId() == Long.parseLong(log.getUid() + "")){
+                    log.setNickName(user.getNickName());
+                }
+            });
+            log.setMiss((int) (days-log.getTheoryTotal()));
+            log.setTotal(log.getAbnormal()+log.getMiss());
+        });
+        return statisticLogBoPage;
+    }
 
 }
