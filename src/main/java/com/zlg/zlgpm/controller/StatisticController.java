@@ -16,7 +16,7 @@ import javax.annotation.Resource;
  * @date 2023/7/11 09:59:41
  */
 @RestController
-public class StatisticController implements StatisticApi{
+public class StatisticController implements StatisticApi {
 
     @Resource
     private StatisticService statisticService;
@@ -24,9 +24,10 @@ public class StatisticController implements StatisticApi{
     private DataConvertHelper dataConvertHelper;
 
     @Override
-    public ResponseEntity<ApiStatisticTaskResponseList> statisticTask(Integer uid, Integer pid, Integer vid, String startTime, String endTime, Integer currentPage, Integer pageSize) {
-        Page<StatisticTaskBo> statisticTaskBoPage = statisticService.statisticTask(uid, pid, vid, startTime, endTime, currentPage, pageSize);
+    public ResponseEntity<ApiStatisticTaskResponseList> statisticTask(Integer uid, Integer pid, Integer vid, String startTime, String endTime, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
+        Page<StatisticTaskBo> statisticTaskBoPage = statisticService.statisticTask(uid, pid, vid, startTime, endTime, currentPage, pageSize, sortField, isAsc);
         ApiStatisticTaskResponseList response = dataConvertHelper.convert2ApiStatisticTaskResponse(statisticTaskBoPage);
         return ResponseEntity.ok().body(response);
     }
+
 }

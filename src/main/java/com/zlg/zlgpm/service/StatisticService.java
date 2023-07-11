@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,8 +27,9 @@ public class StatisticService {
     @Resource
     private UserMapper userMapper;
 
-    public Page<StatisticTaskBo> statisticTask(Integer uid, Integer pid, Integer vid, String startTime, String endTime, Integer currentPage, Integer pageSize) {
+    public Page<StatisticTaskBo> statisticTask(Integer uid, Integer pid, Integer vid, String startTime, String endTime, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         QueryWrapper<StatisticTaskBo> wrapper = new QueryWrapper<>();
+        List<String> sortList = null;
         if (null != uid) {
             wrapper.eq("t.uid", uid);
         }
@@ -41,12 +43,16 @@ public class StatisticService {
             wrapper.ge("t.playStartTime", startTime);
             wrapper.le("t.playEndTime", endTime);
         }
+        if (StringUtils.hasText(sortField)) {
+            String[] split = sortField.split(",");
+            sortList = Arrays.asList(split);
+        }
 
         Page<StatisticTaskBo> page = new Page<>();
         page.setCurrent(currentPage);
         page.setSize(pageSize);
 
-        Page<StatisticTaskBo> statisticTaskBoPage = statisticTaskMapper.statisticTask(page, wrapper);
+        Page<StatisticTaskBo> statisticTaskBoPage = statisticTaskMapper.statisticTask(page, wrapper, sortList, isAsc);
         List<StatisticTaskBo> statisticTaskBoList = statisticTaskBoPage.getRecords();
 
         ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
@@ -56,17 +62,6 @@ public class StatisticService {
                     task.setNickName(user.getNickName());
                 }
             });
-            Integer total = 0;
-            if (null != task.getTaskTimeoutCount()) {
-                total += task.getTaskTimeoutCount();
-            }
-            if (null != task.getFeedbackCount()) {
-                total += task.getFeedbackCount();
-            }
-            if (null != task.getAcceptCount()) {
-                total += task.getAcceptCount();
-            }
-            task.setTotal(total);
         });
         return statisticTaskBoPage;
     }

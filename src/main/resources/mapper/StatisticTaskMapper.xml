@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlg.zlgpm.dao.StatisticTaskMapper">
+    <select id="statisticTask" resultType="com.zlg.zlgpm.pojo.bo.StatisticTaskBo">
+        SELECT
+            ta.uid,
+            COUNT(ta.uid) AS taskTotal,
+            SUM(IF(ta.timely = "2", 1, 0)) AS taskTimeoutCount,
+            SUM(ta.feedbackCount) AS feedbackCount,
+            SUM(ta.acceptCount) AS acceptCount,
+            SUM(feedbackCount + acceptCount + IF(ta.timely = "2", 1, 0)) AS total,
+            SUM(ta.quality) AS qualitySum,
+            SUM(ta.document) AS documentSum,
+            SUM(ta.planWorkTime) AS planWorkTimeSum,
+            SUM(ta.workTimeSum) AS workTimeSum
+        FROM
+            (
+                SELECT
+                    t.id,
+                    t.uid,
+                    t.timely,
+                    t.quality,
+                    t.document,
+                    t.planWorkTime,
+                    tl.workTimeSum,
+                    tc.feedbackCount,
+                    tc.acceptCount
+                FROM
+                    project_task AS t
+                        LEFT JOIN (
+                        SELECT
+                            taskId,
+                            SUM(workTime) AS workTimeSum
+                        FROM
+                            task_log
+                        GROUP BY
+                            taskId
+                    ) AS tl ON t.id = tl.taskId
+                        LEFT JOIN (
+                        SELECT
+                            taskId,
+                            SUM(IF(`type` = 1, 1, 0)) AS acceptCount,
+                            SUM(IF(`type` = 2, 1, 0)) AS feedbackCount
+                        FROM
+                            task_check
+                        WHERE
+                            isTimely = 2
+                        GROUP BY
+                            taskId
+                    ) AS tc ON t.id = tc.taskId
+                    ${ew.customSqlSegment}
+            ) AS ta
+        GROUP BY
+            ta.uid
+        <if test="sortList != null and isAsc == true">
+            ORDER BY
+            <foreach collection="sortList" open="" item="sort" separator="," close="">
+                ${sort} ASC
+            </foreach>
+        </if>
+        <if test="sortList != null and isAsc == false">
+            ORDER BY
+            <foreach collection="sortList" open="" item="sort" separator="," close="">
+                ${sort} DESC
+            </foreach>
+        </if>
+    </select>
+
+</mapper>
