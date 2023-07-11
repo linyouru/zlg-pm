@@ -304,4 +304,15 @@ public class DataConvertHelper {
         return list;
     }
 
+    public ApiStatisticTaskResponseList convert2ApiStatisticTaskResponse(Page<StatisticTaskBo> statisticTaskBoPage){
+        ApiStatisticTaskResponseList response = new ApiStatisticTaskResponseList();
+        fillApiPage(response, statisticTaskBoPage);
+        response.setList(statisticTaskBoPage.getRecords().stream().map(this::convert2ApiStatisticTaskResponse).collect(Collectors.toList()));
+        return response;
+    }
+
+    public ApiStatisticTaskResponse convert2ApiStatisticTaskResponse(StatisticTaskBo statisticTask){
+        return dataConvertMapping.convertToApiStatisticTaskResponse(statisticTask);
+    }
+
 }

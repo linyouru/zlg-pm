@@ -6,7 +6,6 @@ info:
 host: localhost:8618
 schemes:
   - http
-  - https
 
 paths:
   /v1/login:
@@ -1360,6 +1359,53 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/statistic/tasks:
+    get:
+      tags:
+        - statistic
+      summary: 任务统计
+      description: 任务统计
+      operationId: statisticTask
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: uid
+          type: integer
+          description: 用户id
+        - in: query
+          name: pid
+          type: integer
+          description: 项目id
+        - in: query
+          name: vid
+          type: integer
+          description: 项目版本id
+        - in: query
+          name: startTime
+          type: string
+          description: 开始时间
+        - in: query
+          name: endTime
+          type: string
+          description: 结束时间
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/StatisticTaskResponseList"
+        400:
+          description: parameter error
+        500:
+          description: server error
 # common parameters
 parameters:
   queryPageSize:
@@ -2393,3 +2439,47 @@ definitions:
         description: 问题反馈任务数
   TodayWorkTimeResponse:
     type: integer
+  StatisticTaskResponseList:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/StatisticTaskResponse"
+  StatisticTaskResponse:
+    type: object
+    properties:
+      uid:
+        type: integer
+      nickName:
+        type: string
+        description: 开发人员
+      taskTotal:
+        type: integer
+        description: 任务总数
+      taskTimeoutCount:
+        type: integer
+        description: 任务未及时完成数
+      feedbackCount:
+        type: integer
+        description: 任务反馈未及时解决数
+      acceptCount:
+        type: integer
+        description: 任务未及时验收数
+      total:
+        type: integer
+        description: 总计
+      qualitySum:
+        type: integer
+        description: 质量分
+      documentSum:
+        type: integer
+        description: 文档分
+      planWorkTimeSum:
+        type: integer
+        description: 计划工时
+      workTimeSum:
+        type: integer
+        description: 实际工时
