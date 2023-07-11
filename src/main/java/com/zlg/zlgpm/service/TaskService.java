@@ -26,10 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -47,7 +46,8 @@ public class TaskService {
     private ProjectVersionMapper projectVersionMapper;
     @Resource
     private TaskChangeMapper taskChangeMapper;
-
+    @Resource
+    private TaskCheckMapper taskCheckMapper;
     @Resource
     private EmailHelper emailHelper;
 
@@ -117,6 +117,7 @@ public class TaskService {
         if (taskAuthentication(beforeTask)) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
+        task.setId(id);
         int i = taskMapper.updateById(task);
         if (i == 0) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
@@ -132,10 +133,32 @@ public class TaskService {
             //任务状态改为[待验收]需要给项目负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
             emailHelper.sendSimpleMailMessage(message);
+
+            ArrayList<TaskCheckPo> taskCheckList = taskCheckMapper.getTaskCheckByTaskId(id);
+            if(taskCheckList.size() > 0) {
+                taskCheckUpdate(taskCheckList);
+            }
+            taskCheckMapper.insert(new TaskCheckPo(id, 1, 0));
         }
         return retTask;
     }
 
+    private void taskCheckUpdate(ArrayList<TaskCheckPo> taskCheckList) {
+        TaskCheckPo taskCheckPo = taskCheckList.get(0);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date parse = null;
+        try {
+            parse = simpleDateFormat.parse(taskCheckPo.getCreateTime());
+        } catch (ParseException ignored) {
+        }
+        long time = parse.getTime();
+        long now = System.currentTimeMillis();
+        if (now - time > 86400000) {
+            taskCheckMapper.updateById(new TaskCheckPo(taskCheckPo.getId(), null, null, 2));
+        } else {
+            taskCheckMapper.updateById(new TaskCheckPo(taskCheckPo.getId(), null, null, 1));
+        }
+    }
 
     @OperationLog(value = "修改任务", type = "Task")
     public TaskPo updateTask(Integer id, ApiUpdateTaskRequest body) {
@@ -361,21 +384,19 @@ public class TaskService {
     public TaskPo taskAccept(TaskPo taskPo) {
         //任务状态修改为已完成时,判断任务及时性
         TaskPo beforeTask = taskMapper.selectById(taskPo.getId());
-        if (TASK_END.equals(taskPo.getStatus())) {
-            String playEndTime = beforeTask.getPlayEndTime();
-            long now = System.currentTimeMillis();
-            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
-            taskPo.setAcceptanceTime(now + "");
-        }
-        taskMapper.updateById(taskPo);
-
         ProjectPo projectPo = projectMapper.selectById(beforeTask.getPid());
         ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(beforeTask.getVid());
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
         UserPo taskUser = userMapper.selectById(beforeTask.getUid());
         UserPo taskCreator = userMapper.selectById(beforeTask.getCreatedUid());
         String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), beforeTask.getTask());
+
         if (TASK_END.equals(taskPo.getStatus())) {
+            String playEndTime = beforeTask.getPlayEndTime();
+            long now = System.currentTimeMillis();
+            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
+            taskPo.setAcceptanceTime(now + "");
+
             //任务状态改为[已完成]需要给任务负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
             emailHelper.sendSimpleMailMessage(message);
@@ -383,6 +404,13 @@ public class TaskService {
                 emailHelper.sendSimpleMailMessage(emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskCreator.getEmail(), "[项目管理系统]任务验收通过", text));
             }
         }
+        taskMapper.updateById(taskPo);
+        ArrayList<TaskCheckPo> taskCheckList = taskCheckMapper.getTaskCheckByTaskId(taskPo.getId());
+        taskCheckUpdate(taskCheckList);
+        if ("2".equals(taskPo.getStatus())) {
+            taskCheckMapper.insert(new TaskCheckPo(taskPo.getId(), 2, 0));
+        }
+
         return beforeTask;
     }
 
