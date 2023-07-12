@@ -13,6 +13,7 @@ import com.zlg.zlgpm.pojo.po.UserPo;
 import com.zlg.zlgpm.service.TaskChangeService;
 import com.zlg.zlgpm.service.TaskRelevanceService;
 import com.zlg.zlgpm.service.TaskService;
+import com.zlg.zlgpm.service.TastFeedbackService;
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,8 @@ public class TaskController implements TaskApi {
     private TaskRelevanceService taskRelevanceService;
     @Resource
     private TaskChangeService taskChangeService;
+    @Resource
+    private TastFeedbackService tastFeedbackService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -67,13 +70,13 @@ public class TaskController implements TaskApi {
 
     @Override
     public ResponseEntity<Void> deleteTask(Integer id) {
-
-
         taskService.deleteTask(id);
         //删除任务关联关系
         taskRelevanceService.deleteTaskRelevanceByTid(id);
         //删除任务变更申请
         taskChangeService.deleteTaskChange(id);
+        //删除任务同时关联删除任务反馈记录
+        tastFeedbackService.deleteFeedbackByTid(id);
         return ResponseEntity.ok(null);
     }
 

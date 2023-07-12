@@ -60,6 +60,12 @@ public class TastFeedbackService {
         return taskFeedbackPo;
     }
 
+    public void deleteFeedbackByTid(int tid) {
+        QueryWrapper<Integer> wrapper = new QueryWrapper<>();
+        wrapper.eq("tid",tid);
+        feedbackMapper.deleteFeedbackByTaskId(wrapper);
+    }
+
     @OperationLog(value = "修改问题反馈", type = "Feedback")
     public TaskFeedbackPo updateFeedback(int id, TaskFeedbackPo body) {
         body.setId(id);

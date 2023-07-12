@@ -26,4 +26,6 @@ public interface TaskFeedbackMapper extends BaseMapper<TaskFeedbackPo> {
     @Select("SELECT pt.pid,p.`name` AS `project`,pt.vid,pv.version,pt.id AS tid,pt.task,tf.feedback, pt.uid,pt.accepterUid,tf.createTime FROM task_feedback AS tf LEFT JOIN `project_task` AS pt ON pt.id = tf.tid LEFT JOIN project AS p ON pt.pid = p.id LEFT JOIN project_version AS pv ON pt.vid = pv.id ${ew.customSqlSegment}")
     Page<StatisticFeedbackBo> getStatisticFeedbackList(Page<StatisticFeedbackBo> page, @Param(Constants.WRAPPER) Wrapper<StatisticFeedbackBo> ew);
 
+    @Select("DELETE FROM task_feedback ${ew.customSqlSegment} ")
+    void deleteFeedbackByTaskId(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
 }
