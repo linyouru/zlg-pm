@@ -812,6 +812,14 @@ paths:
           name: detail
           type: string
           description: 任务内容
+        - in: query
+          name: isTimely
+          type: boolean
+          description: 及实性
+        - in: query
+          name: notTimely
+          type: integer
+          description: 过滤,用于统计表格的弹窗.1验收未及时处理;2问题反馈未及时处理;
       responses:
         200:
           description: success

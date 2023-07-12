@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Api(tags = "task")
@@ -114,12 +113,12 @@ public class TaskController implements TaskApi {
     public ResponseEntity<ApiTaskListResponse> taskList(Integer currentPage, Integer pageSize, Integer projectUid, Integer createdUid,
                                                         Integer accepterUid, String status, Integer pid, Integer vid, Integer uid,
                                                         String startTime, String endTime, String abnormal, String sortField, Boolean isAsc,
-                                                        String mid, String level, String task, String detail) {
+                                                        String mid, String level, String task, String detail, Boolean isTimely, Integer notTimely) {
         if (StringUtils.hasText(sortField) && null == isAsc) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
         }
         Page<TaskListBo> taskListBoPage = taskService.taskList(currentPage, pageSize, projectUid, status, pid, vid, uid,
-                startTime, endTime, abnormal, sortField, isAsc, mid, level, task, detail, createdUid, accepterUid);
+                startTime, endTime, abnormal, sortField, isAsc, mid, level, task, detail, createdUid, accepterUid, isTimely, notTimely);
         ApiTaskListResponse apiTaskListResponse = dataConvertHelper.convert2ApiTaskListResponse(taskListBoPage);
         return ResponseEntity.ok().body(apiTaskListResponse);
     }
@@ -132,10 +131,9 @@ public class TaskController implements TaskApi {
     }
 
 
-
     @Override
     public ResponseEntity<Void> updataTaskStatus(Integer id, ApiUpdateTaskStatusRequest body) {
-        taskService.updateTaskStatus(id,body);
+        taskService.updateTaskStatus(id, body);
         return ResponseEntity.ok(null);
     }
 

@@ -135,7 +135,7 @@ public class TaskService {
             emailHelper.sendSimpleMailMessage(message);
 
             ArrayList<TaskCheckPo> taskCheckList = taskCheckMapper.getTaskCheckByTaskId(id);
-            if(taskCheckList.size() > 0) {
+            if (taskCheckList.size() > 0) {
                 taskCheckUpdate(taskCheckList);
             }
             taskCheckMapper.insert(new TaskCheckPo(id, 1, 0));
@@ -220,7 +220,7 @@ public class TaskService {
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid,
-                                     String level, String task, String detail, Integer createdUid, Integer accepterUid) {
+                                     String level, String task, String detail, Integer createdUid, Integer accepterUid, Boolean isTimely, Integer notTimely) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             String[] split = status.split(",");
@@ -246,7 +246,7 @@ public class TaskService {
         }
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
             queryWrapper.ge("t.playStartTime", Long.parseLong(startTime));
-            queryWrapper.le("t.playStartTime", Long.parseLong(endTime));
+            queryWrapper.le("t.playEndTime", Long.parseLong(endTime));
         }
         if (StringUtils.hasText(abnormal)) {
             if (TASK_TIMEOUT.equals(abnormal)) {
@@ -276,12 +276,31 @@ public class TaskService {
         if (StringUtils.hasText(detail)) {
             queryWrapper.like("t.detail", detail);
         }
+        if (isTimely != null) {
+            if (isTimely) {
+                queryWrapper.eq("timely", "1");
+            } else {
+                queryWrapper.eq("timely", "2");
+            }
+        }
 
         Page<TaskListBo> taskListBoPage = new Page<>();
         taskListBoPage.setCurrent(currentPage);
         taskListBoPage.setSize(pageSize);
         Page<TaskListBo> taskListBo = taskMapper.selectPage(taskListBoPage, queryWrapper);
-        return this.taskListFillNickName(taskListBo);
+        this.taskListFillNickName(taskListBo);
+
+        if(notTimely!=null){
+            ArrayList<TaskListBo> newTaskListBos = new ArrayList<>();
+            ArrayList<Integer> notTimelyTaskIds = taskCheckMapper.getNotTimelyTaskId(notTimely);
+            taskListBo.getRecords().forEach(taskItem->{
+                if(notTimelyTaskIds.contains(taskItem.getId())){
+                    newTaskListBos.add(taskItem);
+                }
+            });
+            taskListBo.setRecords(newTaskListBos);
+        }
+        return taskListBo;
     }
 
     public TaskStatisticsBo selectTaskStatistics(Integer pid, Integer uid) {

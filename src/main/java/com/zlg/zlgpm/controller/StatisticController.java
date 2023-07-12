@@ -31,6 +31,9 @@ public class StatisticController implements StatisticApi {
 
     @Override
     public ResponseEntity<ApiStatisticTaskResponseList> statisticTask(Integer uid, Integer pid, Integer vid, String startTime, String endTime, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
+        if (StringUtils.hasText(sortField) && null == isAsc) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
+        }
         Page<StatisticTaskBo> statisticTaskBoPage = statisticService.statisticTask(uid, pid, vid, startTime, endTime, currentPage, pageSize, sortField, isAsc);
         ApiStatisticTaskResponseList response = dataConvertHelper.convert2ApiStatisticTaskResponseList(statisticTaskBoPage);
         return ResponseEntity.ok().body(response);
