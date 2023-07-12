@@ -337,4 +337,16 @@ public class DataConvertHelper {
     public ApiStatisticWorkTimeResponse convert2ApiStatisticWorkTimeResponse(StatisticWorkTimeBo statisticWorkTimeBo) {
         return dataConvertMapping.convertToApiStatisticWorkTimeResponse(statisticWorkTimeBo);
     }
+
+    public ApiStatisticFeedbackListResponse convert2ApiStatisticFeedbackListResponse(Page<StatisticFeedbackBo> statisticFeedbackList) {
+        ApiStatisticFeedbackListResponse response = new ApiStatisticFeedbackListResponse();
+        fillApiPage(response, statisticFeedbackList);
+        response.setList(statisticFeedbackList.getRecords().stream().map(this::convert2ApiStatisticFeedbackResponse).collect(Collectors.toList()));
+        return response;
+    }
+
+    public ApiStatisticFeedbackResponse convert2ApiStatisticFeedbackResponse(StatisticFeedbackBo statisticFeedbackBo) {
+        return dataConvertMapping.convertToApiStatisticFeedbackResponse(statisticFeedbackBo);
+    }
+
 }

@@ -1230,6 +1230,53 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/task/feedback/statistic:
+    get:
+      tags:
+        - taskFeedback
+      summary: 问题反馈统计列表
+      description: 问题反馈统计列表
+      operationId: getStatisticFeedbackList
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: pid
+          type: integer
+          description: 项目id
+        - in: query
+          name: vid
+          type: integer
+          description: 版本id
+        - in: query
+          name: uid
+          type: integer
+          description: 用户id
+        - in: query
+          name: startTime
+          type: string
+          description: 开始时间
+        - in: query
+          name: endTime
+          type: string
+          description: 结束时间
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/StatisticFeedbackListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/task/log/aggregation:
     get:
       tags:
@@ -2618,3 +2665,39 @@ definitions:
         type: integer
       workTime:
         type: integer
+  StatisticFeedbackListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/StatisticFeedbackResponse"
+  StatisticFeedbackResponse:
+    type: object
+    properties:
+      pid:
+        type: integer
+      project:
+        type: string
+      vid:
+        type: integer
+      version:
+        type: string
+      tid:
+        type: integer
+      task:
+        type: string
+      feedback:
+        type: string
+      uid:
+        type: integer
+      nickName:
+        type: string
+      accepterUid:
+        type: integer
+      accepterNickName:
+        type: string
+      createTime:
+        type: string
