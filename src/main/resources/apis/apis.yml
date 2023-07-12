@@ -1455,7 +1455,35 @@ paths:
           description: parameter error
         500:
           description: server error
-
+  /v1/statistic/workTimeDetail:
+    get:
+      tags:
+        - statistic
+      summary: 工时详情
+      description: 工时详情
+      operationId: workTimeDetail
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: pid
+          type: integer
+        - in: query
+          name: vid
+          type: integer
+        - in: query
+          name: uid
+          type: integer
+          description: 用户id
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/StatisticWorkTimeResponseList"
+        400:
+          description: parameter error
+        500:
+          description: server error
 # common parameters
 parameters:
   queryPageSize:
@@ -2565,3 +2593,28 @@ definitions:
       total:
         type: integer
         description: 总计
+  StatisticWorkTimeResponseList:
+    allOf:
+      - $ref: "#/definitions/WorkTime"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/StatisticWorkTimeResponse"
+  StatisticWorkTimeResponse:
+    type: object
+    properties:
+      mid:
+        type: integer
+      moduleName:
+        type: string
+      workTime:
+        type: integer
+  WorkTime:
+    type: object
+    properties:
+      planWorkTime:
+        type: integer
+      workTime:
+        type: integer

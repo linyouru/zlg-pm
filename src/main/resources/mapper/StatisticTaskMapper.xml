@@ -66,4 +66,19 @@
         </if>
     </select>
 
+    <select id="statisticPlanWorkTime" resultType="Integer">
+        SELECT
+            SUM(pt.planWorkTime) AS planWorkTime
+        FROM
+            `project_task` AS pt
+        ${ew.customSqlSegment}
+        GROUP BY
+        <if test="pid != null">
+            pt.pid
+        </if>
+        <if test="vid != null">
+            ,pt.vid
+        </if>
+    </select>
+
 </mapper>

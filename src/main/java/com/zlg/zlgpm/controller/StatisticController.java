@@ -3,6 +3,7 @@ package com.zlg.zlgpm.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.controller.model.ApiStatisticLogResponseList;
 import com.zlg.zlgpm.controller.model.ApiStatisticTaskResponseList;
+import com.zlg.zlgpm.controller.model.ApiStatisticWorkTimeResponseList;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.StatisticLogBo;
@@ -43,6 +44,15 @@ public class StatisticController implements StatisticApi {
         Page<StatisticLogBo> statisticLogBoPage = statisticService.statisticLog(uid, startTime, endTime, currentPage, pageSize);
         ApiStatisticLogResponseList response = dataConvertHelper.convert2ApiStatisticLogResponseList(statisticLogBoPage);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Override
+    public ResponseEntity<ApiStatisticWorkTimeResponseList> workTimeDetail(Integer pid, Integer vid, Integer uid) {
+        if(null == pid){
+            throw new BizException(HttpStatus.BAD_REQUEST,"statistic.16002");
+        }
+        ApiStatisticWorkTimeResponseList apiStatisticWorkTimeResponseList = statisticService.workTimeDetail(pid, vid, uid);
+        return ResponseEntity.ok().body(apiStatisticWorkTimeResponseList);
     }
 
 }

@@ -4,10 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.commom.WorkDayUtils;
+import com.zlg.zlgpm.controller.model.ApiStatisticWorkTimeResponseList;
+import com.zlg.zlgpm.dao.ProjectModuleMapper;
 import com.zlg.zlgpm.dao.StatisticTaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
+import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.StatisticLogBo;
 import com.zlg.zlgpm.pojo.bo.StatisticTaskBo;
+import com.zlg.zlgpm.pojo.bo.StatisticWorkTimeBo;
+import com.zlg.zlgpm.pojo.po.ProjectModulePo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -16,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author linyouru
@@ -31,6 +37,10 @@ public class StatisticService {
     private UserMapper userMapper;
     @Resource
     private WorkDayUtils workDayUtils;
+    @Resource
+    private ProjectModuleService projectModuleService;
+    @Resource
+    private DataConvertHelper dataConvertHelper;
 
     public Page<StatisticTaskBo> statisticTask(Integer uid, Integer pid, Integer vid, String startTime, String endTime, Integer currentPage, Integer pageSize, String sortField, Boolean isAsc) {
         QueryWrapper<StatisticTaskBo> wrapper = new QueryWrapper<>();
@@ -98,4 +108,32 @@ public class StatisticService {
         return statisticLogBoPage;
     }
 
+    public ApiStatisticWorkTimeResponseList workTimeDetail(Integer pid, Integer vid, Integer uid){
+        QueryWrapper<StatisticWorkTimeBo> wrapper = new QueryWrapper<>();
+        if(null!=pid){
+            wrapper.eq("pt.pid",pid);
+        }
+        if(null!=vid){
+            wrapper.eq("pt.vid",vid);
+        }
+        if(null!=uid){
+            wrapper.eq("pt.uid",uid);
+        }
+        //根据条件获取总计划工时
+        Integer planWorkTime = statisticTaskMapper.statisticPlanWorkTime(wrapper,pid,vid);
+        //根据条件获取总工时
+        Integer workTime = statisticTaskMapper.statisticWorkTime(wrapper);
+        //根据条件获取按模块分组的工时
+        ArrayList<StatisticWorkTimeBo> statisticWorkTimeBos = statisticTaskMapper.statisticWorkTimeDetail(wrapper);
+        List<ProjectModulePo> projectModulePos = projectModuleService.queryProjectModule(pid);
+        statisticWorkTimeBos.forEach(item->{
+            projectModulePos.forEach(modulePo->{
+                if(Objects.equals(item.getMid(), modulePo.getId())){
+                    item.setModuleName(modulePo.getModule());
+                }
+            });
+        });
+        //组装response
+        return dataConvertHelper.convert2ApiStatisticWorkTimeResponseList(statisticWorkTimeBos,planWorkTime,workTime);
+    }
 }

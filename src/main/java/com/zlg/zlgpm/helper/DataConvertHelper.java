@@ -120,7 +120,7 @@ public class DataConvertHelper {
         return taskPo;
     }
 
-    public TaskPo convert2TaskPo(ApiUpdateTaskStatusRequest taskRequest){
+    public TaskPo convert2TaskPo(ApiUpdateTaskStatusRequest taskRequest) {
         TaskPo taskPo = new TaskPo();
         taskPo.setStatus(taskRequest.getStatus() != null ? taskRequest.getStatus().toString() : null);
         return taskPo;
@@ -304,26 +304,37 @@ public class DataConvertHelper {
         return list;
     }
 
-    public ApiStatisticTaskResponseList convert2ApiStatisticTaskResponseList(Page<StatisticTaskBo> statisticTaskBoPage){
+    public ApiStatisticTaskResponseList convert2ApiStatisticTaskResponseList(Page<StatisticTaskBo> statisticTaskBoPage) {
         ApiStatisticTaskResponseList response = new ApiStatisticTaskResponseList();
         fillApiPage(response, statisticTaskBoPage);
         response.setList(statisticTaskBoPage.getRecords().stream().map(this::convert2ApiStatisticTaskResponse).collect(Collectors.toList()));
         return response;
     }
 
-    public ApiStatisticTaskResponse convert2ApiStatisticTaskResponse(StatisticTaskBo statisticTask){
+    public ApiStatisticTaskResponse convert2ApiStatisticTaskResponse(StatisticTaskBo statisticTask) {
         return dataConvertMapping.convertToApiStatisticTaskResponse(statisticTask);
     }
 
-    public ApiStatisticLogResponseList convert2ApiStatisticLogResponseList(Page<StatisticLogBo> statisticLogBoPage){
+    public ApiStatisticLogResponseList convert2ApiStatisticLogResponseList(Page<StatisticLogBo> statisticLogBoPage) {
         ApiStatisticLogResponseList response = new ApiStatisticLogResponseList();
-        fillApiPage(response,statisticLogBoPage);
+        fillApiPage(response, statisticLogBoPage);
         response.setList(statisticLogBoPage.getRecords().stream().map(this::convert2ApiStatisticLogResponse).collect(Collectors.toList()));
         return response;
     }
 
-    public ApiStatisticLogResponse convert2ApiStatisticLogResponse(StatisticLogBo statisticLog){
+    public ApiStatisticLogResponse convert2ApiStatisticLogResponse(StatisticLogBo statisticLog) {
         return dataConvertMapping.convertToApiStatisticLogResponse(statisticLog);
     }
 
+    public ApiStatisticWorkTimeResponseList convert2ApiStatisticWorkTimeResponseList(ArrayList<StatisticWorkTimeBo> statisticWorkTimeBos, Integer planWorkTime, Integer workTime) {
+        ApiStatisticWorkTimeResponseList response = new ApiStatisticWorkTimeResponseList();
+        response.setList(statisticWorkTimeBos.stream().map(this::convert2ApiStatisticWorkTimeResponse).collect(Collectors.toList()));
+        response.setWorkTime(workTime);
+        response.setPlanWorkTime(planWorkTime);
+        return response;
+    }
+
+    public ApiStatisticWorkTimeResponse convert2ApiStatisticWorkTimeResponse(StatisticWorkTimeBo statisticWorkTimeBo) {
+        return dataConvertMapping.convertToApiStatisticWorkTimeResponse(statisticWorkTimeBo);
+    }
 }
