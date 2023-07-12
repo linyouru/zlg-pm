@@ -44,4 +44,5 @@ public interface DataConvertMapping {
     ApiStatisticLogResponse convertToApiStatisticLogResponse(StatisticLogBo statisticLog);
     ApiStatisticWorkTimeResponse convertToApiStatisticWorkTimeResponse(StatisticWorkTimeBo statisticWorkTime);
     ApiStatisticFeedbackResponse convertToApiStatisticFeedbackResponse(StatisticFeedbackBo statisticFeedback);
+    ApiStatisticTaskChangeResponse convertToApiStatisticTaskChangeResponse(StatisticTaskChangeBo statTaskChange);
 }

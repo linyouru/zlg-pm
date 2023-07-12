@@ -3,6 +3,7 @@ package com.zlg.zlgpm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.OperationLog;
+import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiStatisticFeedbackResponse;
 import com.zlg.zlgpm.dao.TaskFeedbackMapper;
 import com.zlg.zlgpm.dao.TaskMapper;
@@ -91,8 +92,7 @@ public class TastFeedbackService {
             wrapper.eq("pt.uid", uid);
         }
         if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
-            wrapper.ge("tf.createTime", Long.parseLong(startTime));
-            wrapper.le("tf.createTime", Long.parseLong(endTime));
+            wrapper.between("tf.createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
         }
         Page<StatisticFeedbackBo> page = new Page<>();
         page.setCurrent(currentPage);

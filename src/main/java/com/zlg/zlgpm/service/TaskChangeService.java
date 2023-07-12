@@ -2,6 +2,7 @@ package com.zlg.zlgpm.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zlg.zlgpm.commom.Utils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskChangeRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskChangeRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
@@ -10,6 +11,8 @@ import com.zlg.zlgpm.dao.TaskMapper;
 import com.zlg.zlgpm.dao.UserMapper;
 import com.zlg.zlgpm.exception.BizException;
 import com.zlg.zlgpm.helper.DataConvertHelper;
+import com.zlg.zlgpm.pojo.bo.StatisticFeedbackBo;
+import com.zlg.zlgpm.pojo.bo.StatisticTaskChangeBo;
 import com.zlg.zlgpm.pojo.bo.TaskChangeListBo;
 import com.zlg.zlgpm.pojo.bo.TaskListBo;
 import com.zlg.zlgpm.pojo.po.ProjectPo;
@@ -113,8 +116,28 @@ public class TaskChangeService {
     public void deleteTaskChange(Integer taskId){
         QueryWrapper<TaskChangePo> wrapper = new QueryWrapper<>();
         wrapper.eq("taskId",taskId);
-        wrapper.eq("status",1);
+//        wrapper.eq("status",1);
         taskChangeMapper.delete(wrapper);
+    }
+
+    public Page<StatisticTaskChangeBo> getStatisticTaskChangeList(Integer pid, Integer vid, Integer uid, String startTime, String endTime, Integer currentPage, Integer pageSize){
+        QueryWrapper<StatisticTaskChangeBo> wrapper = new QueryWrapper<>();
+        if (pid != null) {
+            wrapper.eq("pt.pid", pid);
+        }
+        if (vid != null) {
+            wrapper.eq("pt.vid", vid);
+        }
+        if (uid != null) {
+            wrapper.eq("pt.uid", uid);
+        }
+        if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
+            wrapper.between("tc.createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
+        }
+        Page<StatisticTaskChangeBo> page = new Page<>();
+        page.setCurrent(currentPage);
+        page.setSize(pageSize);
+        return taskChangeMapper.getStatisticTaskChangeList(page, wrapper);
     }
 
 }

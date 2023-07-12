@@ -349,4 +349,15 @@ public class DataConvertHelper {
         return dataConvertMapping.convertToApiStatisticFeedbackResponse(statisticFeedbackBo);
     }
 
+    public ApiStatisticTaskChangeListResponse convert2ApiStatisticTaskChangeListResponse(Page<StatisticTaskChangeBo> statisticTaskChangeList){
+        ApiStatisticTaskChangeListResponse response = new ApiStatisticTaskChangeListResponse();
+        fillApiPage(response,statisticTaskChangeList);
+        response.setList(statisticTaskChangeList.getRecords().stream().map(this::convert2ApiStatisticTaskChangeResponse).collect(Collectors.toList()));
+        return response;
+    }
+
+    public ApiStatisticTaskChangeResponse convert2ApiStatisticTaskChangeResponse(StatisticTaskChangeBo statisticTaskChangeBo){
+        return dataConvertMapping.convertToApiStatisticTaskChangeResponse(statisticTaskChangeBo);
+    }
+
 }

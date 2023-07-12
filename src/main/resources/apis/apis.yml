@@ -1011,6 +1011,51 @@ paths:
             $ref: "#/definitions/TaskChangeListResponse"
         500:
           description: server error
+  /v1/task/change/statistic:
+    get:
+      tags:
+        - taskChange
+      summary: 任务变更统计列表
+      description: 任务变更统计列表
+      operationId: getStatisticTaskChangeList
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: pid
+          type: integer
+          description: 项目id
+        - in: query
+          name: vid
+          type: integer
+          description: 版本id
+        - in: query
+          name: uid
+          type: integer
+          description: 用户id
+        - in: query
+          name: startTime
+          type: string
+          description: 开始时间
+        - in: query
+          name: endTime
+          type: string
+          description: 结束时间
+        - name: currentPage
+          in: query
+          type: integer
+          default: 1
+        - name: pageSize
+          in: query
+          type: integer
+          default: 10
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/StatisticTaskChangeListResponse"
+        500:
+          description: server error
   /v1/task/log:
     post:
       tags:
@@ -2698,6 +2743,48 @@ definitions:
       accepterUid:
         type: integer
       accepterNickName:
+        type: string
+      createTime:
+        type: string
+  StatisticTaskChangeListResponse:
+    allOf:
+      - $ref: "#/definitions/OnePageData"
+      - type: object
+        properties:
+          list:
+            type: array
+            items:
+              $ref: "#/definitions/StatisticTaskChangeResponse"
+  StatisticTaskChangeResponse:
+    type: object
+    properties:
+      pid:
+        type: integer
+      project:
+        type: string
+      vid:
+        type: integer
+      version:
+        type: string
+      tid:
+        type: integer
+      task:
+        type: string
+      beforeStartTime:
+        type: string
+      beforeEndTime:
+        type: string
+      afterStartTime:
+        type: string
+      afterEndTime:
+        type: string
+      reason:
+        type: string
+      uid:
+        type: integer
+      nickName:
+        type: string
+      auditorName:
         type: string
       createTime:
         type: string
