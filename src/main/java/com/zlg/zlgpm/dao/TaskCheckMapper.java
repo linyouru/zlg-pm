@@ -18,7 +18,7 @@ public interface TaskCheckMapper extends BaseMapper<TaskCheckPo> {
     @Select("SELECT * FROM `task_check` WHERE taskId = #{taskId} ORDER BY createTime DESC")
     ArrayList<TaskCheckPo> getTaskCheckByTaskId(Integer taskId);
 
-    @Select("SELECT t.taskId FROM( SELECT taskId,type,isTimely FROM `task_check` WHERE isTimely = 2 AND type = #{type})AS t GROUP BY t.taskId")
+    @Select("SELECT taskId FROM `task_check` WHERE isTimely = 2 AND type = #{type} GROUP BY taskId ")
     ArrayList<Integer> getNotTimelyTaskId(Integer type);
 
 }

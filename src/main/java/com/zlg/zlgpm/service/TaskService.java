@@ -50,6 +50,8 @@ public class TaskService {
     private TaskCheckMapper taskCheckMapper;
     @Resource
     private EmailHelper emailHelper;
+    @Resource
+    private TaskLogMapper taskLogMapper;
 
     private static final String TASK_CHECK = "3";
     private static final String TASK_END = "1";
@@ -220,7 +222,8 @@ public class TaskService {
 
     public Page<TaskListBo> taskList(Integer currentPage, Integer pageSize, Integer projectUid, String status, Integer pid, Integer vid,
                                      Integer uid, String startTime, String endTime, String abnormal, String sortField, Boolean isAsc, String mid,
-                                     String level, String task, String detail, Integer createdUid, Integer accepterUid, Boolean isTimely, Integer notTimely) {
+                                     String level, String task, String detail, Integer createdUid, Integer accepterUid, Boolean isTimely,
+                                     Integer notTimelyType, Boolean abnormalWorkTime) {
         QueryWrapper<TaskListBo> queryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(status)) {
             String[] split = status.split(",");
@@ -290,11 +293,21 @@ public class TaskService {
         Page<TaskListBo> taskListBo = taskMapper.selectPage(taskListBoPage, queryWrapper);
         this.taskListFillNickName(taskListBo);
 
-        if(notTimely!=null){
+        if (notTimelyType != null) {
             ArrayList<TaskListBo> newTaskListBos = new ArrayList<>();
-            ArrayList<Integer> notTimelyTaskIds = taskCheckMapper.getNotTimelyTaskId(notTimely);
-            taskListBo.getRecords().forEach(taskItem->{
-                if(notTimelyTaskIds.contains(taskItem.getId())){
+            ArrayList<Integer> notTimelyTaskIds = taskCheckMapper.getNotTimelyTaskId(notTimelyType);
+            taskListBo.getRecords().forEach(taskItem -> {
+                if (notTimelyTaskIds.contains(taskItem.getId())) {
+                    newTaskListBos.add(taskItem);
+                }
+            });
+            taskListBo.setRecords(newTaskListBos);
+        }
+        if (abnormalWorkTime != null && abnormalWorkTime) {
+            ArrayList<TaskListBo> newTaskListBos = new ArrayList<>();
+            ArrayList<Integer> workTimeAbnormalTaskIds = taskLogMapper.getWorkTimeAbnormalTaskId();
+            taskListBo.getRecords().forEach(taskItem -> {
+                if (workTimeAbnormalTaskIds.contains(taskItem.getId())) {
                     newTaskListBos.add(taskItem);
                 }
             });

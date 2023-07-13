@@ -817,9 +817,13 @@ paths:
           type: boolean
           description: 及实性
         - in: query
-          name: notTimely
+          name: notTimelyType
           type: integer
-          description: 过滤,用于统计表格的弹窗.1验收未及时处理;2问题反馈未及时处理;
+          description: 过滤存在未及时处理的任务,用于统计表格的弹窗.1验收未及时处理;2问题反馈未及时处理;不能和abnormalWorkTime同时使用
+        - in: query
+          name: abnormalWorkTime
+          type: boolean
+          description: 过滤存在日志异常（工时为0）的任务;不能和notTimelyType同时使用
       responses:
         200:
           description: success
