@@ -9,6 +9,7 @@ import com.zlg.zlgpm.helper.DataConvertHelper;
 import com.zlg.zlgpm.pojo.bo.StatisticLogBo;
 import com.zlg.zlgpm.pojo.bo.StatisticTaskBo;
 import com.zlg.zlgpm.service.StatisticService;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
  * @date 2023/7/11 09:59:41
  */
 @RestController
+@Api(tags = "statistic", description = "统计相关接口")
 public class StatisticController implements StatisticApi {
 
     @Resource
