@@ -3,6 +3,7 @@ package com.zlg.zlgpm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.Utils;
+import com.zlg.zlgpm.commom.WorkDayUtils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskLogRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskLogRequest;
 import com.zlg.zlgpm.dao.TaskLogMapper;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskLogService {
@@ -36,6 +38,8 @@ public class TaskLogService {
     private TaskMapper taskMapper;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private WorkDayUtils workDayUtils;
 
     public void createTaskLog(ApiCreateTaskLogRequest body) {
         TaskLogPo taskLogPo = dataConvertHelper.convert2TaskLogPo(body);
@@ -82,8 +86,8 @@ public class TaskLogService {
         if (null != pid) {
             queryWrapper.eq("p.id", pid);
         }
-        if(null!= vid){
-            queryWrapper.eq("pv.id",vid);
+        if (null != vid) {
+            queryWrapper.eq("pv.id", vid);
         }
         if (StringUtils.hasText(sortField)) {
             String[] split = sortField.split(",");
@@ -129,15 +133,24 @@ public class TaskLogService {
         return taskLogMapper.getTodayWorkTime(wrapper);
     }
 
-    public TaskLogPo updateTaskLog(Long currentUid,Integer id, ApiUpdateTaskLogRequest body){
+    public TaskLogPo updateTaskLog(Long currentUid, Integer id, ApiUpdateTaskLogRequest body) {
         TaskLogPo beforeTaskLogPo = taskLogMapper.selectById(id);
-        if(!Objects.equals(currentUid, Long.valueOf(beforeTaskLogPo.getUid()))){
-            throw new BizException(HttpStatus.FORBIDDEN,"auth.11001");
+        if (!Objects.equals(currentUid, Long.valueOf(beforeTaskLogPo.getUid()))) {
+            throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
         TaskLogPo taskLogPo = dataConvertHelper.convert2TaskLogPo(body);
         taskLogPo.setId(id);
         taskLogMapper.updateById(taskLogPo);
         return taskLogMapper.selectById(id);
+    }
+
+    public ArrayList<String> getLogMissing(Integer uid, String startTime, String endTime) {
+        QueryWrapper<String> wrapper = new QueryWrapper<>();
+        wrapper.eq("uid", uid);
+        wrapper.between("createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
+        ArrayList<String> logDays = taskLogMapper.getLogMissing(wrapper);
+        ArrayList<String> workDayLogDays = workDayUtils.getWorkDayStringList(Long.parseLong(startTime), Long.parseLong(endTime));
+        return (ArrayList<String>) workDayLogDays.stream().filter(item -> !logDays.contains(item)).collect(Collectors.toList());
     }
 
 }

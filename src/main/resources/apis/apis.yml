@@ -1169,6 +1169,37 @@ paths:
           description: parameter error
         500:
           description: server error
+  /v1/task/log/missing:
+    get:
+      tags:
+        - taskLog
+      summary: 查询日志缺失
+      description: 获取某人一定时间范围内，工作日没写日志的日期
+      operationId: getLogMissing
+      produces:
+        - "application/json"
+      parameters:
+        - name: uid
+          in: query
+          required: true
+          type: integer
+        - name: startTime
+          in: query
+          required: true
+          type: string
+        - name: endTime
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/LogMissingListResponse"
+        400:
+          description: parameter error
+        500:
+          description: server error
   /v1/tast/worktime:
     get:
       tags:
@@ -2799,4 +2830,8 @@ definitions:
       auditorName:
         type: string
       createTime:
+        type: string
+  LogMissingListResponse:
+    type: array
+    items:
         type: string

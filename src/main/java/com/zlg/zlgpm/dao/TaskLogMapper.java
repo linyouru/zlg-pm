@@ -72,4 +72,7 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
     @Select("SELECT taskId FROM `task_log` WHERE workTime = \"0\" GROUP BY taskId;")
     ArrayList<Integer> getWorkTimeAbnormalTaskId();
 
+    @Select("SELECT SUBSTRING_INDEX(createTime, \" \", 1) AS `day` FROM task_log ${ew.customSqlSegment} GROUP BY `day`")
+    ArrayList<String> getLogMissing(@Param(Constants.WRAPPER) Wrapper<String> ew);
+
 }

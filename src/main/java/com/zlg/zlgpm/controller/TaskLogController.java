@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @RestController
@@ -37,6 +38,14 @@ public class TaskLogController implements TaskLogApi {
     public ResponseEntity<ApiLastTaskLogResponse> getLastTaskLog(Integer taskId) {
         TaskLogPo lastTaskLog = taskLogService.getLastTaskLog(taskId);
         ApiLastTaskLogResponse response = dataConvertHelper.convert2ApiLastTaskLogResponse(lastTaskLog);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Override
+    public ResponseEntity<ApiLogMissingListResponse> getLogMissing(Integer uid, String startTime, String endTime) {
+        ApiLogMissingListResponse response = new ApiLogMissingListResponse();
+        ArrayList<String> logMissing = taskLogService.getLogMissing(uid, startTime, endTime);
+        response.addAll(logMissing);
         return ResponseEntity.ok().body(response);
     }
 

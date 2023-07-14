@@ -14,6 +14,21 @@ import java.util.*;
 @Component
 public class WorkDayUtils {
 
+    public ArrayList<String> getWorkDayStringList(long start, long end) {
+        long oneDay = 86400000;
+        ArrayList<String> workDays = new ArrayList<>();
+        while (start < end) {
+            Calendar currentDate = Calendar.getInstance();
+            currentDate.setTimeInMillis(start);
+            if (currentDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && currentDate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+                String day = Utils.convertTimestamp2Date(start, "yyyy-MM-dd");
+                workDays.add(day);
+            }
+            start += oneDay;
+        }
+        return workDays;
+    }
+
     private double getWorkdayTimeInMillis(long start, long end,
                                           List<Date> listHolidays) {
 
@@ -39,31 +54,24 @@ public class WorkDayUtils {
 
         // 如果两个时间在同一周并且都不是周末日期，则直接返回时间差，增加执行效率
         if ((sdate.get(Calendar.YEAR) == edate.get(Calendar.YEAR))
-                && (sdate.get(Calendar.WEEK_OF_YEAR) == edate
-                .get(Calendar.WEEK_OF_YEAR))
-                && (sdate.get(Calendar.DAY_OF_WEEK) != 1 && sdate
-                .get(Calendar.DAY_OF_WEEK) != 7)
-                && (edate.get(Calendar.DAY_OF_WEEK) != 1 && edate
-                .get(Calendar.DAY_OF_WEEK) != 7)) {
-            return new Long(end - start - holidays);
+                && (sdate.get(Calendar.WEEK_OF_YEAR) == edate.get(Calendar.WEEK_OF_YEAR))
+                && (sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
+                && (edate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && edate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)) {
+            return end - start - holidays;
         }
         // 如果两个时间在同一周并且都是周末日期，则直接返回0
         if ((sdate.get(Calendar.YEAR) == edate.get(Calendar.YEAR))
-                && (sdate.get(Calendar.WEEK_OF_YEAR) == edate
-                .get(Calendar.WEEK_OF_YEAR)-1)
-                && (sdate.get(Calendar.DAY_OF_WEEK) == 1
-                || sdate.get(Calendar.DAY_OF_WEEK) == 7)
-                &&
-                (edate.get(Calendar.DAY_OF_WEEK) == 1
-                        || edate.get(Calendar.DAY_OF_WEEK) == 7)) {
-            start=validateStartTime(sdate);
-            end=validateEndTime(edate);
-            long result=end - start - holidays;
-            return new Long(result>0?result:0);
+                && (sdate.get(Calendar.WEEK_OF_YEAR) == edate.get(Calendar.WEEK_OF_YEAR) - 1)
+                && (sdate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || sdate.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
+                && (edate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || edate.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)) {
+            start = validateStartTime(sdate);
+            end = validateEndTime(edate);
+            long result = end - start - holidays;
+            return result > 0 ? result : 0;
         }
 
-        start=validateStartTime(sdate);
-        end=validateEndTime(edate);
+        start = validateStartTime(sdate);
+        end = validateEndTime(edate);
 
         // 首先取得起始日期与结束日期的下个周一的日期
         Calendar snextM = getNextMonday(sdate);
@@ -76,27 +84,28 @@ public class WorkDayUtils {
         int workdays = days / 7 * 5;
 
         // 计算最终结果，具体为：workdays加上开始时间的时间偏移量，减去结束时间的时间偏移量
-        double a=(double)workdays*24*3600000;
+        double a = (double) workdays * 24 * 3600000;
         double result = (a + calcWorkdayTimeInMillis(sdate, edate, start, end) - holidays);
-        result = Math.round(result/(24*3600000)) ;
+        result = Math.round(result / (24 * 3600000));
         return result > 0 ? result : 0;
     }
+
     /***
      * 验证开始日期是否合法,如果不合法,并返回修复后的正确日期毫秒数
      * @param sdate
      * @return
      */
-    private long validateStartTime(Calendar sdate){
-        if(sdate.get(Calendar.DAY_OF_WEEK) == 1)//开始日期从周日开始,如果开始时间为周末，自动修复为下周的9：00开始
+    private long validateStartTime(Calendar sdate) {
+        if (sdate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)//开始日期从周日开始,如果开始时间为周末，自动修复为下周的9：00开始
         {
-            sdate.add(Calendar.DATE,1);
-            sdate.setTimeInMillis(sdate.getTime().getTime()- //从9点开始
-                    (((sdate.get(Calendar.HOUR_OF_DAY)-9) * 3600000)+ (sdate.get(Calendar.MINUTE) * 60000)+ (sdate.get(Calendar.SECOND) * 1000)));
-        }else if(sdate.get(Calendar.DAY_OF_WEEK) == 7){//开始日期从周六开始
-            sdate.add(Calendar.DATE,2);
+            sdate.add(Calendar.DATE, 1);
+            sdate.setTimeInMillis(sdate.getTime().getTime() - //从9点开始
+                    (((sdate.get(Calendar.HOUR_OF_DAY) - 9) * 3600000) + (sdate.get(Calendar.MINUTE) * 60000) + (sdate.get(Calendar.SECOND) * 1000)));
+        } else if (sdate.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {//开始日期从周六开始
+            sdate.add(Calendar.DATE, 2);
             sdate.setTimeInMillis(
-                    sdate.getTime().getTime()- //从9点开始,如果开始时间为周末，自动修复为下周的9：00开始
-                            (((sdate.get(Calendar.HOUR_OF_DAY)-9) * 3600000)
+                    sdate.getTime().getTime() - //从9点开始,如果开始时间为周末，自动修复为下周的9：00开始
+                            (((sdate.get(Calendar.HOUR_OF_DAY) - 9) * 3600000)
                                     + (sdate.get(Calendar.MINUTE) * 60000)
                                     + (sdate.get(Calendar.SECOND) * 1000)));
         }
@@ -109,25 +118,26 @@ public class WorkDayUtils {
      * @param edate
      * @return
      */
-    private long validateEndTime(Calendar edate)
-    {
-        if(edate.get(Calendar.DAY_OF_WEEK) == 1)//结束日期是周日,如果结束日期是周六、周末自动修复为这周五18:00
+    private long validateEndTime(Calendar edate) {
+        if (edate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)//结束日期是周日,如果结束日期是周六、周末自动修复为这周五18:00
         {
-            edate.add(Calendar.DATE,-2);
+            edate.add(Calendar.DATE, -2);
             edate.setTimeInMillis(
-                    edate.getTime().getTime()+
-                            (18*3600000-((edate.get(Calendar.HOUR_OF_DAY) * 3600000)
+                    edate.getTime().getTime() +
+                            (18 * 3600000 - ((edate.get(Calendar.HOUR_OF_DAY) * 3600000)
                                     + (edate.get(Calendar.MINUTE) * 60000)
                                     + (edate.get(Calendar.SECOND) * 1000))));
-        }else if(edate.get(Calendar.DAY_OF_WEEK) == 7){//结束日期是周六,如果结束日期是周六、周末自动修复为这周五18:00
-            edate.add(Calendar.DATE,-1);
+        } else if (edate.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {//结束日期是周六,如果结束日期是周六、周末自动修复为这周五18:00
+            edate.add(Calendar.DATE, -1);
             edate.setTimeInMillis(
-                    edate.getTime().getTime()+
-                            (18*3600000-((edate.get(Calendar.HOUR_OF_DAY) * 3600000)
+                    edate.getTime().getTime() +
+                            (18 * 3600000 - ((edate.get(Calendar.HOUR_OF_DAY) * 3600000)
                                     + (edate.get(Calendar.MINUTE) * 60000)
-                                    + (edate.get(Calendar.SECOND) * 1000))));}
+                                    + (edate.get(Calendar.SECOND) * 1000))));
+        }
         return edate.getTimeInMillis();
     }
+
     /***
      * 计算两个日期间的工作日天数，除周六日
      *
@@ -135,11 +145,11 @@ public class WorkDayUtils {
      * @param edate
      * @return
      */
-    private long calcWorkdayTimeInMillis(Calendar sdate, Calendar edate,long start, long end) {
+    private long calcWorkdayTimeInMillis(Calendar sdate, Calendar edate, long start, long end) {
         // 获取开始时间的偏移量
         long scharge = 0;
-        if (sdate.get(Calendar.DAY_OF_WEEK) != 1
-                && sdate.get(Calendar.DAY_OF_WEEK) != 7) {
+        if (sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
+                && sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
             // 只有在开始时间为非周末的时候才计算偏移量
             scharge += (sdate.get(Calendar.HOUR_OF_DAY) * 3600000);
             scharge += (sdate.get(Calendar.MINUTE) * 60000);
@@ -152,8 +162,8 @@ public class WorkDayUtils {
         // 86400000-34200000=52200000
         // 获取结束时间的偏移量
         long echarge = 0;
-        if (edate.get(Calendar.DAY_OF_WEEK) != 1
-                && edate.get(Calendar.DAY_OF_WEEK) != (7)) {
+        if (edate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
+                && edate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
             // 只有在结束时间为非周末的时候才计算偏移量
             echarge += (edate.get(Calendar.HOUR_OF_DAY) * 3600000);
             echarge += (edate.get(Calendar.MINUTE) * 60000);
@@ -171,10 +181,8 @@ public class WorkDayUtils {
     /**
      * 获取两个时间之内的工作日时间（只去掉两个日期之间的周末时间，法定节假日未去掉）
      *
-     * @param start
-     * -起始时间，共有3个重载方法，可以传入long型，Long型，与Date型
-     * @param end
-     * -结束时间，共有3个重载方法，可以传入long型，Long型，与Date型
+     * @param start -起始时间，共有3个重载方法，可以传入long型，Long型，与Date型
+     * @param end   -结束时间，共有3个重载方法，可以传入long型，Long型，与Date型
      * @return Long型时间差对象
      */
     public double getWorkdayTimeInMillisExcWeekend(long start, long end) {
@@ -188,7 +196,7 @@ public class WorkDayUtils {
      * @param end
      * @return
      */
-    public double getWorkdayTimeInMillisExcWeekendHolidays(String start,String end, String format, List<Date> listHolidays) {
+    public double getWorkdayTimeInMillisExcWeekendHolidays(String start, String end, String format, List<Date> listHolidays) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         Date sdate;
         Date edate;
@@ -199,12 +207,12 @@ public class WorkDayUtils {
                     listHolidays);
         } catch (ParseException e) {
             e.printStackTrace();
-            return new Long(0);
+            return 0L;
         }
     }
 
     public double getWorkdayTimeInMillis(Long start, Long end) {
-        return getWorkdayTimeInMillis(start.longValue(), end.longValue(), null);
+        return getWorkdayTimeInMillis(start, end, null);
     }
 
     public double getWorkdayTimeInMillis(Date start, Date end) {
@@ -221,7 +229,7 @@ public class WorkDayUtils {
             return getWorkdayTimeInMillis(sdate, edate);
         } catch (ParseException e) {
             e.printStackTrace();
-            return new Long(0);
+            return 0L;
         }
     }
 
@@ -236,7 +244,7 @@ public class WorkDayUtils {
             ecalendar.setTimeInMillis(end);
 
             if (listHolidays == null)
-                return new Long(0);
+                return 0L;
             Iterator<Date> iterator = listHolidays.iterator();
             while (iterator.hasNext()) {
                 Calendar ca = Calendar.getInstance();
@@ -253,9 +261,9 @@ public class WorkDayUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new Long(0);
+            return 0L;
         }
-        return daysofH * 24 * 3600000;
+        return (long) daysofH * 24 * 3600000;
     }
 
 
@@ -268,7 +276,6 @@ public class WorkDayUtils {
     }
 
     /**
-     *
      * @param mss 要转换的毫秒数
      * @return 该毫秒数转换为 * days * hours * minutes * seconds 后的格式
      */
@@ -281,9 +288,8 @@ public class WorkDayUtils {
                 + seconds + " seconds ";
     }
 
-    public double formateToDay(double mss){
-        double days = mss / (1000 * 60 * 60 * 24);
-        return days;
+    public double formateToDay(double mss) {
+        return mss / (1000 * 60 * 60 * 24);
     }
 
     public int getDaysBetween(Calendar start, Calendar end) {
@@ -293,7 +299,7 @@ public class WorkDayUtils {
             end = swap;
         }
 
-        int days = end.get(Calendar.DAY_OF_YEAR)- start.get(Calendar.DAY_OF_YEAR);
+        int days = end.get(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR);
         int y2 = end.get(Calendar.YEAR);
         if (start.get(Calendar.YEAR) != y2) {
             start = (Calendar) start.clone();
@@ -305,12 +311,14 @@ public class WorkDayUtils {
         }
         return days;
     }
+
     /**
      * 手动维护节假日
+     *
      * @return
      * @throws ParseException
      */
-    public List<Date> initHoliday() throws ParseException{
+    public List<Date> initHoliday() throws ParseException {
         List<Date> holidays = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //元旦
