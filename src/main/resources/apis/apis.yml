@@ -1200,7 +1200,7 @@ paths:
           description: parameter error
         500:
           description: server error
-  /v1/tast/worktime:
+  /v1/task/worktime:
     get:
       tags:
         - taskLog
