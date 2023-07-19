@@ -121,7 +121,7 @@ public class TaskLogService {
         return taskLogMapper.getTodayTaskLogUid(wrapper);
     }
 
-    public Integer getTodayWorkTime(Long uid) {
+    public Double getTodayWorkTime(Long uid) {
         long now = System.currentTimeMillis();
         String nowString = Utils.convertTimestamp2Date(now, "yyyy-MM-dd HH:mm:ss");
         String today = nowString.split(" ")[0];

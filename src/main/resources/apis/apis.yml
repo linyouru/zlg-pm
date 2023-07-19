@@ -2651,7 +2651,7 @@ definitions:
         type: integer
         description: 问题反馈任务数
   TodayWorkTimeResponse:
-    type: integer
+    type: string
   StatisticTaskResponseList:
     allOf:
       - $ref: "#/definitions/OnePageData"

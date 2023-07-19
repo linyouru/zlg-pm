@@ -67,7 +67,7 @@ public interface TaskLogMapper extends BaseMapper<TaskLogPo> {
     ArrayList<Integer> getTodayTaskLogUid(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
 
     @Select("SELECT SUM(workTime) AS workTime FROM task_log ${ew.customSqlSegment}")
-    Integer getTodayWorkTime(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
+    Double getTodayWorkTime(@Param(Constants.WRAPPER) Wrapper<Integer> ew);
 
     @Select("SELECT taskId FROM `task_log` WHERE workTime = \"0\" GROUP BY taskId;")
     ArrayList<Integer> getWorkTimeAbnormalTaskId();
