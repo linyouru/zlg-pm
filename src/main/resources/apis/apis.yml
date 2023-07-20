@@ -1204,9 +1204,9 @@ paths:
     get:
       tags:
         - taskLog
-      summary: 获取当前用户今日累计任务日志工时
-      description: 获取当前用户今日累计任务日志工时
-      operationId: getTodayWorkTime
+      summary: 获取当前用户累计任务日志工时
+      description: 获取当前用户累计任务日志工时
+      operationId: getWorkTimeSum
       produces:
         - "application/json"
       parameters:
@@ -1214,6 +1214,14 @@ paths:
           type: string
           name: exceptId
           description: 不计算的日志id，多个用英文逗号分隔
+        - in: query
+          type: string
+          name: startTime
+          description: ms
+        - in: query
+          type: string
+          name: endTime
+          description: ms
       responses:
         200:
           description: success

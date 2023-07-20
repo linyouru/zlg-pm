@@ -122,21 +122,26 @@ public class TaskLogService {
         return taskLogMapper.getTodayTaskLogUid(wrapper);
     }
 
-    public Double getTodayWorkTime(Long uid, String exceptId) {
-        long now = System.currentTimeMillis();
-        String nowString = Utils.convertTimestamp2Date(now, "yyyy-MM-dd HH:mm:ss");
-        String today = nowString.split(" ")[0];
-        String todayStart = today + " " + "00:00:00";
-        String todayEnd = today + " " + "23:59:59";
+    public Double getWorkTimeSum(Long uid, String exceptId, String startTime, String endTime) {
+//        long now = System.currentTimeMillis();
+//        String nowString = Utils.convertTimestamp2Date(now, "yyyy-MM-dd HH:mm:ss");
+//        String today = nowString.split(" ")[0];
+//        String todayStart = today + " " + "00:00:00";
+//        String todayEnd = today + " " + "23:59:59";
+
         QueryWrapper<Integer> wrapper = new QueryWrapper<>();
-        wrapper.between("createTime", todayStart, todayEnd);
         wrapper.eq("uid", uid);
+        if (StringUtils.hasText(startTime) && StringUtils.hasText(endTime)) {
+            String start = Utils.convertTimestamp2Date(Long.parseLong(startTime), "yyyy-MM-dd HH:mm:ss");
+            String end = Utils.convertTimestamp2Date(Long.parseLong(endTime), "yyyy-MM-dd HH:mm:ss");
+            wrapper.between("createTime", start, end);
+        }
         if (StringUtils.hasText(exceptId)) {
             String[] split = exceptId.split(",");
             List<String> idList = (List<String>) CollectionUtils.arrayToList(split);
             wrapper.notIn("id", idList);
         }
-        return taskLogMapper.getTodayWorkTime(wrapper);
+        return taskLogMapper.getWorkTimeSum(wrapper);
     }
 
     public TaskLogPo updateTaskLog(Long currentUid, Integer id, ApiUpdateTaskLogRequest body) {
