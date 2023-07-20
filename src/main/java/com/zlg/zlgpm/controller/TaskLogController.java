@@ -68,9 +68,9 @@ public class TaskLogController implements TaskLogApi {
     }
 
     @Override
-    public ResponseEntity<String> getTodayWorkTime() {
+    public ResponseEntity<String> getTodayWorkTime(String exceptId) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
-        Double todayWorkTime = taskLogService.getTodayWorkTime(currentUser.getId());
+        Double todayWorkTime = taskLogService.getTodayWorkTime(currentUser.getId(), exceptId);
         todayWorkTime = todayWorkTime != null ? todayWorkTime : 0;
         return ResponseEntity.ok(todayWorkTime.toString());
     }

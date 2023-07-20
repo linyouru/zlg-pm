@@ -18,6 +18,7 @@ import com.zlg.zlgpm.pojo.po.TaskPo;
 import com.zlg.zlgpm.pojo.po.UserPo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -121,7 +122,7 @@ public class TaskLogService {
         return taskLogMapper.getTodayTaskLogUid(wrapper);
     }
 
-    public Double getTodayWorkTime(Long uid) {
+    public Double getTodayWorkTime(Long uid, String exceptId) {
         long now = System.currentTimeMillis();
         String nowString = Utils.convertTimestamp2Date(now, "yyyy-MM-dd HH:mm:ss");
         String today = nowString.split(" ")[0];
@@ -130,6 +131,11 @@ public class TaskLogService {
         QueryWrapper<Integer> wrapper = new QueryWrapper<>();
         wrapper.between("createTime", todayStart, todayEnd);
         wrapper.eq("uid", uid);
+        if (StringUtils.hasText(exceptId)) {
+            String[] split = exceptId.split(",");
+            List<String> idList = (List<String>) CollectionUtils.arrayToList(split);
+            wrapper.notIn("id", idList);
+        }
         return taskLogMapper.getTodayWorkTime(wrapper);
     }
 

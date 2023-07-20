@@ -1209,6 +1209,11 @@ paths:
       operationId: getTodayWorkTime
       produces:
         - "application/json"
+      parameters:
+        - in: query
+          type: string
+          name: exceptId
+          description: 不计算的日志id，多个用英文逗号分隔
       responses:
         200:
           description: success
