@@ -71,13 +71,14 @@ public class TaskLogController implements TaskLogApi {
     public ResponseEntity<String> getTodayWorkTime() {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
         Double todayWorkTime = taskLogService.getTodayWorkTime(currentUser.getId());
+        todayWorkTime = todayWorkTime != null ? todayWorkTime : 0;
         return ResponseEntity.ok(todayWorkTime.toString());
     }
 
     @Override
     public ResponseEntity<ApiTaskLogResponse> updateTaskLog(Integer id, ApiUpdateTaskLogRequest body) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
-        TaskLogPo taskLogPo = taskLogService.updateTaskLog(currentUser.getId(),id, body);
+        TaskLogPo taskLogPo = taskLogService.updateTaskLog(currentUser.getId(), id, body);
         ApiTaskLogResponse apiTaskLogResponse = dataConvertHelper.convert2ApiTaskLogResponse(taskLogPo);
         return ResponseEntity.ok(apiTaskLogResponse);
     }
