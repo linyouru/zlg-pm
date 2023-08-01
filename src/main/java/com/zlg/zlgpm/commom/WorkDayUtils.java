@@ -57,17 +57,18 @@ public class WorkDayUtils {
                 && (sdate.get(Calendar.WEEK_OF_YEAR) == edate.get(Calendar.WEEK_OF_YEAR))
                 && (sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
                 && (edate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && edate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)) {
-            return end - start - holidays;
+            return  Math.round((double) (end - start - holidays) / (24 * 3600000));
         }
         // 如果两个时间在同一周并且都是周末日期，则直接返回0
         if ((sdate.get(Calendar.YEAR) == edate.get(Calendar.YEAR))
                 && (sdate.get(Calendar.WEEK_OF_YEAR) == edate.get(Calendar.WEEK_OF_YEAR) - 1)
                 && (sdate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || sdate.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
                 && (edate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || edate.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)) {
-            start = validateStartTime(sdate);
-            end = validateEndTime(edate);
-            long result = end - start - holidays;
-            return result > 0 ? result : 0;
+//            start = validateStartTime(sdate);
+//            end = validateEndTime(edate);
+//            long result = end - start - holidays;
+//            return result > 0 ? result : 0;
+            return 0;
         }
 
         start = validateStartTime(sdate);

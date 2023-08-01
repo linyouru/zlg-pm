@@ -2734,10 +2734,10 @@ definitions:
         description: 理论日志总数
       abnormal:
         type: integer
-        description: 日志缺失
+        description: 日志异常
       miss:
         type: integer
-        description: 日志异常
+        description: 日志缺失
       total:
         type: integer
         description: 总计
