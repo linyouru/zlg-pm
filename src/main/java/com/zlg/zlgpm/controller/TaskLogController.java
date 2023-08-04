@@ -58,11 +58,11 @@ public class TaskLogController implements TaskLogApi {
     }
 
     @Override
-    public ResponseEntity<ApiTaskLogAggregationListResponse> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, Integer vid, String sortField, Boolean isAsc, String startTime, String endTime) {
+    public ResponseEntity<ApiTaskLogAggregationListResponse> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, Integer vid, String sortField, Boolean isAsc, String startTime, String endTime, Boolean abnormal) {
         if (StringUtils.hasText(sortField) && isAsc == null) {
             throw new BizException(HttpStatus.BAD_REQUEST, "task.12002");
         }
-        Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, pid, vid, sortField, isAsc, startTime, endTime);
+        Page<TaskLogAggregationListBo> taskLogAggregation = taskLogService.getTaskLogAggregation(currentPage, pageSize, uid, log, pid, vid, sortField, isAsc, startTime, endTime, abnormal);
         ApiTaskLogAggregationListResponse response = dataConvertHelper.convertToAggregationListResponse(taskLogAggregation);
         return ResponseEntity.ok().body(response);
     }
@@ -70,7 +70,7 @@ public class TaskLogController implements TaskLogApi {
     @Override
     public ResponseEntity<String> getWorkTimeSum(String exceptId, String startTime, String endTime) {
         UserPo currentUser = (UserPo) SecurityUtils.getSubject().getPrincipal();
-        Double todayWorkTime = taskLogService.getWorkTimeSum(currentUser.getId(), exceptId,startTime,endTime);
+        Double todayWorkTime = taskLogService.getWorkTimeSum(currentUser.getId(), exceptId, startTime, endTime);
         todayWorkTime = todayWorkTime != null ? todayWorkTime : 0;
         return ResponseEntity.ok(todayWorkTime.toString());
     }

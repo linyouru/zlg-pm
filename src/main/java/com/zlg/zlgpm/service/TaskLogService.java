@@ -73,7 +73,7 @@ public class TaskLogService {
         return taskLogMapper.selectPage(page, queryWrapper);
     }
 
-    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, Integer vid, String sortField, Boolean isAsc, String startTime, String endTime) {
+    public Page<TaskLogAggregationListBo> getTaskLogAggregation(Integer currentPage, Integer pageSize, Integer uid, String log, Integer pid, Integer vid, String sortField, Boolean isAsc, String startTime, String endTime, Boolean abnormal) {
         QueryWrapper<TaskLogAggregationListBo> queryWrapper = new QueryWrapper<>();
         if (null != uid) {
             queryWrapper.eq("tl.uid", uid);
@@ -94,6 +94,9 @@ public class TaskLogService {
             String[] split = sortField.split(",");
             List<String> sortList = Arrays.asList(split);
             queryWrapper.orderBy(true, isAsc, sortList);
+        }
+        if(abnormal){
+            queryWrapper.eq("tl.workTime","0.0");
         }
 
         Page<TaskLogAggregationListBo> page = new Page<>();
@@ -163,7 +166,7 @@ public class TaskLogService {
         ArrayList<String> logWorkDays = new ArrayList<>();
         //去除周末和节假日
         for (String logDay : logDays) {
-            if(!workDayUtils.theDayIsWeekendOrHoliday(logDay)){
+            if (!workDayUtils.theDayIsWeekendOrHoliday(logDay)) {
                 logWorkDays.add(logDay);
             }
         }

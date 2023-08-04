@@ -1428,6 +1428,11 @@ paths:
           name: endTime
           type: string
           description: 结束时间.时间戳(ms)
+        - in: query
+          name: abnormal
+          type: boolean
+          description: 是否查询异常日志（工时为0）
+          default: false
       responses:
         200:
           description: success
