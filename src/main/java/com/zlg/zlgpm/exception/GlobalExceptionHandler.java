@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -74,6 +75,24 @@ public class GlobalExceptionHandler implements MessageSourceAware {
         String code = getCode(httpStatus,"");
         Map<String, String> errors = new HashMap<>();
         e.getConstraintViolations().forEach(constv -> errors.put(String.valueOf(constv.getPropertyPath()),constv.getMessage()));
+        final ErrResp resp = ErrResp.builder()
+                .timestamp(new Date())
+                .status(httpStatus.value())
+                .code(code)
+                .error(httpStatus.getReasonPhrase())
+                .path(path)
+                .message(errors)
+                .build();
+        return new ResponseEntity<>(resp, httpStatus);
+    }
+
+    @ExceptionHandler(value = MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrResp> handleMissingServletRequestParameterException(MissingServletRequestParameterException e, WebRequest request){
+        final String path = getPath(request);
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String code = getCode(httpStatus,"");
+        Map<String, String> errors = new HashMap<>();
+        errors.put(e.getParameterName(),e.getMessage());
         final ErrResp resp = ErrResp.builder()
                 .timestamp(new Date())
                 .status(httpStatus.value())
