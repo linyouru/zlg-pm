@@ -1,5 +1,7 @@
 package com.zlg.zlgpm.commom;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -14,6 +16,20 @@ import java.util.*;
 @Component
 public class WorkDayUtils {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final String[] holidays = {"2023-01-02", "2023-01-23", "2023-01-24", "2023-01-25", "2023-01-26", "2023-01-27", "2023-04-05",
+            "2023-05-01", "2023-05-02", "2023-05-03", "2023-06-22", "2023-06-23", "2023-09-29", "2023-10-02", "2023-10-03", "2023-10-04",
+            "2023-10-05", "2023-10-06"};
+
+
+    /***
+     * 获取两个时间之间的工作日期字符串列表（去掉两个日期之间的周末时间，法定节假日时间）
+     * @param start
+     * @param end
+     * @return java.util.ArrayList<java.lang.String>
+     * @author linyouru
+     * @date 2023/8/3 16:52:10
+     */
     public ArrayList<String> getWorkDayStringList(long start, long end) {
         long oneDay = 86400000;
         ArrayList<String> workDays = new ArrayList<>();
@@ -22,15 +38,67 @@ public class WorkDayUtils {
             currentDate.setTimeInMillis(start);
             if (currentDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && currentDate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
                 String day = Utils.convertTimestamp2Date(start, "yyyy-MM-dd");
-                workDays.add(day);
+                if (!theDayIsWeekendOrHoliday(day))
+                    workDays.add(day);
             }
             start += oneDay;
         }
         return workDays;
     }
 
-    private double getWorkdayTimeInMillis(long start, long end,
-                                          List<Date> listHolidays) {
+    /**
+     * 获取两个时间之内的工作日天数（只去掉两个日期之间的周末时间，法定节假日未去掉）
+     *
+     * @param start -起始时间
+     * @param end   -结束时间
+     * @return 工作日天数, 向上取整
+     */
+    public double getWorkdayTimeInMillisExcWeekend(long start, long end) {
+        return getWorkdayTimeInMillis(start, end, null);
+    }
+
+    /***
+     * 获取两个时间之内的工作日天数（去掉两个日期之间的周末时间，法定节假日时间）
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public double getWorkdayTimeInMillisExcWeekendHolidays(long start, long end) {
+        List<Date> holidays = null;
+        try {
+            holidays = this.initHoliday();
+        } catch (ParseException e) {
+            logger.error("function initHoliday error: ", e);
+        }
+        return getWorkdayTimeInMillis(start, end, holidays);
+    }
+
+    /***
+     * 判断日期是否是周末或节日
+     * @param date "2023-05-15"
+     * @return java.lang.Boolean
+     * @author linyouru
+     * @date 2023/8/4 10:44:18
+     */
+    public Boolean theDayIsWeekendOrHoliday(String date) {
+        List<String> holidayList = Arrays.asList(holidays);
+        if (holidayList.contains(date))
+            return true;
+
+        String[] split = date.split("-");
+        int year = Integer.parseInt(split[0]);
+        int month = Integer.parseInt(split[1]) - 1;
+        int day = Integer.parseInt(split[2]);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
+            return true;
+
+        return false;
+    }
+
+    private double getWorkdayTimeInMillis(Long start, Long end, List<Date> listHolidays) {
 
         // 如果起始时间大于结束时间，将二者交换
         if (start > end) {
@@ -57,7 +125,9 @@ public class WorkDayUtils {
                 && (sdate.get(Calendar.WEEK_OF_YEAR) == edate.get(Calendar.WEEK_OF_YEAR))
                 && (sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && sdate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)
                 && (edate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && edate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)) {
-            return  Math.round((double) (end - start - holidays) / (24 * 3600000));
+            long l = end - start - holidays;
+            double v = (double) (end - start - holidays) / (24 * 3600000);
+            return Math.round((double) (end - start - holidays) / (24 * 3600000));
         }
         // 如果两个时间在同一周并且都是周末日期，则直接返回0
         if ((sdate.get(Calendar.YEAR) == edate.get(Calendar.YEAR))
@@ -91,6 +161,67 @@ public class WorkDayUtils {
         return result > 0 ? result : 0;
     }
 
+    private long getHolidaysInMillis(long start, long end,
+                                     List<Date> listHolidays) {
+        Calendar scalendar = Calendar.getInstance();
+        Calendar ecalendar = Calendar.getInstance();
+        int daysofH = 0;
+        try {
+
+            scalendar.setTimeInMillis(start);
+            ecalendar.setTimeInMillis(end);
+
+            if (listHolidays == null)
+                return 0L;
+            Iterator<Date> iterator = listHolidays.iterator();
+            while (iterator.hasNext()) {
+                Calendar ca = Calendar.getInstance();
+                Date hdate = iterator.next();
+                ca.setTime(hdate);
+                if (ca.after(scalendar) && ca.before(ecalendar)) {
+                    daysofH = daysofH + 1;
+                } else if (ca.getTimeInMillis() == scalendar.getTimeInMillis()) {
+                    daysofH = daysofH + 1;
+                } else if (ca.getTimeInMillis() == ecalendar.getTimeInMillis()) {
+                    daysofH = daysofH + 1;
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("function getHolidaysInMillis error", e);
+            return 0L;
+        }
+        return (long) daysofH * 24 * 3600000;
+    }
+
+    public int getDaysBetween(Calendar start, Calendar end) {
+        if (start.after(end)) {
+            Calendar swap = start;
+            start = end;
+            end = swap;
+        }
+
+        int days = end.get(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR);
+        int y2 = end.get(Calendar.YEAR);
+        if (start.get(Calendar.YEAR) != y2) {
+            start = (Calendar) start.clone();
+            do {
+                days += start.getActualMaximum(Calendar.DAY_OF_YEAR);
+                start.add(Calendar.YEAR, 1);
+            } while (start.get(Calendar.YEAR) != y2);
+
+        }
+        return days;
+    }
+
+    private Calendar getNextMonday(Calendar cal) {
+        int addnum = 9 - cal.get(Calendar.DAY_OF_WEEK);
+        if (addnum == 8)
+            addnum = 1;// 周日的情况
+        cal.add(Calendar.DATE, addnum);
+        return cal;
+    }
+
     /***
      * 验证开始日期是否合法,如果不合法,并返回修复后的正确日期毫秒数
      * @param sdate
@@ -112,7 +243,6 @@ public class WorkDayUtils {
         }
         return sdate.getTimeInMillis();
     }
-
 
     /***
      * 验证结束日期是否合法,如果不合法,并返回修复后的正确日期毫秒数
@@ -180,184 +310,39 @@ public class WorkDayUtils {
     }
 
     /**
-     * 获取两个时间之内的工作日时间（只去掉两个日期之间的周末时间，法定节假日未去掉）
-     *
-     * @param start -起始时间，共有3个重载方法，可以传入long型，Long型，与Date型
-     * @param end   -结束时间，共有3个重载方法，可以传入long型，Long型，与Date型
-     * @return Long型时间差对象
-     */
-    public double getWorkdayTimeInMillisExcWeekend(long start, long end) {
-        return getWorkdayTimeInMillis(start, end);
-    }
-
-    /***
-     * 获取两个时间之内的工作日时间（去掉两个日期之间的周末时间，法定节假日时间）
-     *
-     * @param start
-     * @param end
-     * @return
-     */
-    public double getWorkdayTimeInMillisExcWeekendHolidays(String start, String end, String format, List<Date> listHolidays) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        Date sdate;
-        Date edate;
-        try {
-            sdate = sdf.parse(start);
-            edate = sdf.parse(end);
-            return getWorkdayTimeInMillis(sdate.getTime(), edate.getTime(),
-                    listHolidays);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0L;
-        }
-    }
-
-    public double getWorkdayTimeInMillis(Long start, Long end) {
-        return getWorkdayTimeInMillis(start, end, null);
-    }
-
-    public double getWorkdayTimeInMillis(Date start, Date end) {
-        return getWorkdayTimeInMillis(start.getTime(), end.getTime(), null);
-    }
-
-    public double getWorkdayTimeInMillis(String start, String end, String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        Date sdate;
-        Date edate;
-        try {
-            sdate = sdf.parse(start);
-            edate = sdf.parse(end);
-            return getWorkdayTimeInMillis(sdate, edate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0L;
-        }
-    }
-
-    private long getHolidaysInMillis(long start, long end,
-                                     List<Date> listHolidays) {
-        Calendar scalendar = Calendar.getInstance();
-        Calendar ecalendar = Calendar.getInstance();
-        int daysofH = 0;
-        try {
-
-            scalendar.setTimeInMillis(start);
-            ecalendar.setTimeInMillis(end);
-
-            if (listHolidays == null)
-                return 0L;
-            Iterator<Date> iterator = listHolidays.iterator();
-            while (iterator.hasNext()) {
-                Calendar ca = Calendar.getInstance();
-                Date hdate = iterator.next();
-                ca.setTime(hdate);
-                if (ca.after(scalendar) && ca.before(ecalendar)) {
-                    daysofH = daysofH + 1;
-                } else if (ca.getTimeInMillis() == scalendar.getTimeInMillis()) {
-                    daysofH = daysofH + 1;
-                } else if (ca.getTimeInMillis() == ecalendar.getTimeInMillis()) {
-                    daysofH = daysofH + 1;
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0L;
-        }
-        return (long) daysofH * 24 * 3600000;
-    }
-
-
-    private Calendar getNextMonday(Calendar cal) {
-        int addnum = 9 - cal.get(Calendar.DAY_OF_WEEK);
-        if (addnum == 8)
-            addnum = 1;// 周日的情况
-        cal.add(Calendar.DATE, addnum);
-        return cal;
-    }
-
-    /**
-     * @param mss 要转换的毫秒数
-     * @return 该毫秒数转换为 * days * hours * minutes * seconds 后的格式
-     */
-    public String formatDuring(double mss) {
-        long days = (long) (mss / (1000 * 60 * 60 * 24));
-        long hours = (long) ((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        long minutes = (long) ((mss % (1000 * 60 * 60)) / (1000 * 60));
-        long seconds = (long) ((mss % (1000 * 60)) / 1000);
-        return days + " days " + hours + " hours " + minutes + " minutes "
-                + seconds + " seconds ";
-    }
-
-    public double formateToDay(double mss) {
-        return mss / (1000 * 60 * 60 * 24);
-    }
-
-    public int getDaysBetween(Calendar start, Calendar end) {
-        if (start.after(end)) {
-            Calendar swap = start;
-            start = end;
-            end = swap;
-        }
-
-        int days = end.get(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR);
-        int y2 = end.get(Calendar.YEAR);
-        if (start.get(Calendar.YEAR) != y2) {
-            start = (Calendar) start.clone();
-            do {
-                days += start.getActualMaximum(Calendar.DAY_OF_YEAR);
-                start.add(Calendar.YEAR, 1);
-            } while (start.get(Calendar.YEAR) != y2);
-
-        }
-        return days;
-    }
-
-    /**
-     * 手动维护节假日
+     * 手动维护节假日(本就是周末的日期不要加上)
      *
      * @return
      * @throws ParseException
      */
-    public List<Date> initHoliday() throws ParseException {
+    private List<Date> initHoliday() throws ParseException {
         List<Date> holidays = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //元旦
-        holidays.add(sdf.parse("2016-01-01"));
-        holidays.add(sdf.parse("2016-01-02"));
-        holidays.add(sdf.parse("2016-01-03"));
+        holidays.add(sdf.parse("2023-01-02"));
         //春节
-        holidays.add(sdf.parse("2016-02-07"));
-        holidays.add(sdf.parse("2016-02-08"));
-        holidays.add(sdf.parse("2016-02-09"));
-        holidays.add(sdf.parse("2016-02-10"));
-        holidays.add(sdf.parse("2016-02-11"));
-        holidays.add(sdf.parse("2016-02-12"));
-        holidays.add(sdf.parse("2016-02-13"));
+        holidays.add(sdf.parse("2023-01-23"));
+        holidays.add(sdf.parse("2023-01-24"));
+        holidays.add(sdf.parse("2023-01-25"));
+        holidays.add(sdf.parse("2023-01-26"));
+        holidays.add(sdf.parse("2023-01-27"));
         //清明节
-        holidays.add(sdf.parse("2016-04-02"));
-        holidays.add(sdf.parse("2016-04-03"));
-        holidays.add(sdf.parse("2016-04-04"));
+        holidays.add(sdf.parse("2023-04-05"));
         //劳动节
-        holidays.add(sdf.parse("2016-04-30"));
-        holidays.add(sdf.parse("2016-05-01"));
-        holidays.add(sdf.parse("2016-05-02"));
+        holidays.add(sdf.parse("2023-05-01"));
+        holidays.add(sdf.parse("2023-05-02"));
+        holidays.add(sdf.parse("2023-05-03"));
         //端午节
-        holidays.add(sdf.parse("2016-06-09"));
-        holidays.add(sdf.parse("2016-06-10"));
-        holidays.add(sdf.parse("2016-06-11"));
+        holidays.add(sdf.parse("2023-06-22"));
+        holidays.add(sdf.parse("2023-06-23"));
         //中秋节
-        holidays.add(sdf.parse("2016-09-15"));
-        holidays.add(sdf.parse("2016-09-16"));
-        holidays.add(sdf.parse("2016-09-17"));
+        holidays.add(sdf.parse("2023-09-29"));
         //国庆节
-        holidays.add(sdf.parse("2016-10-01"));
-        holidays.add(sdf.parse("2016-10-02"));
-        holidays.add(sdf.parse("2016-10-03"));
-        holidays.add(sdf.parse("2016-10-04"));
-        holidays.add(sdf.parse("2016-10-05"));
-        holidays.add(sdf.parse("2016-10-06"));
-        holidays.add(sdf.parse("2016-10-07"));
+        holidays.add(sdf.parse("2023-10-02"));
+        holidays.add(sdf.parse("2023-10-03"));
+        holidays.add(sdf.parse("2023-10-04"));
+        holidays.add(sdf.parse("2023-10-05"));
+        holidays.add(sdf.parse("2023-10-06"));
         return holidays;
     }
 }

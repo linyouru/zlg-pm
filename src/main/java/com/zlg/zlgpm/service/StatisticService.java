@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author linyouru
@@ -81,10 +78,10 @@ public class StatisticService {
         return statisticTaskBoPage;
     }
 
-    public  Page<StatisticLogBo> statisticLog(Integer uid, String startTime, String endTime, Integer currentPage, Integer pageSize){
+    public Page<StatisticLogBo> statisticLog(Integer uid, String startTime, String endTime, Integer currentPage, Integer pageSize) {
         QueryWrapper<StatisticLogBo> wrapper = new QueryWrapper<>();
-        if(uid != null){
-            wrapper.eq("uid",uid);
+        if (uid != null) {
+            wrapper.eq("uid", uid);
         }
         wrapper.between("createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
 
@@ -94,46 +91,63 @@ public class StatisticService {
 
         Page<StatisticLogBo> statisticLogBoPage = statisticTaskMapper.statisticLog(page, wrapper);
         List<StatisticLogBo> logBoList = statisticLogBoPage.getRecords();
-        double days = workDayUtils.getWorkdayTimeInMillisExcWeekend(Long.parseLong(startTime), Long.parseLong(endTime));
+        double days = workDayUtils.getWorkdayTimeInMillisExcWeekendHolidays(Long.parseLong(startTime), Long.parseLong(endTime));
         ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
-        logBoList.forEach(log->{
-            allUserInfo.forEach(user->{
-                if(user.getId() == Long.parseLong(log.getUid() + "")){
+        ArrayList<HashMap<String, Object>> theoryLogDays = statisticTaskMapper.getTheoryLogDays(wrapper);
+        HashMap<String, Integer> userTheoryTotal = new HashMap<>();
+        String flag = "";
+        int theoryTotal = 0;
+        for (HashMap<String, Object> theoryLogDay : theoryLogDays) {
+            String userId = theoryLogDay.get("uid") + "";
+            if (!Objects.equals(userId, flag)) {
+                userTheoryTotal.put(flag, theoryTotal);
+                flag = userId;
+                theoryTotal = 0;
+            }
+            if (!workDayUtils.theDayIsWeekendOrHoliday(theoryLogDay.get("day") + ""))
+                theoryTotal++;
+        }
+        userTheoryTotal.put(flag, theoryTotal);
+
+        logBoList.forEach(log -> {
+            allUserInfo.forEach(user -> {
+                if (user.getId() == Long.parseLong(log.getUid() + "")) {
                     log.setNickName(user.getNickName());
                 }
             });
-            log.setMiss((int) (days-log.getTheoryTotal()));
-            log.setTotal(log.getAbnormal()+log.getMiss());
+            log.setTheoryTotal(userTheoryTotal.get(log.getUid()+""));
+            log.setMiss((int) (days - log.getTheoryTotal()));
+            log.setTotal(log.getAbnormal() + log.getMiss());
         });
         return statisticLogBoPage;
     }
 
-    public ApiStatisticWorkTimeResponseList workTimeDetail(Integer pid, Integer vid, Integer uid){
+    public ApiStatisticWorkTimeResponseList workTimeDetail(Integer pid, Integer vid, Integer uid) {
         QueryWrapper<StatisticWorkTimeBo> wrapper = new QueryWrapper<>();
-        if(null!=pid){
-            wrapper.eq("pt.pid",pid);
+        if (null != pid) {
+            wrapper.eq("pt.pid", pid);
         }
-        if(null!=vid){
-            wrapper.eq("pt.vid",vid);
+        if (null != vid) {
+            wrapper.eq("pt.vid", vid);
         }
-        if(null!=uid){
-            wrapper.eq("pt.uid",uid);
+        if (null != uid) {
+            wrapper.eq("pt.uid", uid);
         }
         //根据条件获取总计划工时
-        Integer planWorkTime = statisticTaskMapper.statisticPlanWorkTime(wrapper,pid,vid);
+        Integer planWorkTime = statisticTaskMapper.statisticPlanWorkTime(wrapper, pid, vid);
         //根据条件获取总工时
         Integer workTime = statisticTaskMapper.statisticWorkTime(wrapper);
         //根据条件获取按模块分组的工时
         ArrayList<StatisticWorkTimeBo> statisticWorkTimeBos = statisticTaskMapper.statisticWorkTimeDetail(wrapper);
         List<ProjectModulePo> projectModulePos = projectModuleService.queryProjectModule(pid);
-        statisticWorkTimeBos.forEach(item->{
-            projectModulePos.forEach(modulePo->{
-                if(Objects.equals(item.getMid(), modulePo.getId())){
+        statisticWorkTimeBos.forEach(item -> {
+            projectModulePos.forEach(modulePo -> {
+                if (Objects.equals(item.getMid(), modulePo.getId())) {
                     item.setModuleName(modulePo.getModule());
                 }
             });
         });
         //组装response
-        return dataConvertHelper.convert2ApiStatisticWorkTimeResponseList(statisticWorkTimeBos,planWorkTime,workTime);
+        return dataConvertHelper.convert2ApiStatisticWorkTimeResponseList(statisticWorkTimeBos, planWorkTime, workTime);
     }
 }

@@ -160,8 +160,15 @@ public class TaskLogService {
         wrapper.eq("uid", uid);
         wrapper.between("createTime", Utils.convertTimestamp2Date(Long.valueOf(startTime), "yyyy-MM-dd HH:mm:ss"), Utils.convertTimestamp2Date(Long.valueOf(endTime), "yyyy-MM-dd HH:mm:ss"));
         ArrayList<String> logDays = taskLogMapper.getLogMissing(wrapper);
+        ArrayList<String> logWorkDays = new ArrayList<>();
+        //去除周末和节假日
+        for (String logDay : logDays) {
+            if(!workDayUtils.theDayIsWeekendOrHoliday(logDay)){
+                logWorkDays.add(logDay);
+            }
+        }
         ArrayList<String> workDayLogDays = workDayUtils.getWorkDayStringList(Long.parseLong(startTime), Long.parseLong(endTime));
-        return (ArrayList<String>) workDayLogDays.stream().filter(item -> !logDays.contains(item)).collect(Collectors.toList());
+        return (ArrayList<String>) workDayLogDays.stream().filter(item -> !logWorkDays.contains(item)).collect(Collectors.toList());
     }
 
 }

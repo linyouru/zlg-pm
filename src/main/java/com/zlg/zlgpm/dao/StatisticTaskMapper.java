@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,8 +25,11 @@ public interface StatisticTaskMapper extends BaseMapper<StatisticTaskBo> {
 
     Page<StatisticTaskBo> statisticTask(Page<StatisticTaskBo> page, @Param(Constants.WRAPPER) Wrapper<StatisticTaskBo> ew, List<String> sortList, Boolean isAsc);
 
-    @Select("SELECT a.uid, a.trueTotal, a.abnormal, b.theoryTotal FROM( SELECT uid, COUNT(1) AS trueTotal, SUM(IF(workTime = \"0\", 1, 0)) AS abnormal FROM `task_log` ${ew.customSqlSegment} GROUP BY uid) AS a LEFT JOIN ( SELECT t.uid, COUNT(1) AS theoryTotal FROM ( SELECT uid, SUBSTRING_INDEX(createTime, \" \", 1) AS `day` FROM task_log ${ew.customSqlSegment} GROUP BY uid, `day` ) AS t GROUP BY t.uid ) AS b ON a.uid = b.uid")
+    @Select("SELECT uid, COUNT(1) AS trueTotal, SUM(IF(workTime = \"0\", 1, 0)) AS abnormal FROM `task_log` ${ew.customSqlSegment} GROUP BY uid")
     Page<StatisticLogBo> statisticLog(Page<StatisticLogBo> page, @Param(Constants.WRAPPER) Wrapper<StatisticLogBo> ew);
+
+    @Select("SELECT uid, SUBSTRING_INDEX(createTime, \" \", 1) AS `day` FROM task_log  ${ew.customSqlSegment} GROUP BY uid, `day`")
+    ArrayList<HashMap<String,Object>> getTheoryLogDays(@Param(Constants.WRAPPER) Wrapper<StatisticLogBo> ew);
 
     Integer statisticPlanWorkTime(@Param(Constants.WRAPPER) Wrapper<StatisticWorkTimeBo> ew, Integer pid, Integer vid);
 
