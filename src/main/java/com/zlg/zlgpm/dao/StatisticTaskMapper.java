@@ -25,7 +25,7 @@ public interface StatisticTaskMapper extends BaseMapper<StatisticTaskBo> {
 
     Page<StatisticTaskBo> statisticTask(Page<StatisticTaskBo> page, @Param(Constants.WRAPPER) Wrapper<StatisticTaskBo> ew, List<String> sortList, Boolean isAsc);
 
-    @Select("SELECT uid, COUNT(1) AS trueTotal, SUM(IF(workTime = \"0\", 1, 0)) AS abnormal FROM `task_log` ${ew.customSqlSegment} GROUP BY uid")
+    @Select("SELECT uid, COUNT(1) AS trueTotal, SUM(IF(workTime = \"0.0\", 1, 0)) AS abnormal FROM `task_log` ${ew.customSqlSegment} GROUP BY uid")
     Page<StatisticLogBo> statisticLog(Page<StatisticLogBo> page, @Param(Constants.WRAPPER) Wrapper<StatisticLogBo> ew);
 
     @Select("SELECT uid, SUBSTRING_INDEX(createTime, \" \", 1) AS `day` FROM task_log  ${ew.customSqlSegment} GROUP BY uid, `day`")

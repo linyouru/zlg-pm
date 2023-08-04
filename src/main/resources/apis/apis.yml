@@ -2485,6 +2485,7 @@ definitions:
       workTime:
         type: string
         description: 工时
+        pattern: ^[1-9]*\.\d{1}$|^0\.\d{1}$
       progress:
         type: string
         description: 进度
@@ -2533,6 +2534,7 @@ definitions:
     properties:
       workTime:
         type: string
+        pattern: ^[1-9]*\.\d{1}$|^0\.\d{1}$
       log:
         type: string
         maxLength: 1023
