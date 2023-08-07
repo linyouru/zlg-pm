@@ -32,11 +32,13 @@ public class UserPo implements Serializable {
     private String remark;
     @TableField
     private String custom;
+    @TableField
+    private Integer position;
 
     public UserPo() {
     }
 
-    public UserPo(String userName, String password, String nickName, String email, Integer status, String remark, String custom) {
+    public UserPo(String userName, String password, String nickName, String email, Integer status, String remark, String custom, Integer position) {
         this.userName = userName;
         this.password = password;
         this.nickName = nickName;
@@ -44,6 +46,7 @@ public class UserPo implements Serializable {
         this.status = status;
         this.remark = remark;
         this.custom = custom;
+        this.position = position;
     }
 
     @Override
@@ -59,7 +62,16 @@ public class UserPo implements Serializable {
                 ", status=" + status +
                 ", remark='" + remark + '\'' +
                 ", custom='" + custom + '\'' +
+                ", position=" + position +
                 '}';
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
     public Long getId() {
@@ -147,6 +159,7 @@ public class UserPo implements Serializable {
         private Integer status;
         private String remark;
         private String custom;
+        private Integer position;
 
         public UserBuilder userName(final String userName) {
             this.userName = userName;
@@ -183,8 +196,13 @@ public class UserPo implements Serializable {
             return this;
         }
 
+        public UserBuilder position(final Integer position) {
+            this.position = position;
+            return this;
+        }
+
         public UserPo build() {
-            return new UserPo(this.userName, this.password, this.nickName, this.email, this.status, this.remark, this.custom);
+            return new UserPo(this.userName, this.password, this.nickName, this.email, this.status, this.remark, this.custom, this.position);
         }
     }
 }

@@ -1701,6 +1701,7 @@ definitions:
       - password
       - nickName
       - email
+      - position
     properties:
       userName:
         type: string
@@ -1723,6 +1724,11 @@ definitions:
       remark:
         type: string
         maxLength: 255
+      position:
+        type: integer
+        minimum: 1
+        maximum: 4
+        description: 职位:1产品,2前端,3后端,4预留
   UpdateUserRequest:
     type: object
     properties:
@@ -1746,6 +1752,11 @@ definitions:
         type: string
         maxLength: 255
         description: 存储前端自定义json
+      position:
+        type: integer
+        minimum: 1
+        maximum: 4
+        description: 职位:1产品,2前端,3后端,4预留
   UserListResponse:
     allOf:
       - $ref: "#/definitions/OnePageData"
@@ -1808,6 +1819,14 @@ definitions:
         type: string
       custom:
         type: string
+      position:
+        type: integer
+        enum:
+          - 1
+          - 2
+          - 3
+          - 4
+        description: 职位:1产品,2前端,3后端,4预留
   CreateProjectVersionRequest:
     type: object
     required:
