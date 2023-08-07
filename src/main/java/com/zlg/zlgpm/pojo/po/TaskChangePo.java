@@ -38,6 +38,8 @@ public class TaskChangePo implements Serializable {
     private String updateTime;
     @TableField
     private String createTime;
+    @TableField
+    private Integer delayDayCount;
 
     public TaskChangePo() {
     }
@@ -146,6 +148,14 @@ public class TaskChangePo implements Serializable {
         this.auditorName = auditorName;
     }
 
+    public Integer getDelayDayCount() {
+        return delayDayCount;
+    }
+
+    public void setDelayDayCount(Integer delayDayCount) {
+        this.delayDayCount = delayDayCount;
+    }
+
     @Override
     public String toString() {
         return "TaskChangePo{" +
@@ -153,7 +163,7 @@ public class TaskChangePo implements Serializable {
                 ", taskId=" + taskId +
                 ", uid=" + uid +
                 ", auditorId=" + auditorId +
-                ", auditorName=" + auditorName +
+                ", auditorName='" + auditorName + '\'' +
                 ", status=" + status +
                 ", beforeStartTime='" + beforeStartTime + '\'' +
                 ", beforeEndTime='" + beforeEndTime + '\'' +
@@ -162,6 +172,7 @@ public class TaskChangePo implements Serializable {
                 ", reason='" + reason + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", createTime='" + createTime + '\'' +
+                ", delayDayCount=" + delayDayCount +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package com.zlg.zlgpm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.Utils;
+import com.zlg.zlgpm.commom.WorkDayUtils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskChangeRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskChangeRequest;
 import com.zlg.zlgpm.dao.ProjectMapper;
@@ -39,6 +40,8 @@ public class TaskChangeService {
     private UserMapper userMapper;
     @Resource
     private ProjectMapper projectMapper;
+    @Resource
+    private WorkDayUtils workDayUtils;
 
     public void createTaskChange(ApiCreateTaskChangeRequest body) {
         //任务存在待审核的变更记录则不能再创建
@@ -75,6 +78,14 @@ public class TaskChangeService {
             UserPo auditor = userMapper.selectById(auditorId);
             taskChangePo.setAuditorId(auditorId);
             taskChangePo.setAuditorName(auditor.getNickName());
+        }
+        //计算任务延期天数
+        long now = System.currentTimeMillis();
+        long beforeEndTime = Long.parseLong(taskChangePo.getBeforeEndTime());
+        if(now<beforeEndTime){
+            taskChangePo.setDelayDayCount(0);
+        }else{
+            taskChangePo.setDelayDayCount((int)workDayUtils.getWorkdayTimeInMillisExcWeekendHolidays(now, beforeEndTime));
         }
         taskChangeMapper.insert(taskChangePo);
     }

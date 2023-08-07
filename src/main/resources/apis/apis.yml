@@ -2486,6 +2486,8 @@ definitions:
         type: string
       createTime:
         type: string
+      delayDayCount:
+        type: integer
   CreateTaskLogRequest:
     type: object
     required:
@@ -2870,6 +2872,8 @@ definitions:
         type: string
       createTime:
         type: string
+      delayDayCount:
+        type: integer
   LogMissingListResponse:
     type: array
     items:

@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS `task_change`
     `afterStartTime`  varchar(64)          DEFAULT NULL COMMENT '变更后开始时间',
     `afterEndTime`    varchar(64)          DEFAULT NULL COMMENT '变更后结束时间',
     `reason`          varchar(255)         DEFAULT NULL COMMENT '变更原因',
-    `updateTime`      datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `createTime`      datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updateTime`      datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `createTime`      datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `delayDayCount`   tinyint(4)  NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

@@ -19,8 +19,17 @@ public class TaskChangeListBo {
     private String afterEndTime;
     private String reason;
     private String createTime;
+    private Integer delayDayCount;
 
     public TaskChangeListBo() {
+    }
+
+    public Integer getDelayDayCount() {
+        return delayDayCount;
+    }
+
+    public void setDelayDayCount(Integer delayDayCount) {
+        this.delayDayCount = delayDayCount;
     }
 
     public Integer getId() {
@@ -179,6 +188,7 @@ public class TaskChangeListBo {
                 ", afterEndTime='" + afterEndTime + '\'' +
                 ", reason='" + reason + '\'' +
                 ", createTime='" + createTime + '\'' +
+                ", delayDayCount=" + delayDayCount +
                 '}';
     }
 }

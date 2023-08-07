@@ -21,8 +21,17 @@ public class StatisticTaskChangeBo {
     private String nickName;
     private String auditorName;
     private String createTime;
+    private Integer delayDayCount;
 
     public StatisticTaskChangeBo() {
+    }
+
+    public Integer getDelayDayCount() {
+        return delayDayCount;
+    }
+
+    public void setDelayDayCount(Integer delayDayCount) {
+        this.delayDayCount = delayDayCount;
     }
 
     public String getReason() {
