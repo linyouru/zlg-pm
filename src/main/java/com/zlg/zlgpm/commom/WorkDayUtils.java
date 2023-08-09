@@ -127,7 +127,7 @@ public class WorkDayUtils {
                 && (edate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && edate.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY)) {
             long l = end - start - holidays;
             double v = (double) (end - start - holidays) / (24 * 3600000);
-            return Math.round((double) (end - start - holidays) / (24 * 3600000));
+            return Math.ceil((double) (end - start - holidays) / (24 * 3600000));
         }
         // 如果两个时间在同一周并且都是周末日期，则直接返回0
         if ((sdate.get(Calendar.YEAR) == edate.get(Calendar.YEAR))
@@ -157,7 +157,7 @@ public class WorkDayUtils {
         // 计算最终结果，具体为：workdays加上开始时间的时间偏移量，减去结束时间的时间偏移量
         double a = (double) workdays * 24 * 3600000;
         double result = (a + calcWorkdayTimeInMillis(sdate, edate, start, end) - holidays);
-        result = Math.round(result / (24 * 3600000));
+        result = Math.ceil(result / (24 * 3600000));
         return result > 0 ? result : 0;
     }
 

@@ -25,9 +25,9 @@ spring:
           auth: true
 #        debug: true
 
-#日志检查定时任务
-#cron.exp: "0 0 23 * * 1-5 "
-cron.exp: "-"
+#定时任务
+cron.timely: "0 0 23 * * 1-5 "
+cron.email: "-"
 
 
 logging:

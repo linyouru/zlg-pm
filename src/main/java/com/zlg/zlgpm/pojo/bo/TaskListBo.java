@@ -42,6 +42,7 @@ public class TaskListBo {
     private Integer vid;
 
     private Integer serialNumber;
+    private Integer delayDayCount;
 
     public TaskListBo() {
     }
@@ -89,6 +90,14 @@ public class TaskListBo {
                 ", vid=" + vid +
                 ", serialNumber=" + serialNumber +
                 '}';
+    }
+
+    public Integer getDelayDayCount() {
+        return delayDayCount;
+    }
+
+    public void setDelayDayCount(Integer delayDayCount) {
+        this.delayDayCount = delayDayCount;
     }
 
     public String getAccepterNickName() {

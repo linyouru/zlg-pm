@@ -64,6 +64,8 @@ public class TaskPo implements Serializable {
     private Integer sendEmail2Creator;
     @TableField
     private Integer planWorkTime;
+    @TableField
+    private Integer delayDayCount;
 
     public TaskPo() {
     }
@@ -299,4 +301,11 @@ public class TaskPo implements Serializable {
         this.vid = vid;
     }
 
+    public Integer getDelayDayCount() {
+        return delayDayCount;
+    }
+
+    public void setDelayDayCount(Integer delayDayCount) {
+        this.delayDayCount = delayDayCount;
+    }
 }

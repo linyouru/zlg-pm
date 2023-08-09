@@ -8,11 +8,11 @@
             SUM(IF(ta.timely = "2", 1, 0)) AS taskTimeoutCount,
             SUM(ta.feedbackCount) AS feedbackCount,
             SUM(ta.acceptCount) AS acceptCount,
-            SUM(feedbackCount + acceptCount + IF(ta.timely = "2", 1, 0)) AS total,
             SUM(ta.quality) AS qualitySum,
             SUM(ta.document) AS documentSum,
             SUM(ta.planWorkTime) AS planWorkTimeSum,
-            SUM(ta.workTimeSum) AS workTimeSum
+            SUM(ta.workTimeSum) AS workTimeSum,
+            SUM(ta.delayDayCount) AS delayDayCountSum
         FROM
             (
                 SELECT
@@ -22,6 +22,7 @@
                     t.quality,
                     t.document,
                     t.planWorkTime,
+                    t.delayDayCount,
                     tl.workTimeSum,
                     tc.feedbackCount,
                     tc.acceptCount

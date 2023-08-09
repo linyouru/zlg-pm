@@ -18,8 +18,17 @@ public class StatisticTaskBo {
     private Integer documentSum;
     private Integer planWorkTimeSum;
     private Integer workTimeSum;
+    private Integer delayDayCount;
 
     public StatisticTaskBo() {
+    }
+
+    public Integer getDelayDayCount() {
+        return delayDayCount;
+    }
+
+    public void setDelayDayCount(Integer delayDayCount) {
+        this.delayDayCount = delayDayCount;
     }
 
     public Integer getUid() {

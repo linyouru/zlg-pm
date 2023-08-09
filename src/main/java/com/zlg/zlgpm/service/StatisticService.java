@@ -69,6 +69,7 @@ public class StatisticService {
 
         ArrayList<UserPo> allUserInfo = userMapper.getAllUserInfo();
         statisticTaskBoList.forEach(task -> {
+            task.setTotal(task.getAcceptCount()+task.getFeedbackCount()+task.getTaskTimeoutCount());
             allUserInfo.forEach(user -> {
                 if (user.getId() == Long.parseLong(task.getUid() + "")) {
                     task.setNickName(user.getNickName());

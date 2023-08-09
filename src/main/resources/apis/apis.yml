@@ -2336,6 +2336,9 @@ definitions:
       serialNumber:
         type: integer
         description: 任务序号
+      delayDayCount:
+        type: integer
+        description: 延期天数
   TaskStatisticsResponse:
     type: object
     properties:

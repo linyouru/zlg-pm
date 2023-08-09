@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlg.zlgpm.commom.OperationLog;
 import com.zlg.zlgpm.commom.Utils;
+import com.zlg.zlgpm.commom.WorkDayUtils;
 import com.zlg.zlgpm.controller.model.ApiCreateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskRequest;
 import com.zlg.zlgpm.controller.model.ApiUpdateTaskStatusRequest;
@@ -52,9 +53,13 @@ public class TaskService {
     private EmailHelper emailHelper;
     @Resource
     private TaskLogMapper taskLogMapper;
+    @Resource
+    private WorkDayUtils workDayUtils;
 
-    private static final String TASK_CHECK = "3";
-    private static final String TASK_END = "1";
+    private static final String TASK_CHECK = "3"; //待验收
+    private static final String TASK_END = "1"; //已完成
+    private static final String TASK_FEEDBACK = "2"; //问题反馈
+    private static final String TASK_RUNNING = "4"; //开发中
     private static final String TASK_TIMEOUT = "2";
     private static final String[] CANNOTCHANGETASKTIME = {"1", "2", "3", "5"};
 
@@ -112,29 +117,37 @@ public class TaskService {
         return taskPo;
     }
 
-    @OperationLog(value = "修改任务", type = "Task")
+    @OperationLog(value = "修改任务状态", type = "Task")
     public TaskPo updateTaskStatus(Integer id, ApiUpdateTaskStatusRequest body) {
         TaskPo task = dataConvertHelper.convert2TaskPo(body);
         TaskPo beforeTask = taskMapper.selectById(id);
         if (taskAuthentication(beforeTask)) {
             throw new BizException(HttpStatus.FORBIDDEN, "auth.11001");
         }
-        task.setId(id);
-        int i = taskMapper.updateById(task);
-        if (i == 0) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
-        }
-        TaskPo retTask = taskMapper.selectById(id);
 
-        ProjectPo projectPo = projectMapper.selectById(retTask.getPid());
-        ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(retTask.getVid());
+        ProjectPo projectPo = projectMapper.selectById(beforeTask.getPid());
+        ProjectVersionPo projectVersionPo = projectVersionMapper.selectById(beforeTask.getVid());
         UserPo projectUser = userMapper.selectById(projectPo.getUid());
-        UserPo taskUser = userMapper.selectById(retTask.getUid());
-        String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), retTask.getTask());
+        UserPo taskUser = userMapper.selectById(beforeTask.getUid());
+        String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), beforeTask.getTask());
         if (TASK_CHECK.equals(task.getStatus())) {
             //任务状态改为[待验收]需要给项目负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, projectUser.getEmail(), "[项目管理系统]任务申请验收", text);
             emailHelper.sendSimpleMailMessage(message);
+
+            if(TASK_RUNNING.equals(beforeTask.getStatus())){
+                //计算及时性和延期天数
+                long playEndTime = Long.parseLong(beforeTask.getPlayEndTime());
+                long now = System.currentTimeMillis();
+                if (now < playEndTime) {
+                    //未延期
+                    task.setTimely("1");
+                    task.setDelayDayCount(0);
+                } else {
+                    task.setTimely("2");
+                    task.setDelayDayCount((int) workDayUtils.getWorkdayTimeInMillisExcWeekendHolidays(playEndTime,now));
+                }
+            }
 
             ArrayList<TaskCheckPo> taskCheckList = taskCheckMapper.getTaskCheckByTaskId(id);
             if (taskCheckList.size() > 0) {
@@ -142,7 +155,13 @@ public class TaskService {
             }
             taskCheckMapper.insert(new TaskCheckPo(id, 1, 0));
         }
-        return retTask;
+
+        task.setId(id);
+        int i = taskMapper.updateById(task);
+        if (i == 0) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "task.12001", id);
+        }
+        return beforeTask;
     }
 
     private void taskCheckUpdate(ArrayList<TaskCheckPo> taskCheckList) {
@@ -155,7 +174,7 @@ public class TaskService {
         }
         long time = parse.getTime();
         long now = System.currentTimeMillis();
-        if (now - time > 86400000) {
+        if (now - time > 60 * 60 * 24 * 1000) {
             taskCheckMapper.updateById(new TaskCheckPo(taskCheckPo.getId(), null, null, 2));
         } else {
             taskCheckMapper.updateById(new TaskCheckPo(taskCheckPo.getId(), null, null, 1));
@@ -186,10 +205,10 @@ public class TaskService {
                 throw new BizException(HttpStatus.BAD_REQUEST, "user.10002");
             }
         }
-        if ("3".equals(task.getStatus()) && beforeTask.getTimely() == null) {
-            String playEndTime = beforeTask.getPlayEndTime();
-            task.setTimely(System.currentTimeMillis() < Long.parseLong(playEndTime) ? "1" : "2");
-        }
+//        if ("3".equals(task.getStatus()) && beforeTask.getTimely() == null) {
+//            String playEndTime = beforeTask.getPlayEndTime();
+//            task.setTimely(System.currentTimeMillis() < Long.parseLong(playEndTime) ? "1" : "2");
+//        }
         task.setId(id);
         int i = taskMapper.updateById(task);
         if (i == 0) {
@@ -424,14 +443,15 @@ public class TaskService {
         String text = emailHelper.assembleEmailMessage(projectPo.getName(), projectVersionPo.getVersion(), projectUser.getNickName(), taskUser.getNickName(), beforeTask.getTask());
 
         if (TASK_END.equals(taskPo.getStatus())) {
-            String playEndTime = beforeTask.getPlayEndTime();
-            long now = System.currentTimeMillis();
-            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
-            taskPo.setAcceptanceTime(now + "");
+//            String playEndTime = beforeTask.getPlayEndTime();
+//            long now = System.currentTimeMillis();
+//            taskPo.setTimely(now < Long.parseLong(playEndTime) ? "1" : "2");
+            taskPo.setAcceptanceTime(System.currentTimeMillis() + "");
 
             //任务状态改为[已完成]需要给任务负责人发邮件
             SimpleMailMessage message = emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskUser.getEmail(), "[项目管理系统]任务验收通过", text);
             emailHelper.sendSimpleMailMessage(message);
+            //给任务创建人发邮件
             if (beforeTask.getSendEmail2Creator() == 1) {
                 emailHelper.sendSimpleMailMessage(emailHelper.getSimpleMailMessage(EmailHelper.EMAIL_FORM, taskCreator.getEmail(), "[项目管理系统]任务验收通过", text));
             }
@@ -439,7 +459,7 @@ public class TaskService {
         taskMapper.updateById(taskPo);
         ArrayList<TaskCheckPo> taskCheckList = taskCheckMapper.getTaskCheckByTaskId(taskPo.getId());
         taskCheckUpdate(taskCheckList);
-        if ("2".equals(taskPo.getStatus())) {
+        if (TASK_FEEDBACK.equals(taskPo.getStatus())) {
             taskCheckMapper.insert(new TaskCheckPo(taskPo.getId(), 2, 0));
         }
 
