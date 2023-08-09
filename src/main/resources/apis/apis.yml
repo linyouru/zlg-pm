@@ -2746,6 +2746,9 @@ definitions:
       workTimeSum:
         type: integer
         description: 实际工时
+      delayDayCount:
+        type: integer
+        description: 延期天数
   StatisticLogResponseList:
     allOf:
       - $ref: "#/definitions/OnePageData"

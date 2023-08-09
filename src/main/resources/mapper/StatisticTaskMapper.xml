@@ -12,7 +12,7 @@
             SUM(ta.document) AS documentSum,
             SUM(ta.planWorkTime) AS planWorkTimeSum,
             SUM(ta.workTimeSum) AS workTimeSum,
-            SUM(ta.delayDayCount) AS delayDayCountSum
+            SUM(ta.delayDayCount) AS delayDayCount
         FROM
             (
                 SELECT
@@ -24,8 +24,8 @@
                     t.planWorkTime,
                     t.delayDayCount,
                     tl.workTimeSum,
-                    tc.feedbackCount,
-                    tc.acceptCount
+                    IF (tc.feedbackCount is null,0,tc.feedbackCount) as feedbackCount,
+                    IF (tc.acceptCount is null,0,tc.acceptCount) as acceptCount
                 FROM
                     project_task AS t
                         LEFT JOIN (
