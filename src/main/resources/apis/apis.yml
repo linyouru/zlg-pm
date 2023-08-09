@@ -1800,6 +1800,9 @@ definitions:
       timelinessRate:
         type: string
         description: 任务及时达成率
+      position:
+        type: string
+        description: 职位
   UserLoginResponse:
     type: object
     properties:
@@ -2065,6 +2068,9 @@ definitions:
         type: string
       projectName:
         type: string
+      position:
+        type: string
+        description: 职位
   CreateTaskRequest:
     type: object
     required:

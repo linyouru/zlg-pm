@@ -18,8 +18,17 @@ public class UserListBo {
     private String taskTimelyCount;
     private String taskTimeoutCount;
     private String timelinessRate;
+    private Integer position;
 
     public UserListBo() {
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
     public Long getId() {
